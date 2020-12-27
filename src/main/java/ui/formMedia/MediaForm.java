@@ -255,7 +255,7 @@ public class MediaForm {
 
     private class SWLoadImages extends SwingWorker {
         ImageIcon blankImage;
-        Integer student;
+        final Integer student;
 
         public SWLoadImages(Integer student) {
             this.student = student;

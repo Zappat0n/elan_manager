@@ -14,8 +14,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.Date;
 
@@ -31,7 +29,7 @@ public class MediaManager {
     private final Date initialDate;
     private final Date finalDate;
     private final String  fileName;
-    DefaultListModel log;
+    final DefaultListModel log;
 
     public MediaManager(CacheManager cacheManager , SettingsManager settingsManager, BDManager bdManager, Integer student,
                         Date initialDate, Date finalDate, PDDocument doc, PDFont font, float margin, String fileName,

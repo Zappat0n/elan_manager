@@ -86,8 +86,6 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
         if (days > 30) return;
         String note = notes.get(notes.lastKey());
 
-        //String text = "Durante estos meses hemos prestado especial atención a su adaptación, la cual ha sido muy positiva.\n" +
-        //        "A través del trabajo diario con los materiales del ambiente y otras actividades, hemos observado mayor independencia y autonomía. ";
         BoxedText bt = new BoxedText(note, fontSize, 380, font);
         int height = line_space * 5 + Math.round(bt.getHeight());
         if (positionY - height < bottom_limit) nextPage();
@@ -145,19 +143,14 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                 checkCurrentStage(10);
                 break;
             case 8:
-                model = loadModel(new Double[]{10d, 11d});
-                loadEvents(co, studentId);
-                //checkPriorStage(8);
-                checkCurrentStage(11);
-                break;
             case 9:
                 model = loadModel(new Double[]{10d, 11d});
                 loadEvents(co, studentId);
                 //checkPriorStage(8);
                 checkCurrentStage(11);
                 break;
+            //checkPriorStage(8);
             default:
-                return;
         }
     }
 
@@ -184,11 +177,6 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                         new java.sql.Date(birthDate.getTime()), 200 + positionX, positionY, fontTitleSize, false);
         positionY = addTitle(page, ((lang==1)?"Fecha del informe: ":"Date of report: ") + new java.sql.Date(dateOfReport),
                 positionX, positionY, fontTitleSize, false);
-        /*
-        positionY = addTitle(page, ((lang==1)?"Informe anterior: ":"Last Report: ") +
-                        (changeDate != null ? new java.sql.Date(changeDate.getTime()) : "#N/A"),
-                200 + positionX, positionY, fontTitleSize, false);
-        */
         return positionY;
     }
 
@@ -295,11 +283,6 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
         for (String title: data.keySet()) {
             Point[] points = data.get(title);
             //rows += calculateRows(points) + ((rows==0)?1:0);
-            /*
-            if (!checkTableSize(rows, tableBuilder, oldrows)) {
-                tableBuilder = createTableBuilder();
-                rows = points.length + 2;
-            }*/
             rowBuilder = new Row.RowBuilder();
             rowBuilder.add(Cell.withText(title.toUpperCase())
                     .setHorizontalAlignment(Cell.HorizontalAlignment.LEFT)
@@ -383,8 +366,6 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
     }
 
     private void addTable(Table table) throws IOException {
-        //int nextPos = positionY - Math.round(table.getHeight());
-        //if (nextPos < bottom_limit && table.getHeight() < 520) nextPage();
         if (positionY < 80) nextPage();
         positionY = addTable(page, positionX, positionY, table) - line_space;
     }

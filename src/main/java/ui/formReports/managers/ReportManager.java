@@ -40,16 +40,6 @@ public class ReportManager {
         cal.set(Calendar.MONTH, ini - 1);
         cal.set(Calendar.YEAR, (ini != 9 ? year - 1: year));
         return new Date(cal.getTime().getTime());
-        /*
-        if (month >= 2 && month <= 4) ini = 2;
-        else if (month >= 5 && month <= 9) ini = 5;
-        else ini = 9;
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.MONTH, ini - 1);
-        cal.set(Calendar.YEAR, (ini != 9 ? year : year - 1));
-        return new Date(cal.getTime().getTime());
-        */
     }
 
     protected Date getInitialEOYDate(){
@@ -71,16 +61,6 @@ public class ReportManager {
         cal.set(Calendar.MONTH, end - 1);
         cal.set(Calendar.YEAR, year);
         return new Date(cal.getTime().getTime());
-        /*
-        if (month >= 2 && month <= 4) end = 4;
-        else if (month >= 5 && month <= 9) end = 8;
-        else end = 1;
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.MONTH, end - 1);
-        cal.set(Calendar.YEAR, year);
-        return new Date(cal.getTime().getTime());
-         */
     }
 
     protected Date getFinalEOYDate(){

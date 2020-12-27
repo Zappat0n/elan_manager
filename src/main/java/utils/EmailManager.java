@@ -83,8 +83,6 @@ public class EmailManager {
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.port", "465");
-        //properties.setProperty("mail.store.protocol", "imaps");
-        //properties.setProperty("mail.imaps.port", "993");
 
         Session session = Session.getInstance(properties,
                 new Authenticator() {
@@ -92,9 +90,6 @@ public class EmailManager {
                         return new PasswordAuthentication(user, p);
                     }
                 });
-        //Store store = session.getStore("imaps");
-        //store.connect("imap.gmail.com",user, p);
-        //Folder sent = store.getFolder("Sent");
 
         String[] fields={TableContacts.student1, TableContacts.student2, TableContacts.student3, TableContacts.student4};
         if (co == null) co = bdManager.connect();

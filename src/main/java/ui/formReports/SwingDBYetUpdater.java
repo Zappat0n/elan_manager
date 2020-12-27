@@ -51,7 +51,6 @@ public class SwingDBYetUpdater extends SwingWorker {
                 String[] result = yetManager.load();
                 fillTextArea(result);
                 ReportsForm.yetChanged = false;
-                break;
             }
             case 1 -> yetManager.save();
         }

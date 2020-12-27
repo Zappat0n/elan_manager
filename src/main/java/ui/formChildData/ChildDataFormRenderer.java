@@ -22,14 +22,6 @@ public class ChildDataFormRenderer extends JPanel implements ListCellRenderer {
                 item.setBackground(Color.yellow);
             }
         }
-
-
-        //int width = list.getParent().getWidth();
-        //int rows = (width != 0) ? (strWidth+80)/width+1 : 1;
-        //item.label.setRows(rows);
-
-        //String pre = "<html><body style='width: "+String.valueOf(list.getWidth()+80)+"px;'>";
-        //item.label.setText(pre+ item.text);
         return item;
     }
 }

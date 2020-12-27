@@ -21,8 +21,6 @@ public class ApplicationLoader {
     public static CacheManager cacheManager;
 
     public static void main(String[] args) {
-        //settingsManager = new SettingsManager();
-        //bdManager = new BDManager();
         launchUI();
     }
 

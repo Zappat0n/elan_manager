@@ -68,8 +68,6 @@ public class ChildDataFormListItem extends JPanel {
         label.setText(text);
         label.setLineWrap(true);
         label.setWrapStyleWord(true);
-        //label.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
-        //label.setHorizontalAlignment(JLabel.LEFT);
         if (!isTitle) {
             label.setFont(getFont().deriveFont(Font.PLAIN, getFont().getSize() - 2));
         } else {

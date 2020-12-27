@@ -24,8 +24,6 @@ public class PresentationPage extends PDPage {
     private static String TEXT_ACTIVITY;
     private static String TEXT_DATE;
     private static String TEXT_TARGETS;
-    //private static String TEXT_STEPS;
-    //private static String TEXT_WORKED;
     private static String TEXT_COMMENTS;
     private static String TEXT_NEXT;
     private static String TEXT_NEXT_LINKS;
@@ -43,7 +41,7 @@ public class PresentationPage extends PDPage {
     private final String outcomes;
     private final String targets;
     private final NextPresentation nextPresentation;
-    PDFont font;
+    final PDFont font;
 
     public PresentationPage(CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, float margin,
                             BufferedImage picture, Date date, int student, int presentation,
@@ -111,9 +109,6 @@ public class PresentationPage extends PDPage {
         rowBuilder.add(Cell.withText(TEXT_TARGETS)
                 .setHorizontalAlignment(Cell.HorizontalAlignment.CENTER)
                 .withAllBorders());
-        /*rowBuilder.add(Cell.withText(" ")
-                .setHorizontalAlignment(Cell.HorizontalAlignment.CENTER)
-                .withAllBordersButLeft(1));*/
         tableBuilder.addRow(rowBuilder.build());
 /*
         rowBuilder = new Row.RowBuilder();

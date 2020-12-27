@@ -121,15 +121,14 @@ public class DriveGovernor {
         return null;
     }
 
-    public String uploadReport(Integer student, java.io.File file) {
+    public void uploadReport(Integer student, java.io.File file) {
         //name, birthday, drive_main, drive_documents, drive_photos, drive_reports
         String folderId = (String) cacheManager.students.get(student)[5];
         try {
-            return uploadFile(file, folderId);
+            uploadFile(file, folderId);
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }
-        return null;
     }
 
     public String uploadDocument(Integer student, java.io.File file) {

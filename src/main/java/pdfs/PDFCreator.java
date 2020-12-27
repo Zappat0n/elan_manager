@@ -314,13 +314,6 @@ public class PDFCreator {
     public static void sendEmail(CacheManager cacheManager, BDManager bdManager, Connection co, Integer studentId, String studentName,
                                  File[] files, String header, String body) {
         Properties properties = System.getProperties();
-        /*
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-         */
         properties.put("mail.smtp.host", "mail.elanmontessori.org");
         properties.put("mail.smtp.socketFactory.port", "465");
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");

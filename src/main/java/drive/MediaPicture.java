@@ -6,11 +6,11 @@ import java.util.Calendar;
 
 public class MediaPicture {
     public BufferedImage image;
-    public Integer id;
-    public String fileId;
-    public Integer student;
+    public final Integer id;
+    public final String fileId;
+    public final Integer student;
     public Date date;
-    public Integer presentation;
+    public final Integer presentation;
     public Integer presentationSub = null;
     public String comments;
 

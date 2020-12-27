@@ -21,14 +21,14 @@ public class SwingUpdater extends SwingWorker {
     public static final Integer UPDATER_LOAD = 0;
     public static final Integer UPDATER_SAVE = 1;
     public static final Integer UPDATER_CLEAR = 2;
-    BDManager bdManager;
-    CacheManager cacheManager;
-    JTabbedPane tabbedPane;
-    JTable tableContacts;
+    final BDManager bdManager;
+    final CacheManager cacheManager;
+    final JTabbedPane tabbedPane;
+    final JTable tableContacts;
     Integer action = null; // 0 load, 1 save;
-    Integer student;
+    final Integer student;
     ChildrenPanel panel;
-    MyTableModel tableModel;
+    final MyTableModel tableModel;
     private ArrayList<Integer[]>brothers;
 
 
@@ -51,7 +51,6 @@ public class SwingUpdater extends SwingWorker {
                 clear();
                 load();
                 ReportsForm.yetChanged = false;
-                break;
             }
             case 1 -> save();
             case 2 -> clear();
@@ -63,17 +62,6 @@ public class SwingUpdater extends SwingWorker {
         for (int i = tabbedPane.getTabCount() - 1; i >= 0; i--) {
             tabbedPane.removeTabAt(i);
         }
-        /*
-        panel.tFName.setText(null);
-        panel.dMBirthday.setValue(null);
-        panel.cBClassroom.setSelectedIndex(-1);
-        panel.tFAddress.setText(null);
-        panel.dMFirstDayComundi.setValue(null);
-        panel.dMFirstDayCDB.setValue(null);
-        panel.dMFirstDayPrimary.setValue(null);
-        panel.dMExitDay.setValue(null);
-        panel.tANotes.setText(null);
-        */
         ((DefaultTableModel) tableContacts.getModel()).setRowCount(0);
     }
 

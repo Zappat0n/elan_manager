@@ -180,7 +180,7 @@ public class CurriculumForm {
     }
 
     private static class TableLinksGovernor {
-        DefaultTableModel model;
+        final DefaultTableModel model;
 
         public TableLinksGovernor(DefaultTableModel model) {
             this.model = model;
@@ -220,7 +220,7 @@ public class CurriculumForm {
     }
 
     private static class TableCurriculumGovernor {
-        DefaultTableModel model;
+        final DefaultTableModel model;
 
         public TableCurriculumGovernor(DefaultTableModel model) {
             this.model = model;

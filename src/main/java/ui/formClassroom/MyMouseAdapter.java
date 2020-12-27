@@ -48,8 +48,6 @@ public class MyMouseAdapter extends MouseAdapter {
 
                 JPopupMenu menu = new MyPopUpMenuPresentations(bdManager, settingsManager, cacheManager, table,
                         tablePlanning, date, formData);
-                //menu.setSelected(menu.getComponent(0));
-                //menu.setLabel(row +":"+column);
                 menu.show(e.getComponent(), e.getX(), e.getY());
             } else {
                 String event = ((MyTableModelPlanning)table.getModel()).events[row][column-1];

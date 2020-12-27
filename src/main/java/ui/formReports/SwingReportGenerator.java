@@ -49,7 +49,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
     final String header;
     final String body;
     final ArrayList<Integer> students;
-    DefaultListModel log;
+    final DefaultListModel log;
 
     public SwingReportGenerator(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
                                 JFrame frame, Integer student, Integer classroom, Date reportDate, Date changeDate,
@@ -171,7 +171,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
         ArrayList<Integer> pending = new ArrayList<>();
         HashMap<Integer, ArrayList<String>> contacts = bdManager.getContacts(co, students);
         for (Integer student : students) {
-            if (!contacts.keySet().contains(student)) pending.add(student);
+            if (!contacts.containsKey(student)) pending.add(student);
         }
         if (pending.size() > 0) {
             StringBuilder names = new StringBuilder();

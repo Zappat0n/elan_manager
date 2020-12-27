@@ -118,23 +118,6 @@ public class PDFForm_Reports {
         int years = getYears(false);
         if (years < 3) stageId = 0;
         else stageId = years - 2;
-        /*
-        switch (classroom) {
-            case 1 :    stageId = 0;
-                        break;
-            case 2 : case 3: case 6:
-                        int years = getYears(false);
-                        if (years < 4) stageId = 1;
-                        else if (years < 5) stageId = 2;
-                        else stageId = 3;
-                        break;
-            case 4 :    years = getYears(false);
-                        if (years < 7) stageId = 4;
-                        else if (years < 8) stageId = 5;
-                        else if (years < 9) stageId = 6;
-                        else stageId = 7;
-                        break;
-        }*/
     }
 
     private Integer getYears(Boolean startInSeptember) {
@@ -208,8 +191,6 @@ public class PDFForm_Reports {
 
         //BufferedImage image = ImageIO.read(new File(imagePath));
         PDImageXObject pdImage = LosslessFactory.createFromImage(doc,image);
-                //System.out.println(new File(imagePath).getAbsolutePath());
-        //PDImageXObject pdImage = PDImageXObject.createFromFile(file, doc);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page,
                 PDPageContentStream.AppendMode.APPEND, true, true);
         float scale = Float.parseFloat(_scale);

@@ -316,10 +316,10 @@ public class BDManager {
         return executeQuery(connection, table.getValues(keysToString(keys), condition), table, keys);
     }
 
-    public int removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
-        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return 0;
-        if (table == null) return 0;
-        return executeQueryUpdate(co, table.removeValue(condition));
+    public void removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
+        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
+        if (table == null) return;
+        executeQueryUpdate(co, table.removeValue(condition));
     }
 
     public static String getSqlOrValues(String variable, int[] values) {

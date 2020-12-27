@@ -85,11 +85,6 @@ public class YetManager implements IManager{
         }
     }
 
-    @Override
-    public void setDate(Date date) {
-
-    }
-
     private void fillData(String[] array, Integer student, Integer id, String text){
         if (student == -1) {
             if (id == classroom) {

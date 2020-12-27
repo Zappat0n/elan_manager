@@ -158,7 +158,7 @@ public class MyTable {
                 return "\"" + value + "\"";
             else if (value.contains("\""))
                 return "'" + value + "'";
-            else return "'" + value.replace("'", "\'") + "'";
+            else return "'" + value.replace("'", "'") + "'";
         } else return null;
     }
 

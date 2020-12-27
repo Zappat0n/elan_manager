@@ -54,8 +54,8 @@ public class CacheManager {
     public final HashMap<Integer, HashMap<String, String>> globalVars;
 
     public static class PresentationLinks {
-        public ArrayList<Integer> outcomes;
-        public ArrayList<Integer> targets;
+        public final ArrayList<Integer> outcomes;
+        public final ArrayList<Integer> targets;
         public PresentationLinks() {
             outcomes = new ArrayList<>();
             targets = new ArrayList<>();
@@ -400,7 +400,7 @@ public class CacheManager {
         }
 
         LinkedList<Map.Entry<Integer, Date>> list = new LinkedList(map.entrySet());
-        Comparator<Map.Entry<Integer, Date>> comparator = Comparator.comparing(Map.Entry::getValue);
+        Comparator<Map.Entry<Integer, Date>> comparator = Map.Entry.comparingByValue();
         list.sort(comparator.reversed());
 
         ArrayList<Integer> temp = new ArrayList<>();

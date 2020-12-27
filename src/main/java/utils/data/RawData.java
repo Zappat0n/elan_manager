@@ -51,20 +51,6 @@ public class RawData {
     public static final Integer[] ncOutcomes_Types = new Integer[]{9, 10, 11};
 
 
-    /*
-    private static List[] subareasMontessoriperYearData = new List[]{
-            Arrays.asList(1,2,4,5,6,7,15,16,17),
-            Arrays.asList(1,2,4,7,8,14,24),
-            Arrays.asList(2,4,7,8,13,14,17,18,19,25),
-            Arrays.asList(5,21,24,26,27,28,30,13,3)};
-    public static List[] subareasMontessoriperStageData = new List[]{
-            Arrays.asList(1,2,4,5,6,7,15,16,17),
-            Arrays.asList(1,2,4,7,8,14,24,13,17,18,19,25,5,21,26,27,28,3),
-            null,
-            null,
-            null,
-            null};
-*/
     public static final HashMap<Double, List<Integer>> areasTargetperStage = getAreasTargetperstage();
 
     public static Integer[] getOutcomeMonthsperYear(Double year) {

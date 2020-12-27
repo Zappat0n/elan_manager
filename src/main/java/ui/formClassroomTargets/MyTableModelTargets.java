@@ -193,10 +193,4 @@ public class MyTableModelTargets extends AbstractTableModel {
         data[rowIndex][columnIndex-1] = (int)aValue;
         fireTableCellUpdated(rowIndex, columnIndex);
     }
-
-    /*
-    public void setValueAt(Byte value, int row, int col) {
-        data[row][col] = value;
-        fireTableCellUpdated(row, col);
-    }*/
 }

@@ -46,9 +46,7 @@ public class ClipboardKeyAdapter extends KeyAdapter {
             SwingUtilities.invokeLater(() -> {
                 if (event.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
                     if (textField == null || textField.getText() == null) return;
-                    StringBuilder bd = new StringBuilder();
-                    bd.append(textField.getText()).append(event.getKeyChar());
-                    textField.setText(bd.toString());
+                    textField.setText(textField.getText() + event.getKeyChar());
                 } else {
                     textField.setText(textField.getText().substring(0,
                             textField.getText().length()-1));

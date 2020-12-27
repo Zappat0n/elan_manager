@@ -75,15 +75,6 @@ class ChildDataFormWritetodbDialog extends JDialog {
             ChildDataForm.addToBd(studentId, index, item, java.sql.Date.valueOf(LocalDate.of(dateModel.getYear(),
                 dateModel.getMonth() + 1, dateModel.getDay())), subitems);
         else ChildDataForm.removeFromBd(item, studentId, index, subitems);
-        /*
-        switch (index) {
-            case 0 :    if (add) item.setBox1(1); else if (removeFromDb()) item.unsetBox1();
-                        break;
-            case 1 :    if (add) item.setBox2(1); else if (removeFromDb()) item.unsetBox2();
-                        break;
-            case 2 :    if (add) item.setBox3(1); else if (removeFromDb()) item.unsetBox3();
-                        break;
-        }*/
         settingsManager.addValue(SettingsManager.LAST_DATE, String.valueOf(dateModel.getValue().getTime()));
         dispose();
     }

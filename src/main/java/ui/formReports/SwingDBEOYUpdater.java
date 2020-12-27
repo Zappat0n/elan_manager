@@ -46,7 +46,6 @@ public class SwingDBEOYUpdater extends SwingWorker {
                 clear();
                 eoyManager.load();
                 ReportsForm.yetChanged = false;
-                break;
             }
             case 1 -> eoyManager.save();
         }

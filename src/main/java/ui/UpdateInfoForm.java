@@ -178,7 +178,7 @@ public class UpdateInfoForm  extends JDialog {
         InputStream is = conn.getInputStream();
         int max = conn.getContentLength();
         infoPane.setText("<html>Descargando fichero...<br>Tamaño: "+max+" Bytes");
-        BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(new File(root+fileName)));
+        BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(root+fileName));
         byte[] buffer = new byte[32 * 1024];
         int bytesRead;
         int in = 0;

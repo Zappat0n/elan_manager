@@ -95,14 +95,6 @@ public class ChildDataForm {
         ChildDataForm.settingsManager = settingsManager;
         ChildDataForm.cacheManager = cacheManager;
         return new ChildDataForm().mainPanel;
-        /*
-        frame = new JFrame("Child data");
-        frame.setContentPane(new ChildDataForm().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setSize(1000, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);*/
     }
 
 
@@ -685,15 +677,14 @@ public class ChildDataForm {
 
                 switch (event_type) {
                     case 2: case 4: case 5:
+                    case 1:
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 10:
+                    case 11:
                         markItem(set.getInt(TableEvents.id), event_id, set.getInt(TableEvents.event_sub), event_type,
                                 set.getDate(TableEvents.date)); break;
-                    case 1: case 6: case 7:
-                        markItem(set.getInt(TableEvents.id), event_id, set.getInt(TableEvents.event_sub), event_type,
-                                set.getDate(TableEvents.date)); break;
-                    case 9: case 10: case 11:
-                        markItem(set.getInt(TableEvents.id), event_id, set.getInt(TableEvents.event_sub), event_type,
-                                set.getDate(TableEvents.date));
-                        break;
                     case 99:
                         switch (event_id) {
                             case 1 -> {

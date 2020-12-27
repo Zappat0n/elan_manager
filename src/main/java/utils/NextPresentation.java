@@ -5,8 +5,8 @@ import java.util.*;
 public class NextPresentation {
     private final CacheManager cacheManager;
     private final SettingsManager settingsManager;
-    Integer presentation;
-    Integer presentation_sub;
+    final Integer presentation;
+    final Integer presentation_sub;
 
     public Integer nextPresentation;
     public Integer nextPresentationSub;
