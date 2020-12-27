@@ -36,7 +36,7 @@ public class CacheManager {
     public final HashMap<Integer, Object[]> outcomes;//name,nombre,subarea,start_month,end_month
     public final HashMap<Integer, Object[]> targets; //name, nombre, subarea, year
     public final HashMap<Integer, Object[]> presentations; //name, nombre, subarea,year,priority
-    public final HashMap<Integer, Object[]> presentationssub;//name, nombre
+    public final HashMap<Integer, Object[]> presentationsSub;//name, nombre
     public final HashMap<Integer, LinkedHashMap<Integer, HashSet<Integer>>> stageAreaSubareaMontessori;
     public final LinkedHashMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> targetsperyearandsubarea;
     public final LinkedHashMap<Integer, LinkedHashMap<Integer, ArrayList<Integer>>> outcomespermonthandsubarea;
@@ -84,7 +84,7 @@ public class CacheManager {
         outcomes  = new HashMap<>();
         targets = new HashMap<>();
         presentations = new HashMap<>();
-        presentationssub = new HashMap<>();
+        presentationsSub = new HashMap<>();
         targetsubareaarea = new HashMap<>();
         ncTargets = new ArrayList<>();
         links = new HashMap<>();
@@ -219,7 +219,7 @@ public class CacheManager {
                 Integer presentation = set.getInt(TablePresentations_sub.presentation);
                 ArrayList<Integer> list = presentationssubperpresentation.computeIfAbsent(presentation, k -> new ArrayList<>());
                 list.add(id);
-                presentationssub.put(id, new String[]{set.getString(TablePresentations_areas.name), set.getString(TablePresentations_areas.nombre)});
+                presentationsSub.put(id, new String[]{set.getString(TablePresentations_areas.name), set.getString(TablePresentations_areas.nombre)});
             }
             labelAction.setText("Loading outcomes...");
             set = new MySet(st.executeQuery(query + TableOutcomes.table_name), BDManager.tableOutcomes, null);

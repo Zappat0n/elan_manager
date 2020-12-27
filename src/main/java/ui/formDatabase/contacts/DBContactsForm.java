@@ -4,7 +4,6 @@ import bd.BDManager;
 import drive.DriveGovernor;
 import utils.CacheManager;
 import utils.MyLogger;
-import utils.SettingsManager;
 
 import javax.swing.*;
 import java.io.File;

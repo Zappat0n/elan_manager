@@ -217,7 +217,8 @@ public class UploadForm {
 
             listSearchedPresentations.addListSelectionListener(e -> {
                 if (listSearchedPresentations.getSelectedIndex() == -1) return;
-                updatePresentationsSub(presentationssearched.get(listSearchedPresentations.getSelectedValue())[0]);
+                String searched = (String) listSearchedPresentations.getSelectedValue();
+                updatePresentationsSub(presentationssearched.get(searched)[0]);
             });
 
             listSearchedPresentations.addMouseMotionListener(new MouseMotionAdapter() {
@@ -226,9 +227,12 @@ public class UploadForm {
                     JList l = (JList) e.getSource();
                     int index = l.locationToIndex(e.getPoint());
                     if (index > -1) {
-                        Integer subarea = presentationssearched.get(l.getModel().getElementAt(index))[1];
+                        String searched = (String) l.getModel().getElementAt(index);
+                        Integer subarea = presentationssearched.get(searched)[1];
                         Object[] data = cacheManager.subareasMontessori.get(subarea);
-                        l.setToolTipText(cacheManager.areasMontessori.get(data[2])[settingsManager.language] + " -> " + data[settingsManager.language]);
+                        Integer area = (Integer) data[2];
+                        String area_name = (String) data[settingsManager.language];
+                        l.setToolTipText(cacheManager.areasMontessori.get(area)[settingsManager.language] + " -> " + area_name);
                     }
                 }
             });
@@ -262,16 +266,19 @@ public class UploadForm {
                     if (tabPresentations.getSelectedIndex() == 0) {
                         presentation = listPresentations.getSelectedIndex();
                         if (presentation != -1) presentation = presentations.get(presentation);
-                        else if (listSearchedPresentations.getSelectedIndex() != -1)
-                            presentation = presentationssearched.get(listSearchedPresentations.getSelectedValue())[0];
-                        else {
+                        else if (listSearchedPresentations.getSelectedIndex() != -1) {
+                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            presentation = presentationssearched.get(searched)[0];
+                        } else {
                             UploadForm.showMessage("Please select a presentation");
                             return;
                         }
                     } else {
                         presentation = listSearchedPresentations.getSelectedIndex();
-                        if (presentation != -1) presentation = presentationssearched.get(listSearchedPresentations.getSelectedValue())[0];
-                        else if (listPresentations.getSelectedIndex() != -1)
+                        if (presentation != -1) {
+                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            presentation = presentationssearched.get(searched)[0];
+                        } else if (listPresentations.getSelectedIndex() != -1)
                             presentation = presentations.get(listPresentations.getSelectedIndex());
                         else {
                             UploadForm.showMessage("Please select a presentation");
@@ -348,9 +355,8 @@ public class UploadForm {
 
     private void setMainImage(File f, BufferedImage image){
         mainImageFile = f;
-        if (true) mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
+        mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
         //((Long)Math.round(panelLabel.getWidth() * 0.9)).intValue(),((Long)Math.round(panelLabel.getHeight() * 0.95)).intValue());
-        else mainImage = image;
         labelMainImg.setIcon(new ImageIcon(mainImage));
         labelMainImg.updateUI();
         imageRotated = false;
@@ -364,7 +370,7 @@ public class UploadForm {
             ArrayList<Integer> list = cacheManager.presentationssubperpresentation.get(presentation);
             if (list != null && list.size() > 0)
                 for (Integer id : list) {
-                    String name = (String)cacheManager.presentationssub.get(id)[settingsManager.language];
+                    String name = (String)cacheManager.presentationsSub.get(id)[settingsManager.language];
                     modelPresentationsSub.addElement(name);
                     presentationssub.add(id);
                 }

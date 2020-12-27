@@ -2,7 +2,6 @@ package ui.formCurriculum;
 
 import com.drew.lang.annotations.NotNull;
 import com.google.common.io.Files;
-import bd.BDManager;
 import ui.formCurriculum.curriculumTypes.CurriculumSubareaYear;
 import utils.CacheManager;
 import utils.MyLogger;
@@ -185,7 +184,7 @@ public class CurriculumForm {
         public void loadSubarea(int stage, int subarea) {
             for (Integer[] link : cacheManager.links.keySet()) {
                 Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != null ? cacheManager.presentationssub.get(link[1]) : null;
+                Object[] presentation_sub = link[1] != null ? cacheManager.presentationsSub.get(link[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||
@@ -223,7 +222,7 @@ public class CurriculumForm {
         public void loadSubarea(int stage, int subarea) {
             for (Integer[] link : cacheManager.links.keySet()) {
                 Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != null ? cacheManager.presentationssub.get(link[1]) : null;
+                Object[] presentation_sub = link[1] != null ? cacheManager.presentationsSub.get(link[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||

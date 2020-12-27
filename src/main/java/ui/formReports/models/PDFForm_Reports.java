@@ -115,8 +115,8 @@ public class PDFForm_Reports {
     }
 
     void calculateStage(int classroom) { //1 comundi, 2 cdb, 3 taller
-        int years = getYears();
-        if (years < 3) stageId = 0;
+        Integer years = getYears();
+        if (years == null || years < 3) stageId = 0;
         else stageId = years - 2;
     }
 

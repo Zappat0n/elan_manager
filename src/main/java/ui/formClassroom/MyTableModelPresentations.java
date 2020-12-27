@@ -144,7 +144,7 @@ public class MyTableModelPresentations extends AbstractTableModel {
             int sub = Integer.parseInt(presentation[1]);
             if (sub == 0) return (String)cacheManager.presentations.get(
                     Integer.valueOf(presentation[0]))[settingsManager.language];
-            else return "->" + cacheManager.presentationssub.get(sub)[settingsManager.language];
+            else return "->" + cacheManager.presentationsSub.get(sub)[settingsManager.language];
         }
 
         return switch (data[rowIndex][columnIndex - 1]) {

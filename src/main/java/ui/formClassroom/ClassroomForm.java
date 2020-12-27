@@ -1,6 +1,7 @@
 package ui.formClassroom;
 
 import bd.BDManager;
+import main.ApplicationLoader;
 import pdfs.models.Pdf_Planning;
 import ui.components.DateLabelFormatter;
 import utils.CacheManager;
@@ -39,7 +40,7 @@ public class ClassroomForm {
     private JTable tablePlanning;
     private JButton buttonPrint;
     private JSplitPane mainSP;
-    private JList listSearch;
+    private JList<String> listSearch;
     ArrayList<Integer> areas;
     private LinkedHashMap<String, Integer[]> presentationssearched;
 
@@ -166,13 +167,13 @@ public class ClassroomForm {
                 public void changedUpdate(DocumentEvent documentEvent){ updateSearch(); }
             });
 
-            listSearch = new JList(new DefaultListModel());
+            listSearch = new JList<>(new DefaultListModel<>());
             listSearch.addListSelectionListener(e -> {
                 if (listSearch.getSelectedIndex() == -1) return;
                 Integer[] datos = presentationssearched.get(listSearch.getSelectedValue()); //id, subarea
-                Object[] datos_subarea = cacheManager.subareasMontessori.get(datos[1]); //name, nombre, area
+                Integer area = (Integer) cacheManager.subareasMontessori.get(datos[1])[ApplicationLoader.settingsManager.language]; //name, nombre, area
                 SwingUtilities.invokeLater(() -> {
-                    listArea.setSelectedIndex(areas.indexOf(datos_subarea[2]));
+                    listArea.setSelectedIndex(areas.indexOf(area));
                     int position = (formData.presentations.indexOf(datos[0]+".0"));
                     if (position != -1) {
                         tablePresentations.changeSelection(position,0,false,false);

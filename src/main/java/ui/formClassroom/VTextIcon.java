@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
  (for example, Chinese/Japanese/Korean scripts have special rules when 
  drawn vertically and should never be rotated)
  */
+@SuppressWarnings("ALL")
 public class VTextIcon implements Icon, PropertyChangeListener {
 	String fLabel;
 	String[] fCharStrings; // for efficiency, break the fLabel into one-char strings to be passed to drawString

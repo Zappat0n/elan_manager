@@ -39,7 +39,7 @@ public class CurriculumSubareaYear extends Curriculum {
                     addLine(1, id, (String)cacheManager.presentations.get(id)[settingsManager.language]);
                     ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(id);
                     if (subs != null) for (int sub : subs) {
-                        addLine(2, sub, (String)cacheManager.presentationssub.get(sub)[settingsManager.language]);
+                        addLine(2, sub, (String)cacheManager.presentationsSub.get(sub)[settingsManager.language]);
                     }
                 }
             }

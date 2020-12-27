@@ -288,7 +288,7 @@ public class MediaForm {
                             (String)cacheManager.presentations.get(currentPicture.presentation)[settingsManager.language]);
                     if (currentPicture.presentationSub != null && currentPicture.presentationSub != -1)
                         labelPresentationSub.setText(
-                                (String)cacheManager.presentationssub.get(currentPicture.presentationSub)[settingsManager.language]);
+                                (String)cacheManager.presentationsSub.get(currentPicture.presentationSub)[settingsManager.language]);
                     if (currentPicture.comments != null) textAreaComments.setText(currentPicture.comments);
                 }
                 @Override

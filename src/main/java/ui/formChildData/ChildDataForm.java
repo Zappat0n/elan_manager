@@ -30,8 +30,8 @@ public class ChildDataForm {
     //public static JFrame frame;
     public static final Date endOfTerm = new Date(Long.parseLong("1548979200000"));
     private JPanel mainPanel;
-    private JComboBox comboBoxClassrooms;
-    private JComboBox comboBoxStudents;
+    private JComboBox<String> comboBoxClassrooms;
+    private JComboBox<String> comboBoxStudents;
     private JLabel labelBirthDate;
     private JTextArea textArea1;
     private JTextArea textArea2;
@@ -386,8 +386,8 @@ public class ChildDataForm {
         models = new HashMap<>();
         students = new HashMap<>();
         labelBirthDate = new JLabel();
-        comboBoxStudents = new JComboBox();
-        comboBoxStudents.addItem("");
+        comboBoxStudents = new JComboBox<>();
+        comboBoxStudents.addItem(null);
         students.put("", null);
         for (Integer id : cacheManager.studentsperclassroom.get(1)) {
             String student = (String)cacheManager.students.get(id)[0];
@@ -395,7 +395,10 @@ public class ChildDataForm {
             students.put(student, id);
         }
         comboBoxStudents.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) loadDataforStudent(e.getItem());
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String name = (String) e.getItem();
+                loadDataforStudent(name);
+            }
         });
         comboBoxClassrooms = new JComboBox(cacheManager.getClasroomsName());
         comboBoxClassrooms.addItemListener(e -> {
@@ -646,7 +649,7 @@ public class ChildDataForm {
         }
     }
 
-    private void loadDataforStudent(Object student) {
+    private void loadDataforStudent(String student) {
         studentId = students.get(student);
         String text;
         if (studentId == null) {
@@ -1003,6 +1006,7 @@ public class ChildDataForm {
         Integer area;
         Integer type = ChildDataFormListItem.getType(event_type);
         String result = null;
+        if (type == null) return null;
 
         try {
             switch (type) {

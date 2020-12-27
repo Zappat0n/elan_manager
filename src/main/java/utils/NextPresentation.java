@@ -82,7 +82,7 @@ public class NextPresentation {
             Integer area = (Integer) cacheManager.subareasMontessori.get(subarea)[2];//name, nombre, area
             nextPresentationText += cacheManager.areasMontessori.get(area)[settingsManager.language] + " - ";
             nextPresentationText += cacheManager.subareasMontessori.get(subarea)[settingsManager.language] + "\n";
-            Object[] sub = cacheManager.presentationssub.get(nextPresentationSub); //name, nombre
+            Object[] sub = cacheManager.presentationsSub.get(nextPresentationSub); //name, nombre
             nextPresentationText += data[settingsManager.language] + ((sub != null) ? " --> " + sub[settingsManager.language] : "") + "\n";
         }
         return nextPresentationText;

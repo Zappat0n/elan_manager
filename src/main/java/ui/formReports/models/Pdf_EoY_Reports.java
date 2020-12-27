@@ -310,6 +310,7 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
             if (result == null) result = new StringBuilder(set.getString(TableTeachers.nick));
             else result.append(" y ").append(set.getString(TableTeachers.nick));
         }
-        return result.toString();
+
+        return result != null ? result.toString() : null;
     }
 }

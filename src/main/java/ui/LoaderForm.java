@@ -18,13 +18,12 @@ public class LoaderForm {
     private JPanel MainPanel;
     private JProgressBar pBar;
     private static JLabel lAction;
-    private static JLabel lError;
 
     private void createUIComponents(){
         labelAction = new JLabel();
         labelError = new JLabel();
         lAction = labelAction;
-        lError = labelError;
+        JLabel lError = labelError;
         JProgressBar pB = pBar;
     }
 

@@ -111,7 +111,9 @@ CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, flo
         public String[] getLinks(Integer presentation, Integer presentation_sub) {
             String[] result = {"", ""};
             Integer lastSubarea = -1;
-            String pair = presentation + "-" + (presentation_sub != -1 ? presentation_sub : 0);
+            Integer[] pair = new Integer[2];
+            pair[0] = presentation;
+            pair[1] = presentation_sub != -1 ? presentation_sub : 0;
 
             if (cacheManager.links.containsKey(pair)) {
                 for (Integer outcome : cacheManager.links.get(pair).outcomes) {

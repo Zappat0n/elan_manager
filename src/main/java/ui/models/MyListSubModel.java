@@ -57,12 +57,12 @@ public class MyListSubModel extends DefaultListModel<String> {
 
     public Boolean addData(Integer itemIndex) {
         clear();
-        Object[] element = listItemsModel.getElementAndIdAt(itemIndex);
-        if (element != null) {
-            ArrayList<Integer> list = AddDataForm.cacheManager.presentationssubperpresentation.get(element[1]);
+        Integer elementId = (Integer) listItemsModel.getElementAndIdAt(itemIndex)[1];
+        if (elementId != null) {
+            ArrayList<Integer> list = AddDataForm.cacheManager.presentationssubperpresentation.get(elementId);
             if (list!=null) {
                 for (Integer id : list) data.put(
-                        (String)AddDataForm.cacheManager.presentationssub.get(id)[settingsManager.language], id);
+                        (String)AddDataForm.cacheManager.presentationsSub.get(id)[settingsManager.language], id);
                 fireIntervalAdded(this, 0, data.size());
                 return true;
             }

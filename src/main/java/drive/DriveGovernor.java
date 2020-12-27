@@ -12,9 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class DriveGovernor {
     private static final String TAG = DriveGovernor.class.getSimpleName();

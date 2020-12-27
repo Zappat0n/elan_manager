@@ -192,7 +192,7 @@ public class PresentationPage extends PDPage {
     private String getActivity() {
         return  cacheManager.presentations.get(presentation)[settingsManager.language] +
                 ((presentationSub != null && presentationSub != -1) ?
-                        " --> " + cacheManager.presentationssub.get(presentationSub)[settingsManager.language] : "");
+                        " --> " + cacheManager.presentationsSub.get(presentationSub)[settingsManager.language] : "");
     }
 
     private Float drawTable(Table.TableBuilder tableBuilder, int y) {

@@ -150,7 +150,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public String getValue(Integer event_id, Integer event_sub) {
         return cacheManager.presentations.get(event_id)[settingsManager.language] +
                 ((event_sub != null && event_sub != 0) ? " (" +
-                        cacheManager.presentationssub.get(event_sub)[settingsManager.language] + ")" : "");
+                        cacheManager.presentationsSub.get(event_sub)[settingsManager.language] + ")" : "");
     }
 
 }
