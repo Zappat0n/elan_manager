@@ -107,7 +107,7 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
                     ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(id);
                     if (subs!=null) for (Integer sub:subs) {
                         data.put("2/"+id+"."+sub, new ChildDataFormListItem(settingsManager,
-                                " -> " + cacheManager.presentationssub.get(sub), id, sub, type, null,
+                                " -> " + cacheManager.presentationssub.get(sub)[settingsManager.language], id, sub, type, null,
                                 false, false, false));
                     }
                 }

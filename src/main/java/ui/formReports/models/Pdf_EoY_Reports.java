@@ -150,7 +150,7 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
                 cacheManager.students.get(studentId)[0]);
         addCellToRowBuilder(rowBuilder, LanguageManager.DATE[settingsManager.language] + ":" +
                 new SimpleDateFormat("MMMM").format(reportDate) + " " +
-                new SimpleDateFormat("YYYY").format(reportDate));
+                new SimpleDateFormat("yyyy").format(reportDate));
         tableBuilder.addRow(rowBuilder.build());
 
         rowBuilder = new Row.RowBuilder();

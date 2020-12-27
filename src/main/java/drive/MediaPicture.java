@@ -11,7 +11,7 @@ public class MediaPicture {
     public final Integer student;
     public Date date;
     public final Integer presentation;
-    public Integer presentationSub = null;
+    public final Integer presentationSub;
     public String comments;
 
     public MediaPicture(BufferedImage image, Integer id, String fileId, Integer student, Date date, Integer presentation,
@@ -31,7 +31,7 @@ public class MediaPicture {
         String month = _date.substring(4, 5);
         String day = _date.substring(6, 7);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Integer.valueOf(year), Integer.valueOf(month)-1, Integer.valueOf(day));
+        calendar.set(Integer.parseInt(year), Integer.parseInt(month)-1, Integer.parseInt(day));
         return new Date(calendar.getTimeInMillis());
     }
 

@@ -237,7 +237,7 @@ public class UploadForm {
         buttonUpload.addActionListener(e -> {
             if (driveGovernor != null) {
                 try {
-                    Date date = labelDate.getText() != "" ? new SimpleDateFormat("dd/MM/yyyy").parse(labelDate.getText()) :
+                    Date date = !labelDate.getText().equals("") ? new SimpleDateFormat("dd/MM/yyyy").parse(labelDate.getText()) :
                             dateModel.getValue();
                     if (date == null) {
                         UploadForm.showMessage("Please select an estimated date for the picture");
@@ -309,7 +309,7 @@ public class UploadForm {
                     files = new File[]{chooser.getSelectedFile()};
                     settingsManager.addValue(SettingsManager.LASTDIR, chooser.getSelectedFile().getParent());
                 }
-                System.out.println("Selected files:" + files.length);
+                System.out.println("Selected files:" + Objects.requireNonNull(files).length);
                 SWLoadImages load = new SWLoadImages(files, imgs, labelDate);
                 load.execute();
             }
@@ -342,13 +342,13 @@ public class UploadForm {
     private void rotacionMainImagen(double grades) {
         mainOriginalImage = ImageUtils.rotateImage(mainOriginalImage, grades);
         mainImage = ImageUtils.rotateImage(mainImage, grades);
-        setMainImage(mainImageFile, mainImage, true);
+        setMainImage(mainImageFile, mainImage);
         imageRotated = true;
     }
 
-    private void setMainImage(File f, BufferedImage image, Boolean resize){
+    private void setMainImage(File f, BufferedImage image){
         mainImageFile = f;
-        if (resize) mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
+        if (true) mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
         //((Long)Math.round(panelLabel.getWidth() * 0.9)).intValue(),((Long)Math.round(panelLabel.getHeight() * 0.95)).intValue());
         else mainImage = image;
         labelMainImg.setIcon(new ImageIcon(mainImage));
@@ -423,7 +423,7 @@ public class UploadForm {
             panelImgs.removeAll();
             for (final File f : files) {
                 try {
-                    BufferedImage img = null;
+                    BufferedImage img;
                     img = ImageIO.read(f);
                     System.out.println(f.getName());
                     imgs.add(img);
@@ -448,7 +448,7 @@ public class UploadForm {
                         System.out.println("Creating big image" + "");
                         labelDate.setText("");
                         mainOriginalImage = ImageUtils.resizeImage(img, img.getWidth(), img.getHeight());
-                        setMainImage(f, img, true);
+                        setMainImage(f, img);
                         try {
                             Metadata metadata = ImageMetadataReader.readMetadata(f);
                             ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);

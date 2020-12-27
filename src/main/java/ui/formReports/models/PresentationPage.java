@@ -196,7 +196,7 @@ public class PresentationPage extends PDPage {
     }
 
     private Float drawTable(Table.TableBuilder tableBuilder, int y) {
-        PDPageContentStream contents = null;
+        PDPageContentStream contents;
         try {
             Table table = tableBuilder.build();
             contents = new PDPageContentStream(doc, this, PDPageContentStream.AppendMode.APPEND, true);
@@ -211,7 +211,7 @@ public class PresentationPage extends PDPage {
 
     private Float addImage() {
         PDPageContentStream contentStream = null;
-        PDImageXObject pdImage = null;
+        PDImageXObject pdImage;
         try {
             calculateSize();
             picture = ImageUtils.resizeImage(picture, Math.round(pictureWidth), Math.round(pictureHeight));

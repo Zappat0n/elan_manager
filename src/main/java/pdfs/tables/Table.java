@@ -11,8 +11,8 @@ import java.util.List;
 
 public class Table {
 
-    private List<Row> rows = new LinkedList<>();
-    private List<Column> columns = new LinkedList<>();
+    private final List<Row> rows;
+    private final List<Column> columns;
     private PDFont font = PDType1Font.HELVETICA;
 
     private int fontSize;

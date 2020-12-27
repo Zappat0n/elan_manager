@@ -65,7 +65,8 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
             case "W" -> newvalue = 6;
             case "Th" -> newvalue = 7;
             case "F" -> newvalue = 8;
-            case "Clear" -> newvalue = null;
+            case "Clear" -> {
+            }
         }
 
         try {

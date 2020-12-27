@@ -115,15 +115,15 @@ public class PDFForm_Reports {
     }
 
     void calculateStage(int classroom) { //1 comundi, 2 cdb, 3 taller
-        int years = getYears(false);
+        int years = getYears();
         if (years < 3) stageId = 0;
         else stageId = years - 2;
     }
 
-    private Integer getYears(Boolean startInSeptember) {
+    private Integer getYears() {
         if (birthDate == null) return null;
-        int startMonth = (startInSeptember) ? Calendar.SEPTEMBER : Calendar.DECEMBER;
-        int day = (startInSeptember) ? 1 : 31;
+        int startMonth = false ? Calendar.SEPTEMBER : Calendar.DECEMBER;
+        int day = false ? 1 : 31;
         Calendar now = Calendar.getInstance();
         now.setTime(reportDate != null ? reportDate : new java.util.Date());
         Calendar start = Calendar.getInstance();

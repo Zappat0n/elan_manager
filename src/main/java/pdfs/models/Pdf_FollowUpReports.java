@@ -215,7 +215,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                                 if (!old) {
                                     point.isRed = false;
                                     pointsToAdd.add(point);
-                                } else if (old && point.points < 2) {
+                                } else if (point.points < 2) {
                                     point.isRed = true;
                                     pointsToAdd.add(point);
                                 }
@@ -238,7 +238,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                             if (!old) {
                                 point.isRed = false;
                                 pointsToAdd.add(point);
-                            } else if (old && point.points < 2) {
+                            } else if (point.points < 2) {
                                 point.isRed = true;
                                 pointsToAdd.add(point);
                             }

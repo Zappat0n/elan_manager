@@ -115,7 +115,7 @@ public class CreatePresentation extends JDialog {
         for (Integer ar : newareas.keySet()) {
             areas.add(ar);
             cBArea.addItem(cacheManager.areasMontessori.get(ar)[settingsManager.language]);
-            if (ar == area) cBArea.setSelectedIndex(areas.indexOf(ar));
+            if (ar.equals(area)) cBArea.setSelectedIndex(areas.indexOf(ar));
         }
     }
 
@@ -124,7 +124,7 @@ public class CreatePresentation extends JDialog {
             String name = (String)cacheManager.subareasMontessori.get(id)[settingsManager.language];
             subareas.add(id);
             cBSubarea.addItem(name);
-            if (id == subarea) {
+            if (id.equals(subarea)) {
                 cBSubarea.setSelectedIndex(subareas.indexOf(id));
                 subarea = id;
             }

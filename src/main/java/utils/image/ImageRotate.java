@@ -18,7 +18,7 @@ public class ImageRotate {
      */
     public static void main(String[] args) throws IOException {
         System.out.println("Cargando Imagen ...");
-        BufferedImage img = ImageRotate.loadJPGImage("arrow.jpg");
+        BufferedImage img = ImageRotate.loadJPGImage();
 
         System.out.println("Rotando Imagen ...");
         BufferedImage dst = ImageRotate.rotacionImagen(img, 25);
@@ -39,8 +39,8 @@ public class ImageRotate {
         return ato.filter(origen, destinationImage);
     }
 
-    private static BufferedImage loadJPGImage(String ruta) throws IOException {
-        BufferedImage imagen = ImageIO.read(new File(ruta));
+    private static BufferedImage loadJPGImage() throws IOException {
+        BufferedImage imagen = ImageIO.read(new File("arrow.jpg"));
 
         BufferedImage source = new BufferedImage(imagen.getWidth(),
                 imagen.getHeight(), BufferedImage.TYPE_INT_RGB);

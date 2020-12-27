@@ -106,7 +106,7 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
                 (pointsToAdd!=null) ? new int[]{Math.round(page.getMediaBox().getWidth()-2*margin-80*3),80,80,80} :
                         new int[]{Math.round(page.getMediaBox().getWidth()-2*margin)},
                 (pointsToAdd!=null) ? new String[]{title, "Emerging", "Expected", "Exceeding"} : new String[]{title},
-                pointsToAdd, 12, 10);
+                pointsToAdd, 10);
         int height;
         BoxedText bt = null;
         if (year == 0 && areaId == 10) {

@@ -1,4 +1,4 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import bd.BDManager;
 import bd.MySet;
@@ -25,7 +25,7 @@ public class SwingUpdater extends SwingWorker {
     final CacheManager cacheManager;
     final JTabbedPane tabbedPane;
     final JTable tableContacts;
-    Integer action = null; // 0 load, 1 save;
+    final Integer action; // 0 load, 1 save;
     final Integer student;
     ChildrenPanel panel;
     final MyTableModel tableModel;

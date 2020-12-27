@@ -1,8 +1,9 @@
 package ui.formCurriculum;
 
+import com.drew.lang.annotations.NotNull;
 import com.google.common.io.Files;
 import bd.BDManager;
-import ui.formCurriculum.CurriculumTypes.CurriculumSubareaYear;
+import ui.formCurriculum.curriculumTypes.CurriculumSubareaYear;
 import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
@@ -59,7 +60,7 @@ public class CurriculumForm {
         buttonLoadLinks = new JButton();
         DefaultTableModel modelLinks = new DefaultTableModel();
         tableLinks = new JTable(modelLinks) {
-            public String getToolTipText(MouseEvent e) {
+            public String getToolTipText(@NotNull MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
@@ -73,7 +74,7 @@ public class CurriculumForm {
             }
         };
         tableCurriculum = new JTable(new DefaultTableModel()) {
-            public String getToolTipText(MouseEvent e) {
+            public String getToolTipText(@NotNull MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
@@ -109,15 +110,12 @@ public class CurriculumForm {
                     String line = reader.readLine();
                     while (line != null) {
                         String[] items = line.split("\t");
-                        for (String item : items) {
-                        }
                         line = reader.readLine();
                     }
                     reader.close();
                 } catch (IOException ex) {
                     MyLogger.e(TAG, ex);
                 }
-            } else {
             }
         });
 
@@ -196,16 +194,14 @@ public class CurriculumForm {
                         (Double)presentation[3] > RawData.yearsmontessori[stage][1] ) continue;
 
                 CacheManager.PresentationLinks links = cacheManager.links.get(link);
-                if (links.targets != null)
-                    for (int target : links.targets)
-                        addRow((String)presentation[settingsManager.language],
-                                presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
-                                null, (String)cacheManager.targets.get(target)[settingsManager.language]);
-                if (links.outcomes != null)
-                    for (int outcome : links.outcomes)
-                        addRow((String)presentation[settingsManager.language],
-                                presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
-                                (String)cacheManager.outcomes.get(outcome)[settingsManager.language], null);
+                for (int target : links.targets)
+                    addRow((String)presentation[settingsManager.language],
+                            presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
+                            null, (String)cacheManager.targets.get(target)[settingsManager.language]);
+                for (int outcome : links.outcomes)
+                    addRow((String)presentation[settingsManager.language],
+                            presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
+                            (String)cacheManager.outcomes.get(outcome)[settingsManager.language], null);
             }
         }
 
@@ -236,16 +232,14 @@ public class CurriculumForm {
                         (Double)presentation[3] > RawData.yearsmontessori[stage][1] ) continue;
 
                 CacheManager.PresentationLinks links = cacheManager.links.get(link);
-                if (links.targets != null)
-                    for (int target : links.targets)
-                        addRow((String)presentation[settingsManager.language],
-                                presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
-                                null, (String)cacheManager.targets.get(target)[settingsManager.language]);
-                if (links.outcomes != null)
-                    for (int outcome : links.outcomes)
-                        addRow((String)presentation[settingsManager.language],
-                                presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
-                                (String)cacheManager.outcomes.get(outcome)[settingsManager.language], null);
+                for (int target : links.targets)
+                    addRow((String)presentation[settingsManager.language],
+                            presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
+                            null, (String)cacheManager.targets.get(target)[settingsManager.language]);
+                for (int outcome : links.outcomes)
+                    addRow((String)presentation[settingsManager.language],
+                            presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
+                            (String)cacheManager.outcomes.get(outcome)[settingsManager.language], null);
             }
         }
 

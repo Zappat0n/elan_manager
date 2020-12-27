@@ -53,7 +53,7 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
         tablePlanning.getModel().setValueAt(null, row, column);
         String id = event_id + "." + ((event_sub != null) ? event_sub : 0);
         Integer row = formData.presentations.indexOf(id);
-        if (row != null && row != -1) {
+        if (row != -1) {
             int col = formData.students.indexOf(student)+1;
             tablePresentations.setValueAt(0, row, col);
         }

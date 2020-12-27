@@ -1,4 +1,4 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import bd.BDManager;
 import drive.DriveGovernor;
@@ -9,7 +9,6 @@ import utils.SettingsManager;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 public class DBContactsForm {
     private static final String TAG = DBContactsForm.class.getSimpleName();
@@ -41,10 +40,6 @@ public class DBContactsForm {
     }
 
     private void createUIComponents() {
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
         student = null;
         tabbedPane = new JTabbedPane();
 

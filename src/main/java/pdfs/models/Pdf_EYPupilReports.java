@@ -132,7 +132,7 @@ public class Pdf_EYPupilReports extends PDFForm_Reports {
                                String areaTitle) throws IOException {
         Table table = drawTableWithPoints(new int[]{Math.round(page.getMediaBox().getWidth()-2*margin-80*3),80,80,80},
                 new String[]{title, "Emerging", "Expected", "Exceeding"},
-                pointsToAdd, 12, 9);
+                pointsToAdd, 9);
         int nextPos = position - Math.round(table.getHeight());
 
         int limit = (areaTitle!=null)?90:30;

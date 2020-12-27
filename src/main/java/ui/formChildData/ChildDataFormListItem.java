@@ -240,10 +240,10 @@ public class ChildDataFormListItem extends JPanel {
     public static Byte getTerm(SettingsManager settingsManager, Date date) {
         if (date == null) return -1;
 
-        if (date.compareTo(settingsManager.date_TT) == 1 ) return 4;
-        else if (date.compareTo(settingsManager.date_ST) == 1 ) return 3;
-        else if (date.compareTo(settingsManager.date_FT) == 1 ) return 2;
-        else if (date.compareTo(settingsManager.date_SY) == 1 ) return 1;
+        if (date.compareTo(settingsManager.date_TT) > 0) return 4;
+        else if (date.compareTo(settingsManager.date_ST) > 0) return 3;
+        else if (date.compareTo(settingsManager.date_FT) > 0) return 2;
+        else if (date.compareTo(settingsManager.date_SY) > 0) return 1;
         else return 0;
     }
 

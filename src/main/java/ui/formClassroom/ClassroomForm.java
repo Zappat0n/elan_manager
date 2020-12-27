@@ -270,9 +270,6 @@ public class ClassroomForm {
         for (int i=0; i<numRows; i++) {
             for (int j=0; j<numCols; j++) {
                 excelStr.append(escape(table.getValueAt(rowsSelected[i], colsSelected[j])));
-                if (false) {
-                    table.setValueAt(null, rowsSelected[i], colsSelected[j]);
-                }
                 if (j<numCols-1) {
                     excelStr.append(ClipboardKeyAdapter.CELL_BREAK);
                 }

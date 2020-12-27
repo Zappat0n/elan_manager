@@ -93,9 +93,7 @@ public class ChildForm {
 
     private void createTargetsList(double year, int area) {
         ChildDataFormListModel model = new ChildDataFormListModel(cacheManager, settingsManager, year, area);
-        if (model.getSize() == 0) {
-        }
-        else {
+        if (model.getSize() > 0) {
             if (models == null) models = new HashMap<>();
             models.put(getModelString(1, year, area), model);
         }

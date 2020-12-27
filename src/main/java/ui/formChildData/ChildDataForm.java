@@ -28,7 +28,7 @@ import java.util.*;
 public class ChildDataForm {
     private static final String TAG = ChildDataForm.class.getSimpleName();
     //public static JFrame frame;
-    public static final Date endOfTerm = new Date(Long.valueOf("1548979200000"));
+    public static final Date endOfTerm = new Date(Long.parseLong("1548979200000"));
     private JPanel mainPanel;
     private JComboBox comboBoxClassrooms;
     private JComboBox comboBoxStudents;

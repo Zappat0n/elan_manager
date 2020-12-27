@@ -54,8 +54,8 @@ public class RawData {
     public static final HashMap<Double, List<Integer>> areasTargetperStage = getAreasTargetperstage();
 
     public static Integer[] getOutcomeMonthsperYear(Double year) {
-        if (year == yearsperstage[0]) return monthsOutcomesforEY;
-        else if (year == yearsperstage[1]) return monthsOutcomesforFS;
+        if (year.equals(yearsperstage[0])) return monthsOutcomesforEY;
+        else if (year.equals(yearsperstage[1])) return monthsOutcomesforFS;
         else return null;
     }
 

@@ -1,4 +1,4 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import javax.swing.table.DefaultTableModel;
 

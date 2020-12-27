@@ -6,14 +6,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 public class MyPDFGraphicsStreamEngine extends PDFGraphicsStreamEngine {
-    /**
-     * Constructor.
-     *
-     * @param page
-     */
     public MyPDFGraphicsStreamEngine(PDPage page) {
         super(page);
     }

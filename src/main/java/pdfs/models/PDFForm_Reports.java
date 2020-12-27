@@ -116,7 +116,7 @@ public class PDFForm_Reports {
     }
 
     void calculateStage(int classroom) { //1 comundi, 2 cdb, 3 taller
-        int years = getYears(false);
+        int years = getYears();
         if (years < 3) stageId = 0;
         else stageId = years - 2;
         /*
@@ -138,10 +138,10 @@ public class PDFForm_Reports {
         }*/
     }
 
-    private Integer getYears(Boolean startInSeptember) {
+    private Integer getYears() {
         if (birthDate == null) return null;
-        int startMonth = (startInSeptember) ? Calendar.SEPTEMBER : Calendar.DECEMBER;
-        int day = (startInSeptember) ? 1 : 31;
+        int startMonth = false ? Calendar.SEPTEMBER : Calendar.DECEMBER;
+        int day = false ? 1 : 31;
         Calendar now = Calendar.getInstance();
         now.setTime(reportDate != null ? reportDate : new java.util.Date());
         Calendar start = Calendar.getInstance();
@@ -269,7 +269,7 @@ public class PDFForm_Reports {
         return y - Math.round(height - bt.leading) - line_space;
     }
 
-    Table drawTableWithPoints(int[] columns, String[] title, Point[] pointsindex, int fontTitleSize, int fontSize) {
+    Table drawTableWithPoints(int[] columns, String[] title, Point[] pointsindex, int fontSize) {
         String[][] data = null;
         Boolean[] color = null;
         if (pointsindex != null) {
@@ -299,7 +299,7 @@ public class PDFForm_Reports {
                 color[i] = point.isRed;
             }
         }
-        return drawTable(columns, title, data, fontTitleSize, fontSize, color);
+        return drawTable(columns, title, data, 12, fontSize, color);
     }
 
     private Table drawTable(int[] columns, String[] title, String[][] data, int fontTitleSize, int fontSize,

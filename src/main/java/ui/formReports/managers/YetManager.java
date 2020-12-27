@@ -87,7 +87,7 @@ public class YetManager implements IManager{
 
     private void fillData(String[] array, Integer student, Integer id, String text){
         if (student == -1) {
-            if (id == classroom) {
+            if (id.equals(classroom)) {
                 array[0] = text;
             }
             return;

@@ -32,7 +32,7 @@ public class SettingsManager {
 
     private final JFrame frame;
     private String dir;
-    private String separator ="/";
+    private final String separator;
     private final String filename           = "Settings.ini";
     private final HashMap<String, String> settings;
     private static FileManager fileManager;
@@ -72,11 +72,9 @@ public class SettingsManager {
             while ((line = bufferedReader.readLine()) != null) {
                 fields[0] = line.substring(0, line.indexOf("="));
                 fields[1] = line.substring(line.indexOf("=")+1);
-                if (fields.length == 2) {
-                    settings.put(fields[0], fields[1]);
-                    if (fields[0].equals(TEACHER)) teacher = Integer.valueOf(fields[1]);
-                    if (fields[0].equals(USER)) user = fields[1];
-                }
+                settings.put(fields[0], fields[1]);
+                if (fields[0].equals(TEACHER)) teacher = Integer.valueOf(fields[1]);
+                if (fields[0].equals(USER)) user = fields[1];
             }
             if (getValue(REPORTS_DIR) == null) {
                 File newDir = new File(dir + "reports"+separator);

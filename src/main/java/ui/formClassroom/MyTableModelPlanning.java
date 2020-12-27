@@ -84,7 +84,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
                 int row = formData.students.indexOf(student);
                 int col = MyTableModelPresentations.DayOfWeekToInt(notes)+1;
                 setValueAt(getValue(event_id, event_sub), row, col);
-                events[row][col-1] = event_id + ((event_sub != null) ? "." + event_sub : ".0");
+                events[row][col-1] = event_id + "." + event_sub;
             }
         } catch (SQLException e) {
             MyLogger.e(TAG, e);

@@ -40,7 +40,7 @@ public class ChildFormListMouseAdapter extends MouseAdapter {
         else if (-30 > xpos && xpos > -43) index = 1;
         else if (-52 > xpos && xpos > -66) index = 0;
         else return;
-        if (subs != null) checkIndex(index, item);
+        checkIndex(index, item);
         item.boxChecked(form.getStudentId(), form.getStudentName(), index, subs);
         list.repaint();
     }

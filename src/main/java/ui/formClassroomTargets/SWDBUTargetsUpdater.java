@@ -74,9 +74,7 @@ public class SWDBUTargetsUpdater extends SwingWorker {
     }
 
     protected void addToBatch(Statement st, Integer student, Integer event_id, Integer oldvalue, int row, int col) throws SQLException {
-        if (newvalue == oldvalue) {
-        }
-        else if (newvalue > oldvalue)
+        if (newvalue > oldvalue)
             addBatchEvent(st, student, event_id, types[newvalue-1]);
         else {
             removeUpperValues(st, newvalue+1, student, event_id);
@@ -119,7 +117,7 @@ public class SWDBUTargetsUpdater extends SwingWorker {
             paintValue(event_id, event_type, student);
         }
         st.execute("DELETE FROM tempIds WHERE teacher = " + settingsManager.teacher + ";");
-        return result;
+        return false;
     }
 
     private Boolean checkTempEvents(Statement st) throws SQLException {
@@ -163,7 +161,7 @@ public class SWDBUTargetsUpdater extends SwingWorker {
     private void addBatchEvent(Statement st, Integer student, Integer event_id, Integer event_type) throws SQLException {
         String sql = "INSERT INTO `Events` (`date`, `student`, " +
                 "`event_type`, `event_id`, `notes`, `teacher`) VALUES('" + date + "'," + student + "," +
-                event_type + "," + event_id + "," + (null != null ? "'" + null + "'" : "NULL") +
+                event_type + "," + event_id + "," + "NULL" +
                 "," + settingsManager.teacher + ");";
         st.addBatch(sql);
     }

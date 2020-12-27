@@ -110,7 +110,7 @@ public class DriveGovernor {
         String folderId = (String) cacheManager.students.get(student)[4];
         String name = new SimpleDateFormat("yyyyMMdd").format(date) + "-" +presentation +
                 ((presentationSub==-1)? "":"-" + presentationSub);
-        String fileId = null;
+        String fileId;
         try {
             fileId = manager.uploadMediaFile(folderId, date, name, image);
             bdManager.addMedia(new java.sql.Date(date.getTime()),student, presentation, presentationSub, comments,  fileId);
@@ -145,7 +145,7 @@ public class DriveGovernor {
     public void uploadPicture(int student, Date date, int presentation, Integer presentationSub,
                               java.io.File file, String comments) {
         String folderId = (String) cacheManager.students.get(student)[4];
-        String name = "";
+        String name;
 
         try {
             name = checkNameForFile(folderId, new SimpleDateFormat("yyyyMMdd").format(date) + "-" +presentation +

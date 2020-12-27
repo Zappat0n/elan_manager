@@ -160,7 +160,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("progress" == evt.getPropertyName()) {
+        if ("progress".equals(evt.getPropertyName())) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
             progressBar.setString(String.format("Completed %d%% of task.\n", progress * 100 / max));

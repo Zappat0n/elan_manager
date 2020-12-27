@@ -51,7 +51,7 @@ public class ClipboardKeyAdapter extends KeyAdapter {
                     textField.setText(textField.getText().substring(0,
                             textField.getText().length()-1));
                 }
-                if (textField != null) textField.requestFocus();
+                textField.requestFocus();
             });
         }
     }

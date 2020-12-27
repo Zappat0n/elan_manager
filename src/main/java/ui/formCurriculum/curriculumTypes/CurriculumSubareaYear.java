@@ -1,4 +1,4 @@
-package ui.formCurriculum.CurriculumTypes;
+package ui.formCurriculum.curriculumTypes;
 
 import ui.formCurriculum.Curriculum;
 import utils.CacheManager;

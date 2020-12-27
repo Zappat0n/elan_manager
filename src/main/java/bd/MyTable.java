@@ -81,7 +81,7 @@ public class MyTable {
 
         StringBuilder query = new StringBuilder("INSERT INTO " + name);
 
-        if (key != null && keys.length > 0){
+        if (key != null){
             query.append(" (").append(keys[0]);
             for (int i = 1; i < keys.length; i++) query.append(",").append(keys[i]);
             query.append(")");
@@ -158,7 +158,7 @@ public class MyTable {
                 return "\"" + value + "\"";
             else if (value.contains("\""))
                 return "'" + value + "'";
-            else return "'" + value.replace("'", "'") + "'";
+            else return "'" + value + "'";
         } else return null;
     }
 

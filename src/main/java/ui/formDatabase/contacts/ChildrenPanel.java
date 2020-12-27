@@ -1,4 +1,4 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import ui.components.DateLabelFormatter;
 import utils.CacheManager;

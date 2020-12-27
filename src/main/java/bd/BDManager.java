@@ -177,7 +177,7 @@ public class BDManager {
             ps = co.prepareStatement("INSERT INTO `Events` (`date`, `student`, " +
                             "`event_type`, `event_id`, `event_sub`, `notes`, `teacher`) VALUES (?, ?, ?, ?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
-            ps = prepareToAddEvent(ps, date, studentId, event_type, event_id, event_sub, notes);
+            prepareToAddEvent(ps, date, studentId, event_type, event_id, event_sub, notes);
             if (ps.executeUpdate() != 0) {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -194,8 +194,8 @@ public class BDManager {
         return null;
     }
 
-    private PreparedStatement prepareToAddEvent(PreparedStatement ps, Date date, Integer studentId, Integer event_type, Integer event_id,
-                                      Integer event_sub, String notes) {
+    private void prepareToAddEvent(PreparedStatement ps, Date date, Integer studentId, Integer event_type, Integer event_id,
+                                   Integer event_sub, String notes) {
         try {
             ps.setDate(1, date);
             if (studentId != null) ps.setInt(2, studentId);
@@ -213,7 +213,6 @@ public class BDManager {
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
         }
-        return ps;
     }
 
     public void addOrEditEventForStudentAndTypeAndId(Connection co, Date date, Integer studentId, Integer event_type,
@@ -348,17 +347,16 @@ public class BDManager {
         return null;
     }
 
-    public synchronized int executeQueryUpdate(Connection connection, String query) {
+    public synchronized void executeQueryUpdate(Connection connection, String query) {
         try {
             st = connection.createStatement();
-            return st.executeUpdate(query);
+            st.executeUpdate(query);
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
             showError("No he podido realizar la operación\n"+e.getMessage());
         } finally {
             closeQuietlyStatement();
         }
-        return 0;
     }
 
     public static void closeQuietly(Connection connection, PreparedStatement ps) {
