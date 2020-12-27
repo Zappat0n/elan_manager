@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.Properties;
 
 public class ClassroomFormTargets {
-    private static final String TAG = ClassroomFormTargets.class.getSimpleName();
     public static BDManager bdManager;
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
@@ -30,7 +29,6 @@ public class ClassroomFormTargets {
     private JDatePickerImpl datePicker;
     private JButton buttonPrint;
     private JSplitPane mainSP;
-    private static Font font;
 
     public static JPanel main(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager) {
         ClassroomFormTargets.bdManager = bdManager;

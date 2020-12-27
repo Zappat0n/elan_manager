@@ -17,7 +17,6 @@ public class BDManager {
     private static final String TAG = BDManager.class.getSimpleName();
     public static final TableClassrooms tableClassrooms = new TableClassrooms();
     public static final TableContacts tableContacts = new TableContacts();
-    public static final TableDriveFolderKeys tableDriveFolderKeys = new TableDriveFolderKeys();
     public static final TableEvents tableEvents = new TableEvents();
     public static final TableEventsEoY tableEventsEoY = new TableEventsEoY();
     public static final TableEventsYet tableEventsYet = new TableEventsYet();
@@ -148,10 +147,6 @@ public class BDManager {
             closeQuietly(co);
         }
         return null;
-    }
-
-    public void addFrame(JFrame frame) {
-        this.frame = frame;
     }
 
     private void showError(String error) {

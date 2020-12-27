@@ -105,8 +105,7 @@ class MainForm {
         buttonCurriculum = new JButton();
         buttonCurriculum.addActionListener(e -> SwingUtilities.invokeLater(() -> {
             if (!ReportsForm.yetChanged) {
-                addPanelToContainer(CurriculumForm.main(ApplicationLoader.settingsManager, ApplicationLoader.bdManager,
-                        ApplicationLoader.cacheManager));
+                addPanelToContainer(CurriculumForm.main(ApplicationLoader.settingsManager, ApplicationLoader.cacheManager));
             } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
         }));
         buttonDatabase = new JButton();
@@ -115,8 +114,7 @@ class MainForm {
             JMenuItem m1 = new JMenuItem("Contacts");
             m1.addActionListener(e -> {
                 if (!ReportsForm.yetChanged) {
-                    addPanelToContainer(DBContactsForm.main(ApplicationLoader.settingsManager, ApplicationLoader.bdManager,
-                            ApplicationLoader.cacheManager));
+                    addPanelToContainer(DBContactsForm.main(ApplicationLoader.bdManager, ApplicationLoader.cacheManager));
                 } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
             });
             menu.add(m1);

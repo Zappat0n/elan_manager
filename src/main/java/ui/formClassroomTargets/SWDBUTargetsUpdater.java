@@ -99,7 +99,6 @@ public class SWDBUTargetsUpdater extends SwingWorker {
     }
 
     private Boolean checkTempIds(Statement st, ResultSet rs) throws SQLException {
-        Boolean result = false;
         StringBuilder sql = new StringBuilder("INSERT INTO tempIds VALUES ");
          do {
              sql.append("(").append(rs.getInt(1)).append(",").append(settingsManager.teacher).append("),");
@@ -116,8 +115,7 @@ public class SWDBUTargetsUpdater extends SwingWorker {
             Integer event_type = set.getInt(TableEvents.event_type);
             paintValue(event_id, event_type, student);
         }
-        st.execute("DELETE FROM tempIds WHERE teacher = " + settingsManager.teacher + ";");
-        return false;
+        return st.execute("DELETE FROM tempIds WHERE teacher = " + settingsManager.teacher + ";");
     }
 
     private Boolean checkTempEvents(Statement st) throws SQLException {

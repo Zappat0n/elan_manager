@@ -38,7 +38,6 @@ public class CacheManager {
     public final HashMap<Integer, Object[]> presentations; //name, nombre, subarea,year,priority
     public final HashMap<Integer, Object[]> presentationssub;//name, nombre
     public final HashMap<Integer, LinkedHashMap<Integer, HashSet<Integer>>> stageAreaSubareaMontessori;
-    public HashMap<Double, ArrayList<Integer>> subareasTargetperyear;
     public final LinkedHashMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> targetsperyearandsubarea;
     public final LinkedHashMap<Integer, LinkedHashMap<Integer, ArrayList<Integer>>> outcomespermonthandsubarea;
     public final SortedMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> presentationsperyearandsubarea;
@@ -51,7 +50,6 @@ public class CacheManager {
     public final HashMap<Integer[], PresentationLinks> links;
     public final HashMap<Integer, HashSet<Integer[]>> linksNCOutcomes;
     public final HashMap<Integer, HashSet<Integer[]>> linksNCTargets;
-    public final HashMap<Integer, HashMap<String, String>> globalVars;
 
     public static class PresentationLinks {
         public final ArrayList<Integer> outcomes;
@@ -64,7 +62,7 @@ public class CacheManager {
 
     private final JLabel labelAction;
 
-    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction, JLabel labelError) throws SQLException {
+    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) throws SQLException {
         this.bdManager = bdManager;
         this.settingsManager = settingsManager;
         this.labelAction = labelAction;
@@ -93,7 +91,6 @@ public class CacheManager {
         linksNCOutcomes = new HashMap<>();
         linksNCTargets = new HashMap<>();
         stageAreaSubareaMontessori = new HashMap<>();
-        globalVars = new HashMap<>();
         loadData();
     }
 
@@ -276,6 +273,8 @@ public class CacheManager {
                     case SettingsManager.THIRD_TERM -> settingsManager.setDate_TT(value);
                 }
             }
+        } catch (Exception ex) {
+            MyLogger.e(TAG, ex);
         } finally {
             BDManager.closeQuietly(co, st);
         }

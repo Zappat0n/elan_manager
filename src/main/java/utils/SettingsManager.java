@@ -29,6 +29,10 @@ public class SettingsManager {
     public static final String FILENAME     = "FILENAME";
     public static final String DOWNLOADURL  = "DOWNLOADURL";
     public static final String VERSIONURL   = "VERSIONURL";
+    public static final String EMAIL        = "EMAIL";
+    public static final String EMAIL_SERVER = "EMAIL_SERVER";
+    public static final String EMAIL_SOCKET = "EMAIL_SOCKET";
+    public static final String EMAIL_PWD    = "EMAIL_PWD";
 
     private final JFrame frame;
     private String dir;

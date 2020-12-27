@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class SwingReportGenerator extends SwingWorker implements PropertyChangeListener {
+public class SwingReportGenerator extends SwingWorker<Object, Object> implements PropertyChangeListener {
     private static final String TAG = SwingReportGenerator.class.getSimpleName();
     final BDManager bdManager;
     final CacheManager cacheManager;
@@ -49,13 +49,14 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
     final String header;
     final String body;
     final ArrayList<Integer> students;
-    final DefaultListModel log;
+    final DefaultListModel<String> log;
 
     public SwingReportGenerator(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
                                 JFrame frame, Integer student, Integer classroom, Date reportDate, Date changeDate,
                                 Boolean recordDate, Boolean sendEmail, Boolean doYetReport, Boolean doTargetsReport,
                                 Boolean doEoYReport, Boolean doEoYComments, Boolean doEoYPhotos, Boolean checkContacts,
-                                Boolean uploadToDrive, String header, String body, JProgressBar progressBar, DefaultListModel log) {
+                                Boolean uploadToDrive, String header, String body, JProgressBar progressBar,
+                                DefaultListModel<String> log) {
         this.bdManager = bdManager;
         this.cacheManager = cacheManager;
         this.settingsManager = settingsManager;
@@ -126,7 +127,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
                 }
                 if (f1!=null || f2!=null || f3!=null) {
                     if (sendEmail)
-                        EmailManager.sendEmail(cacheManager, bdManager, co, studentId, new File[] {f1,f2, f3},
+                        EmailManager.sendEmail(co, studentId, new File[] {f1,f2, f3},
                                 reportManager.getTextForEmail(header, studentId), reportManager.getTextForEmail(body, studentId));
                     if (uploadToDrive) {
                         File finalF1 = f1; File finalF2 = f2; File finalF3 = f3;

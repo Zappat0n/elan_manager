@@ -96,10 +96,6 @@ public class ChildDataFormListItem extends JPanel {
         return box3.isSelected();
     }
 
-    public Boolean isTitle() {
-        return isTitle;
-    }
-
     public Integer getId() {
         return item;
     }

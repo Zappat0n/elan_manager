@@ -140,8 +140,8 @@ public class PDFForm_Reports {
 
     private Integer getYears() {
         if (birthDate == null) return null;
-        int startMonth = false ? Calendar.SEPTEMBER : Calendar.DECEMBER;
-        int day = false ? 1 : 31;
+        int startMonth = Calendar.DECEMBER;
+        int day = 31;
         Calendar now = Calendar.getInstance();
         now.setTime(reportDate != null ? reportDate : new java.util.Date());
         Calendar start = Calendar.getInstance();

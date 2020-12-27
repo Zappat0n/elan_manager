@@ -450,7 +450,6 @@ public class ChildDataForm {
         tPTallerGeography = new JTabbedPane();
         tPTallerHistory = new JTabbedPane();
         tpTallerBiology = new JTabbedPane();
-        JTabbedPane tpTallerScience = new JTabbedPane();
         tpTallerSpanish = new JTabbedPane();
 
         montessoriPanes = new JTabbedPane[][]{

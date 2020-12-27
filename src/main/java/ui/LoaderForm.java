@@ -42,7 +42,8 @@ public class LoaderForm {
                     return null;
                 }
                 try {
-                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager, ApplicationLoader.settingsManager, lAction, lError);
+                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager,
+                            ApplicationLoader.settingsManager, lAction);
                     MainForm.main(null);
                 } catch (SQLException e) {
                     MyLogger.e(TAG, e);

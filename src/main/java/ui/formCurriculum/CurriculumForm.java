@@ -23,7 +23,6 @@ import java.util.HashSet;
 
 public class CurriculumForm {
     private static final String TAG = CurriculumForm.class.getSimpleName();
-    private static BDManager bdManager;
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
     private JPanel mainPanel;
@@ -41,8 +40,7 @@ public class CurriculumForm {
     private Curriculum curriculum;
     private TableLinksGovernor linksGovernor;
 
-    public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
-        CurriculumForm.bdManager = bdManager;
+    public static JPanel main(SettingsManager settingsManager, CacheManager cacheManager) {
         CurriculumForm.settingsManager = settingsManager;
         CurriculumForm.cacheManager = cacheManager;
         CurriculumForm form = new CurriculumForm();

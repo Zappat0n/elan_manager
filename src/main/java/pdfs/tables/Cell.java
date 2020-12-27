@@ -3,6 +3,7 @@ package pdfs.tables;
 import java.awt.*;
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class Cell {
 
     public enum HorizontalAlignment {

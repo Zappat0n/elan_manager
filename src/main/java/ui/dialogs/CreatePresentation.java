@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class CreatePresentation extends JDialog {
-    private static final String TAG = CreatePresentation.class.getSimpleName();
     private static final Double[][] years = new Double[][]{{1.5, 2d, 2.5}, {3d, 3.5, 4d, 4.5, 5d, 5.5},
             {6d, 6.5, 7d, 7.5, 8d, 8.5, 9d, 9.5, 10d, 10.5, 11d, 11.5}};
     private final CacheManager cacheManager;
@@ -38,7 +37,7 @@ public class CreatePresentation extends JDialog {
     private ArrayList<Integer> areas;
     private ArrayList<Integer> subareas;
 
-    public CreatePresentation(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
+    public CreatePresentation(CacheManager cacheManager, SettingsManager settingsManager,
                               Integer stage, Integer area, Integer subarea, Integer presentation) {
         this.cacheManager = cacheManager;
         this.settingsManager = settingsManager;
@@ -80,7 +79,7 @@ public class CreatePresentation extends JDialog {
     public static void main(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
                             Integer stage, Integer area, Integer subarea, Integer presentation) {
         if (stage == null) return;
-        CreatePresentation dialog = new CreatePresentation(cacheManager, bdManager, settingsManager, stage, area,
+        CreatePresentation dialog = new CreatePresentation(cacheManager, settingsManager, stage, area,
                 subarea, presentation);
         dialog.pack();
         dialog.setVisible(true);
@@ -147,10 +146,8 @@ public class CreatePresentation extends JDialog {
             ((DefaultComboBoxModel)cBPresentation.getModel()).addElement(name);
             ((DefaultListModel)listPresentations.getModel()).addElement(name);
         }
-
         cBPresentation.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));
         listPresentations.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));
-
     }
 
 

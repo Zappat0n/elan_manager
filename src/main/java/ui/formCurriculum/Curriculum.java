@@ -11,22 +11,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Curriculum {
-    protected final int[] types = {0, 1, 2}; //subarea, item, subitem;
     protected final CacheManager cacheManager;
     protected final SettingsManager settingsManager;
     protected final int stage;
-    protected final int area;
     protected final HashSet<Integer> subareas;
-    protected final String name;
     protected final ArrayList<Line> lines;
 
     public Curriculum(CacheManager cacheManager, SettingsManager settingsManager, int stage, int area) {
         this.cacheManager = cacheManager;
         this.settingsManager = settingsManager;
         this.stage = stage;
-        this.area = area;
         lines = new ArrayList<>();
-        name = cacheManager.areasMontessori.get(area)[settingsManager.language];
         subareas = cacheManager.stageAreaSubareaMontessori.get(stage).get(area);
     }
 

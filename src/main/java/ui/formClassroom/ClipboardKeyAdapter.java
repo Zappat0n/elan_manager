@@ -22,7 +22,7 @@ public class ClipboardKeyAdapter extends KeyAdapter {
     private final JTextField textField;
 
 
-    public ClipboardKeyAdapter(JPanel frame, JTable table, JTextField textField, CacheManager cacheManager, ClassroomFormData formData) {
+    public ClipboardKeyAdapter(JTable table, JTextField textField, CacheManager cacheManager, ClassroomFormData formData) {
         this.table = table;
         this.cacheManager = cacheManager;
         this.textField = textField;

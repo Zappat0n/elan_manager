@@ -14,14 +14,12 @@ public class DBContactsForm {
     private static final String TAG = DBContactsForm.class.getSimpleName();
 
     private static BDManager bdManager;
-    private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
 
     private JPanel mainPanel;
     private JList listClassrooms;
     private JTable tableContacts;
     private JList listStudents;
-    private JComboBox cBClassroom;
     private JButton buttonSave;
     private JButton buttonUpload;
     private JButton buttonAddContact;
@@ -29,11 +27,9 @@ public class DBContactsForm {
     private JButton buttonAddChildren;
     private Integer student;
     private MyTableModel tableModel;
-    private ChildrenPanel childrenPanel;
 
-    public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
+    public static JPanel main(BDManager bdManager, CacheManager cacheManager) {
         DBContactsForm.bdManager = bdManager;
-        DBContactsForm.settingsManager = settingsManager;
         DBContactsForm.cacheManager = cacheManager;
         DBContactsForm form = new DBContactsForm();
         return form.mainPanel;
@@ -83,7 +79,6 @@ public class DBContactsForm {
         });
 
         buttonSave = new JButton();
-        JButton buttonNew = new JButton();
         buttonAddContact = new JButton();
         buttonAddChildren = new JButton();
 

@@ -4,6 +4,7 @@ import bd.BDManager;
 import pdfs.models.Pdf_Planning;
 import ui.components.DateLabelFormatter;
 import utils.CacheManager;
+import utils.MyLogger;
 import utils.SettingsManager;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -35,15 +36,12 @@ public class ClassroomForm {
     private JTextField tFSearch;
     private UtilDateModel dateModel;
     public JDatePickerImpl datePicker;
-    private JLabel labelFound;
     private JTable tablePlanning;
     private JButton buttonPrint;
     private JSplitPane mainSP;
     private JList listSearch;
-    Integer currentSearch = null;
     ArrayList<Integer> areas;
     private LinkedHashMap<String, Integer[]> presentationssearched;
-
 
     public static JPanel main(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager) {
         ClassroomForm.bdManager = bdManager;
@@ -66,124 +64,128 @@ public class ClassroomForm {
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         dateModel.setValue(new Date());
 
-        co = bdManager.connect();
-        formData = new ClassroomFormData(mainPanel, cacheManager, bdManager);
-        tablePresentations = new JTable(new MyTableModelPresentations(co, settingsManager, cacheManager, bdManager, mainPanel, dateModel, formData)) {
-            @Override
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return new MyTablePresentationsRenderer(cacheManager, formData);
-            }
-        };
-        tablePresentations.setRowSelectionAllowed ( false );
-        tablePresentations.setCellSelectionEnabled ( true );
-        tablePresentations.getTableHeader().setDefaultRenderer(new MyHeaderRenderer(formData));
-        tablePresentations.addKeyListener(new ClipboardKeyAdapter(mainPanel, tablePresentations, tFSearch, cacheManager, formData));
-        tablePresentations.setShowGrid(true);
+        try {
+            co = bdManager.connect();
+            formData = new ClassroomFormData(mainPanel, cacheManager);
+            tablePresentations = new JTable(new MyTableModelPresentations(co, settingsManager, cacheManager, bdManager, mainPanel, dateModel, formData)) {
+                @Override
+                public TableCellRenderer getCellRenderer(int row, int column) {
+                    return new MyTablePresentationsRenderer(cacheManager, formData);
+                }
+            };
+            tablePresentations.setRowSelectionAllowed ( false );
+            tablePresentations.setCellSelectionEnabled ( true );
+            tablePresentations.getTableHeader().setDefaultRenderer(new MyHeaderRenderer(formData));
+            tablePresentations.addKeyListener(new ClipboardKeyAdapter(tablePresentations, tFSearch, cacheManager, formData));
+            tablePresentations.setShowGrid(true);
 
-        tablePlanning = new JTable(new MyTableModelPlanning(bdManager, settingsManager, co, cacheManager, dateModel, mainPanel, formData)) {
-            @Override
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return new MyTablePlanningRenderer();
-            }
-        };
-        tablePlanning.getModel().addTableModelListener(e -> updateRowHeight(tablePlanning.getRowCount()-1));
-        tablePlanning.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
-            @Override
-            public void columnAdded(TableColumnModelEvent tableColumnModelEvent) { }
+            tablePlanning = new JTable(new MyTableModelPlanning(bdManager, settingsManager, co, cacheManager, dateModel, mainPanel, formData)) {
+                @Override
+                public TableCellRenderer getCellRenderer(int row, int column) {
+                    return new MyTablePlanningRenderer();
+                }
+            };
+            tablePlanning.getModel().addTableModelListener(e -> updateRowHeight(tablePlanning.getRowCount()-1));
+            tablePlanning.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+                @Override
+                public void columnAdded(TableColumnModelEvent tableColumnModelEvent) { }
 
-            @Override
-            public void columnRemoved(TableColumnModelEvent tableColumnModelEvent) { }
+                @Override
+                public void columnRemoved(TableColumnModelEvent tableColumnModelEvent) { }
 
-            @Override
-            public void columnMoved(TableColumnModelEvent tableColumnModelEvent) { }
+                @Override
+                public void columnMoved(TableColumnModelEvent tableColumnModelEvent) { }
 
-            @Override
-            public void columnMarginChanged(ChangeEvent changeEvent) {
-                updateRowHeight(tablePlanning.getRowCount()-1);
-            }
-
-            @Override
-            public void columnSelectionChanged(ListSelectionEvent listSelectionEvent) { }
-        });
-
-        tablePresentations.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
-                new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
-        tablePlanning.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
-                new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
-        formData.setTables(tablePresentations, tablePlanning);
-
-        listClassrooms = new JList();
-        listClassrooms.addListSelectionListener(e -> {
-            if (e.getValueIsAdjusting()) return;
-            listStage.clearSelection();
-            listArea.clearSelection();
-            formData.loadStudents(listClassrooms.getSelectedIndex()+1);
-            MyTableModelPlanning model = (MyTableModelPlanning)tablePlanning.getModel();
-            model.resetTable();
-            model.loadData();
-        });
-
-        listStage = new JList();
-        listStage.addListSelectionListener(e -> {
-            int index = listStage.getSelectedIndex();
-            if (index == -1) return;
-
-            Set<Integer> _areas = cacheManager.stageAreaSubareaMontessori.get(index).keySet();
-            areas.clear();
-            Vector areas_names = new Vector();
-            for (int area: _areas) {
-                areas.add(area);
-                areas_names.add(cacheManager.areasMontessori.get(area)[settingsManager.language]);
-            }
-            listArea.setListData(areas_names);
-            formData.area = null;
-        });
-
-        listArea = new JList();
-        listArea.addListSelectionListener(e -> loadData());
-
-        buttonCopy = new JButton();
-        buttonCopy.addActionListener(e -> {
-            tablePresentations.selectAll();
-            copyToClipboard(tablePresentations);
-        });
-
-        buttonPrint = new JButton();
-        buttonPrint.addActionListener(e -> {
-            Pdf_Planning planning = new Pdf_Planning(bdManager, cacheManager, settingsManager, tablePlanning,
-                    listClassrooms.getSelectedIndex()+1, dateModel.getValue());
-            planning.createDocument();
-        });
-
-        tFSearch = new JTextField();
-        tFSearch.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent documentEvent) { updateSearch(); }
-
-            @Override
-            public void removeUpdate(DocumentEvent documentEvent) { updateSearch(); }
-
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent){ updateSearch(); }
-        });
-
-        listSearch = new JList(new DefaultListModel());
-        listSearch.addListSelectionListener(e -> {
-            if (listSearch.getSelectedIndex() == -1) return;
-            Integer[] datos = presentationssearched.get(listSearch.getSelectedValue()); //id, subarea
-            Object[] datos_subarea = cacheManager.subareasMontessori.get(datos[1]); //name, nombre, area
-            SwingUtilities.invokeLater(() -> {
-                listArea.setSelectedIndex(areas.indexOf(datos_subarea[2]));
-                int position = (formData.presentations.indexOf(datos[0]+".0"));
-                if (position != -1) {
-                    tablePresentations.changeSelection(position,0,false,false);
-                    tablePresentations.scrollRectToVisible(tablePresentations.getCellRect(position,0,true));
+                @Override
+                public void columnMarginChanged(ChangeEvent changeEvent) {
+                    updateRowHeight(tablePlanning.getRowCount()-1);
                 }
 
+                @Override
+                public void columnSelectionChanged(ListSelectionEvent listSelectionEvent) { }
             });
-        });
 
-        BDManager.closeQuietly(co);
+            tablePresentations.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
+                    new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
+            tablePlanning.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
+                    new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
+            formData.setTables(tablePresentations);
+
+            listClassrooms = new JList();
+            listClassrooms.addListSelectionListener(e -> {
+                if (e.getValueIsAdjusting()) return;
+                listStage.clearSelection();
+                listArea.clearSelection();
+                formData.loadStudents(listClassrooms.getSelectedIndex()+1);
+                MyTableModelPlanning model = (MyTableModelPlanning)tablePlanning.getModel();
+                model.resetTable();
+                model.loadData();
+            });
+
+            listStage = new JList();
+            listStage.addListSelectionListener(e -> {
+                int index = listStage.getSelectedIndex();
+                if (index == -1) return;
+
+                Set<Integer> _areas = cacheManager.stageAreaSubareaMontessori.get(index).keySet();
+                areas.clear();
+                Vector areas_names = new Vector();
+                for (int area: _areas) {
+                    areas.add(area);
+                    areas_names.add(cacheManager.areasMontessori.get(area)[settingsManager.language]);
+                }
+                listArea.setListData(areas_names);
+                formData.area = null;
+            });
+
+            listArea = new JList();
+            listArea.addListSelectionListener(e -> loadData());
+
+            buttonCopy = new JButton();
+            buttonCopy.addActionListener(e -> {
+                tablePresentations.selectAll();
+                copyToClipboard(tablePresentations);
+            });
+
+            buttonPrint = new JButton();
+            buttonPrint.addActionListener(e -> {
+                Pdf_Planning planning = new Pdf_Planning(bdManager, cacheManager, settingsManager, tablePlanning,
+                        listClassrooms.getSelectedIndex()+1, dateModel.getValue());
+                planning.createDocument();
+            });
+
+            tFSearch = new JTextField();
+            tFSearch.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent documentEvent) { updateSearch(); }
+
+                @Override
+                public void removeUpdate(DocumentEvent documentEvent) { updateSearch(); }
+
+                @Override
+                public void changedUpdate(DocumentEvent documentEvent){ updateSearch(); }
+            });
+
+            listSearch = new JList(new DefaultListModel());
+            listSearch.addListSelectionListener(e -> {
+                if (listSearch.getSelectedIndex() == -1) return;
+                Integer[] datos = presentationssearched.get(listSearch.getSelectedValue()); //id, subarea
+                Object[] datos_subarea = cacheManager.subareasMontessori.get(datos[1]); //name, nombre, area
+                SwingUtilities.invokeLater(() -> {
+                    listArea.setSelectedIndex(areas.indexOf(datos_subarea[2]));
+                    int position = (formData.presentations.indexOf(datos[0]+".0"));
+                    if (position != -1) {
+                        tablePresentations.changeSelection(position,0,false,false);
+                        tablePresentations.scrollRectToVisible(tablePresentations.getCellRect(position,0,true));
+                    }
+
+                });
+            });
+        } catch (Exception ex) {
+            MyLogger.e(TAG, ex);
+        } finally {
+            BDManager.closeQuietly(co);
+        }
     }
 
     private void updateRowHeight(Integer last){

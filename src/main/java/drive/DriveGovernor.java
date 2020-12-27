@@ -29,7 +29,6 @@ public class DriveGovernor {
     private static final String BUTTON_RED = "Button-Blank-Red-icon.png";
     private static final String BUTTON_YELLOW = "Button-Blank-Yellow-icon.png";
     private static final String BUTTON_GREEN = "Signal-Receiver-icon.png";//"Button-Next-icon.png";
-    public static final String[] FOLDER_IDS = {SNAILS_FOLDER_ID, ROOTS_FOLDER_ID, SEEDS_FOLDER_ID, VOLCANOES_FOLDER_ID};
 
     public GoogleDriveManager manager;
     final JButton buttonUpload;
@@ -163,14 +162,5 @@ public class DriveGovernor {
         FileList list = manager.getFolderContent(folderId, name);
         if (list.getFiles().size() == 0) return name;
         else return name + "_" + list.getFiles().size();
-    }
-
-    private String getFolderYearName(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        if (month < 9) return (year-1)+"-"+year;
-        else return year+"-"+(year+1);
     }
 }
