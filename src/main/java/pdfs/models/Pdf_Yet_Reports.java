@@ -53,10 +53,6 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
 
             position = addTable();
 
-            //model = loadModel(new Double[]{year});
-            //loadEndEvents(co, studentId);
-            //if (year == 2.5) year = 0;
-            //checkCurrentStage();
             doc.save(fileName);
         } catch (Exception e) {
             MyLogger.e(TAG, e);
@@ -163,26 +159,6 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
         contents.close();
         return Math.round(position - Math.round(table.getHeight()));
 
-            /*
-        int height;
-        BoxedText bt = null;
-        if (year == 0 && areaId == 10) {
-            height = 0;
-        } else {
-            bt = new BoxedText(boxedText, fontSize, page.getMediaBox().getWidth()-2*margin, PDType1Font.HELVETICA);
-            height = Math.round(bt.getHeight());
-        }
-
-        int subheight = (sub == null) ? 0 : Math.round(font.getHeight(fontSize) + line_space * 3);
-
-        int nextPos = position - Math.round(table.getHeight()) - height - line_space *3 -subheight;
-        if (nextPos < 30) nextPage();
-        position = addTable(page,Math.round(margin), position, table);
-        position = position - line_space *3;
-
-        if (bt != null) position = addBoxedText(page, page.getMediaBox().getWidth()-2*margin, bt,
-                Math.round(margin), position, PDType1Font.HELVETICA, fontSize);
-        if (sub != null)position = addTitle(page, sub, Math.round(margin), position - line_space*3, fontSize, false);*/
     }
 
     void loadEndEvents(Connection co) throws SQLException {

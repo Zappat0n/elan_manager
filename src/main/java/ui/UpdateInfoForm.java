@@ -16,8 +16,9 @@ import java.net.URLConnection;
  */
 public class UpdateInfoForm  extends JDialog {
     private static final String TAG = UpdateInfoForm.class.getSimpleName();
+    private final String ERROR_DELETING = "Error deleting file: ";
+    private final String ERROR_MKDIR = "Error creating directory: ";
     private final SettingsManager settingsManager;
-    private final Boolean isAdmin;
     private final String root;
     private final JFrame frame;
     private JEditorPane infoPane;
@@ -29,7 +30,6 @@ public class UpdateInfoForm  extends JDialog {
         super(owner, "Actualización", true);
         frame = owner;
         this.settingsManager = settingsManager;
-        this.isAdmin = isAdmin;
         root = settingsManager.getDir() + "update" + settingsManager.getSeparator();
         initComponents();
         infoPane.setText(info);
@@ -87,7 +87,12 @@ public class UpdateInfoForm  extends JDialog {
     private void download() {
         try {
             File dir = new File(root);
-            if (!dir.exists()) dir.mkdir();
+            if (!dir.exists()) {
+                if (!dir.mkdir()) {
+                    MyLogger.d(TAG, ERROR_MKDIR + dir);
+                    return;
+                }
+            }
         } catch (Exception e) {
             MyLogger.e(TAG, e);
             JOptionPane.showMessageDialog(frame, "Error. No he podido crear el directorio 'update'.",
@@ -127,9 +132,9 @@ public class UpdateInfoForm  extends JDialog {
 
     private void cleanup() {
         File f = new File(root+filename);
-        f.delete();
+        if (!f.delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());
         remove(new File(root));
-        new File(root).delete();
+        if(!new File(root).delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());;
     }
 
     private void remove(File f) {
@@ -138,9 +143,9 @@ public class UpdateInfoForm  extends JDialog {
         for(File ff:files) {
             if(ff.isDirectory()) {
                 remove(ff);
-                ff.delete();
+                if (!f.delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());
             } else {
-                ff.delete();
+                if (!f.delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());
             }
         }
     }
@@ -150,7 +155,10 @@ public class UpdateInfoForm  extends JDialog {
         assert files != null;
         for(File ff:files) {
             if(ff.isDirectory()){
-                new File(dir+"/"+ff.getName()).mkdir();
+                if (!new File(dir+"/"+ff.getName()).mkdir()) {
+                    MyLogger.d(TAG, ERROR_MKDIR + dir);
+                    return;
+                }
                 copyFiles(ff,dir+"/"+ff.getName());
             } else {
                 copy(ff.getAbsolutePath(),dir+"/"+ff.getName());
@@ -180,7 +188,7 @@ public class UpdateInfoForm  extends JDialog {
         InputStream is = conn.getInputStream();
         int max = conn.getContentLength();
         infoPane.setText("<html>Descargando fichero...<br>Tamaño: "+max+" Bytes");
-        BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(new File(root+fileName)));
+        BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(root+fileName));
         byte[] buffer = new byte[32 * 1024];
         int bytesRead;
         int in = 0;

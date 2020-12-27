@@ -46,7 +46,7 @@ public class LinkManager {
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
         } finally {
-            BDManager.closeQuietly(co, ps);
+            BDManager.closeQuietly(co, null);
         }
     }
 
@@ -113,7 +113,7 @@ public class LinkManager {
             } catch (SQLException e) {
                 MyLogger.e(TAG, e);
             } finally {
-                BDManager.closeQuietly(co, ps);
+                BDManager.closeQuietly(co, null);
             }
         }
     }

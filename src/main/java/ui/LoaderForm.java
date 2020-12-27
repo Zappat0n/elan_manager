@@ -18,13 +18,12 @@ public class LoaderForm {
     private JPanel MainPanel;
     private JProgressBar pBar;
     private static JLabel lAction;
-    private static JLabel lError;
 
     private void createUIComponents(){
         labelAction = new JLabel();
         labelError = new JLabel();
         lAction = labelAction;
-        lError = labelError;
+        JLabel lError = labelError;
         JProgressBar pB = pBar;
     }
 
@@ -42,7 +41,8 @@ public class LoaderForm {
                     return null;
                 }
                 try {
-                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager, ApplicationLoader.settingsManager, lAction, lError);
+                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager,
+                            ApplicationLoader.settingsManager, lAction);
                     MainForm.main(null);
                 } catch (SQLException e) {
                     MyLogger.e(TAG, e);
@@ -87,7 +87,7 @@ public class LoaderForm {
                 new UpdateInfoForm(frame, ApplicationLoader.settingsManager, Updater.getWhatsNew(), false);
             }
         } catch (Exception ex) {
-            System.out.print(ex);
+            System.out.print(ex.toString());
         }
     }
 

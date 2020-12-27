@@ -126,21 +126,21 @@ public class MyTableModelTargets extends AbstractTableModel {
     }
 
     public static int getTarget_typeValue(Integer event_type) {
-        switch (event_type) {
-            case 2: return 1;
-            case 4: return 2;
-            case 5: return 3;
-            default:return 0;
-        }
+        return switch (event_type) {
+            case 2 -> 1;
+            case 4 -> 2;
+            case 5 -> 3;
+            default -> 0;
+        };
     }
 
     public static int getOutcome_typeValue(Integer event_type) {
-        switch (event_type) {
-            case 9: return 1;
-            case 10: return 2;
-            case 11: return 3;
-            default:return 0;
-        }
+        return switch (event_type) {
+            case 9 -> 1;
+            case 10 -> 2;
+            case 11 -> 3;
+            default -> 0;
+        };
     }
 
     @Override
@@ -179,13 +179,13 @@ public class MyTableModelTargets extends AbstractTableModel {
                 return (String)cacheManager.targets.get(targets.get(rowIndex-outcomes.size()))[settingsManager.language];
         }
 
-        switch (data[rowIndex][columnIndex-1]) {
-            case 0: return "";
-            case 1: return "/";
-            case 2: return "Λ";
-            case 3: return "Δ";
-            default:return null;
-        }
+        return switch (data[rowIndex][columnIndex - 1]) {
+            case 0 -> "";
+            case 1 -> "/";
+            case 2 -> "Λ";
+            case 3 -> "Δ";
+            default -> null;
+        };
     }
 
     @Override
@@ -193,10 +193,4 @@ public class MyTableModelTargets extends AbstractTableModel {
         data[rowIndex][columnIndex-1] = (int)aValue;
         fireTableCellUpdated(rowIndex, columnIndex);
     }
-
-    /*
-    public void setValueAt(Byte value, int row, int col) {
-        data[row][col] = value;
-        fireTableCellUpdated(row, col);
-    }*/
 }

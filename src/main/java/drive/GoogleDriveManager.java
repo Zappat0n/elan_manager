@@ -207,7 +207,7 @@ public class GoogleDriveManager {
     }
 
 
-    public File updateFile(String fileId, Date date, MediaPicture picture) {
+    public void updateFile(String fileId, Date date, MediaPicture picture) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(picture.image, "jpg", os);
@@ -220,13 +220,12 @@ public class GoogleDriveManager {
             fileMetadata.setModifiedTime(dateTime);
             //fileMetadata.setParents(Collections.singletonList(folderId));
 
-            return service.files().update(fileId, fileMetadata, isc)
+            service.files().update(fileId, fileMetadata, isc)
                     .setSupportsAllDrives(true)
                     .setSupportsTeamDrives(true)
                     .execute();
         } catch (IOException e) {
             MyLogger.e(TAG, e);
-            return null;
         }
     }
 

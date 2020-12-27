@@ -6,80 +6,74 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 public class MyPDFGraphicsStreamEngine extends PDFGraphicsStreamEngine {
-    /**
-     * Constructor.
-     *
-     * @param page
-     */
     public MyPDFGraphicsStreamEngine(PDPage page) {
         super(page);
     }
 
     @Override
-    public void appendRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3) throws IOException {
+    public void appendRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3) {
 
     }
 
     @Override
-    public void drawImage(PDImage pdImage) throws IOException {
+    public void drawImage(PDImage pdImage) {
 
     }
 
     @Override
-    public void clip(int windingRule) throws IOException {
+    public void clip(int windingRule) {
 
     }
 
     @Override
-    public void moveTo(float x, float y) throws IOException {
+    public void moveTo(float x, float y) {
 
     }
 
     @Override
-    public void lineTo(float x, float y) throws IOException {
+    public void lineTo(float x, float y) {
 
     }
 
     @Override
-    public void curveTo(float x1, float y1, float x2, float y2, float x3, float y3) throws IOException {
+    public void curveTo(float x1, float y1, float x2, float y2, float x3, float y3) {
 
     }
 
     @Override
-    public Point2D getCurrentPoint() throws IOException {
+    public Point2D getCurrentPoint() {
         return null;
     }
 
     @Override
-    public void closePath() throws IOException {
+    public void closePath() {
 
     }
 
     @Override
-    public void endPath() throws IOException {
+    public void endPath() {
 
     }
 
     @Override
-    public void strokePath() throws IOException {
+    public void strokePath() {
 
     }
 
     @Override
-    public void fillPath(int windingRule) throws IOException {
+    public void fillPath(int windingRule) {
 
     }
 
     @Override
-    public void fillAndStrokePath(int windingRule) throws IOException {
+    public void fillAndStrokePath(int windingRule) {
 
     }
 
     @Override
-    public void shadingFill(COSName shadingName) throws IOException {
+    public void shadingFill(COSName shadingName) {
 
     }
 }

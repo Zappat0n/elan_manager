@@ -12,9 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class DriveGovernor {
     private static final String TAG = DriveGovernor.class.getSimpleName();
@@ -29,7 +27,6 @@ public class DriveGovernor {
     private static final String BUTTON_RED = "Button-Blank-Red-icon.png";
     private static final String BUTTON_YELLOW = "Button-Blank-Yellow-icon.png";
     private static final String BUTTON_GREEN = "Signal-Receiver-icon.png";//"Button-Next-icon.png";
-    public static final String[] FOLDER_IDS = {SNAILS_FOLDER_ID, ROOTS_FOLDER_ID, SEEDS_FOLDER_ID, VOLCANOES_FOLDER_ID};
 
     public GoogleDriveManager manager;
     final JButton buttonUpload;
@@ -69,12 +66,12 @@ public class DriveGovernor {
         String folderDocuments = createFolder(parentFolder, STUDENTS_FOLDER_DOCUMENTS);
         String folderPhotos = createFolder(parentFolder, STUDENTS_FOLDER_PHOTOS);
         String folderReports = createFolder(parentFolder, STUDENTS_FOLDER_REPORTS);
-        switch (folderType) {
-            case STUDENTS_FOLDER_DOCUMENTS: return folderDocuments;
-            case STUDENTS_FOLDER_PHOTOS: return folderPhotos;
-            case STUDENTS_FOLDER_REPORTS: return folderReports;
-        }
-        return null;
+        return switch (folderType) {
+            case STUDENTS_FOLDER_DOCUMENTS -> folderDocuments;
+            case STUDENTS_FOLDER_PHOTOS -> folderPhotos;
+            case STUDENTS_FOLDER_REPORTS -> folderReports;
+            default -> null;
+        };
     }
 
     private String getStudentFolder(Integer student) throws IOException {
@@ -110,7 +107,7 @@ public class DriveGovernor {
         String folderId = (String) cacheManager.students.get(student)[4];
         String name = new SimpleDateFormat("yyyyMMdd").format(date) + "-" +presentation +
                 ((presentationSub==-1)? "":"-" + presentationSub);
-        String fileId = null;
+        String fileId;
         try {
             fileId = manager.uploadMediaFile(folderId, date, name, image);
             bdManager.addMedia(new java.sql.Date(date.getTime()),student, presentation, presentationSub, comments,  fileId);
@@ -121,15 +118,14 @@ public class DriveGovernor {
         return null;
     }
 
-    public String uploadReport(Integer student, java.io.File file) {
+    public void uploadReport(Integer student, java.io.File file) {
         //name, birthday, drive_main, drive_documents, drive_photos, drive_reports
         String folderId = (String) cacheManager.students.get(student)[5];
         try {
-            return uploadFile(file, folderId);
+            uploadFile(file, folderId);
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }
-        return null;
     }
 
     public String uploadDocument(Integer student, java.io.File file) {
@@ -146,7 +142,7 @@ public class DriveGovernor {
     public void uploadPicture(int student, Date date, int presentation, Integer presentationSub,
                               java.io.File file, String comments) {
         String folderId = (String) cacheManager.students.get(student)[4];
-        String name = "";
+        String name;
 
         try {
             name = checkNameForFile(folderId, new SimpleDateFormat("yyyyMMdd").format(date) + "-" +presentation +
@@ -164,14 +160,5 @@ public class DriveGovernor {
         FileList list = manager.getFolderContent(folderId, name);
         if (list.getFiles().size() == 0) return name;
         else return name + "_" + list.getFiles().size();
-    }
-
-    private String getFolderYearName(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        if (month < 9) return (year-1)+"-"+year;
-        else return year+"-"+(year+1);
     }
 }

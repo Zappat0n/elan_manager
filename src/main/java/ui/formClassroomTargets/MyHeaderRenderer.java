@@ -21,12 +21,6 @@ public class MyHeaderRenderer extends JLabel implements TableCellRenderer {
         } else {
             setBackground(Color.white);
         }
-        /*
-        if (column > 0) {
-            Double age = ClassroomForm.formData.dates.get(column-1);
-            setBackground(getColor(age));
-        } else setBackground(Color.lightGray);
-        */
         return this;
     }
 
@@ -38,12 +32,4 @@ public class MyHeaderRenderer extends JLabel implements TableCellRenderer {
         }
         return res.toString();
     }
-/*
-    private Color getColor(Double age) {
-        for (int i = 0; i < MyTableRenderer.years.length; i++) {
-            if (age < MyTableRenderer.years[i]) return MyTableRenderer.colors[i];
-        }
-        return Color.red.darker();
-    }
-*/
 }

@@ -106,7 +106,7 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
                 (pointsToAdd!=null) ? new int[]{Math.round(page.getMediaBox().getWidth()-2*margin-80*3),80,80,80} :
                         new int[]{Math.round(page.getMediaBox().getWidth()-2*margin)},
                 (pointsToAdd!=null) ? new String[]{title, "Emerging", "Expected", "Exceeding"} : new String[]{title},
-                pointsToAdd, 12, 10);
+                pointsToAdd, 10);
         int height;
         BoxedText bt = null;
         if (year == 0 && areaId == 10) {
@@ -139,10 +139,10 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             int type = rs.getInt(TableEvents.event_type);
             int targetId = rs.getInt(TableEvents.event_id);
             switch (type) {
-                case 2: event_points = 2; break;
-                case 4: event_points = 1; break;
-                case 5: event_points = 3; break;
-                case 99:notes.put(targetId, rs.getString(TableEvents.notes));break;
+                case 2 -> event_points = 2;
+                case 4 -> event_points = 1;
+                case 5 -> event_points = 3;
+                case 99 -> notes.put(targetId, rs.getString(TableEvents.notes));
             }
             if (event_points == null) continue;
 

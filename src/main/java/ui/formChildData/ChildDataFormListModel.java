@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -51,7 +52,7 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
             if (subareasperarea != null) {
                 for (Integer subareaId : subareasperarea) {
                     boolean titleAdded = false;
-                    ArrayList<Integer> list = tpersubarea.get(subareaId);
+                    ArrayList<Integer> list = Objects.requireNonNull(tpersubarea).get(subareaId);
                     if (list != null) {
                         for (Integer targetId : list) {
                             if (!titleAdded) {
@@ -107,7 +108,7 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
                     ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(id);
                     if (subs!=null) for (Integer sub:subs) {
                         data.put("2/"+id+"."+sub, new ChildDataFormListItem(settingsManager,
-                                " -> " + cacheManager.presentationssub.get(sub), id, sub, type, null,
+                                " -> " + cacheManager.presentationsSub.get(sub)[settingsManager.language], id, sub, type, null,
                                 false, false, false));
                     }
                 }
@@ -131,7 +132,7 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
     public ChildDataFormListItem getElementAt(int index) {
         int i = 0;
         for (Object o : data.keySet()) {
-            ChildDataFormListItem item = data.get(o);
+            ChildDataFormListItem item = data.get(o.toString());
             if (i == index) return item;
             i++;
         }

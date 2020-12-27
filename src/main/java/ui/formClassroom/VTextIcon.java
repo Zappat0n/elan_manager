@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
  (for example, Chinese/Japanese/Korean scripts have special rules when 
  drawn vertically and should never be rotated)
  */
+@SuppressWarnings("ALL")
 public class VTextIcon implements Icon, PropertyChangeListener {
 	String fLabel;
 	String[] fCharStrings; // for efficiency, break the fLabel into one-char strings to be passed to drawString
@@ -152,20 +153,18 @@ public class VTextIcon implements Icon, PropertyChangeListener {
 				// should draw in the top-right quadrant when drawn vertically
 				// - they draw in the bottom-left normally
 				int tweak;
-				switch (fPosition[i]) {
-					case POSITION_NORMAL: 
-						// Roman fonts should be centered. Japanese fonts are always monospaced.  
-						g.drawString(fCharStrings[i], x+((fWidth-fCharWidths[i])/2), yPos);
-						break;
-					case POSITION_TOP_RIGHT:
-						tweak = fCharHeight/3; // Should be 2, but they aren't actually half-height
-						g.drawString(fCharStrings[i], x+(tweak/2), yPos-tweak); 
-						break;
-					case POSITION_FAR_TOP_RIGHT:
-						tweak = fCharHeight - fCharHeight/3;
-						g.drawString(fCharStrings[i], x+(tweak/2), yPos-tweak); 
-						break;
-				}
+                // Roman fonts should be centered. Japanese fonts are always monospaced.
+                switch (fPosition[i]) {
+                    case POSITION_NORMAL -> g.drawString(fCharStrings[i], x + ((fWidth - fCharWidths[i]) / 2), yPos);
+                    case POSITION_TOP_RIGHT -> {
+                        tweak = fCharHeight / 3; // Should be 2, but they aren't actually half-height
+                        g.drawString(fCharStrings[i], x + (tweak / 2), yPos - tweak);
+                    }
+                    case POSITION_FAR_TOP_RIGHT -> {
+                        tweak = fCharHeight - fCharHeight / 3;
+                        g.drawString(fCharStrings[i], x + (tweak / 2), yPos - tweak);
+                    }
+                }
 				yPos += fCharHeight;
 			}
 		}

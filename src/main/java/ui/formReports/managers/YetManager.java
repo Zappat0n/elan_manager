@@ -17,7 +17,6 @@ import static bd.BDManager.encodeString;
 
 public class YetManager implements IManager{
     private static final String TAG = YetManager.class.getSimpleName();
-    private final String tableName = TableEventsYet.table_name;
     private final BDManager bdManager;
     private final SettingsManager settingsManager;
     private final ReportManager reportManager;
@@ -86,30 +85,24 @@ public class YetManager implements IManager{
         }
     }
 
-    @Override
-    public void setDate(Date date) {
-
-    }
-
     private void fillData(String[] array, Integer student, Integer id, String text){
         if (student == -1) {
-            if (id == classroom) {
+            if (id.equals(classroom)) {
                 array[0] = text;
-                return;
             }
-            else return;
+            return;
         }
         array[id] = text;
     }
 
     private String getCondition() {
-        String condition = "(" + TableEventsYet.student + "=" + student + " OR (" + TableEventsYet.student + "= -1 AND "+
+        return "(" + TableEventsYet.student + "=" + student + " OR (" + TableEventsYet.student + "= -1 AND "+
                 TableEventsYet.event_id +"=" + classroom+")) AND " + TableEventsYet.date + "> '" + reportManager.getInitialDate() +
                 "' AND " + TableEventsYet.date + "< '" + reportManager.getFinalDate() + "'";
-        return condition;
     }
 
     private String getInsertString(Integer student, Integer event_id, String text) {
+        String tableName = TableEventsYet.table_name;
         return "INSERT INTO `" + tableName + "` (`date`, `student`, `event_id`, `notes`, `teacher`) VALUES('" +
                 date + "'," + student + "," + event_id + "," + (text != null ? "'" +
                 text + "'" : "NULL")+ "," + settingsManager.teacher + ");";

@@ -54,7 +54,6 @@ public class MediaForm {
     public DriveGovernor driveGovernor;
     private HashMap<JRadioButton, MediaPicture> mediaFiles;
     private ArrayList<Integer> subareas;
-    private ArrayList<Integer> targets;
     MediaPicture currentPicture;
     JRadioButton currentItem;
 
@@ -68,7 +67,7 @@ public class MediaForm {
 
     private void createUIComponents() {
         subareas = new ArrayList<>();
-        targets = new ArrayList<>();
+        ArrayList<Integer> targets1 = new ArrayList<>();
         mediaFiles = new HashMap<>();
         SwingUtilities.invokeLater(()-> {
             try {
@@ -110,45 +109,41 @@ public class MediaForm {
         });
 
         buttonDelete = new JButton();
-        buttonDelete.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
-                Integer result = driveGovernor.manager.delete(currentPicture.fileId);
-                if (result == 1 || result == 404) {
-                    Connection co = null;
-                    try {
-                        co = bdManager.connect();
-                        bdManager.removeValue(co, BDManager.tableMedia, TableMedia.id + "=" + currentPicture.id, false);
-                        panelImgs.remove(currentItem);
-                        if (!mediaFiles.remove(currentItem, mediaFiles.get(currentItem))) MyLogger.d(TAG, "Error removing picture");
-                        panelImgs.updateUI();
-                        labelProgress.setText("");
-                    } finally {
-                        BDManager.closeQuietly(co);
-                    }
-                } else JOptionPane.showMessageDialog(mainPanel, "Error deleting picture", "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            });
-        });
-
-        buttonUpdate = new JButton();
-        buttonUpdate.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
+        buttonDelete.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+            Integer result = driveGovernor.manager.delete(currentPicture.fileId);
+            if (result == 1 || result == 404) {
                 Connection co = null;
                 try {
                     co = bdManager.connect();
-                    //id, date, student, presentation, presentation_sub, comment, fileId;
-                    String[] keys = {TableMedia.date, TableMedia.comment};
-                    java.sql.Date newDate = new java.sql.Date(dateModel.getValue().getTime());
-                    String newComment = textAreaComments.getText();
-                    String[] values = {newDate.toString(), newComment};
-                    bdManager.updateValues(co, BDManager.tableMedia, keys, values, TableMedia.id + "=" + currentPicture.id);
-                    currentPicture.date = newDate;
-                    currentPicture.comments = newComment;
+                    bdManager.removeValue(co, BDManager.tableMedia, TableMedia.id + "=" + currentPicture.id, false);
+                    panelImgs.remove(currentItem);
+                    if (!mediaFiles.remove(currentItem, mediaFiles.get(currentItem))) MyLogger.d(TAG, "Error removing picture");
+                    panelImgs.updateUI();
+                    labelProgress.setText("");
                 } finally {
                     BDManager.closeQuietly(co);
                 }
-            });
-        });
+            } else JOptionPane.showMessageDialog(mainPanel, "Error deleting picture", "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }));
+
+        buttonUpdate = new JButton();
+        buttonUpdate.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+            Connection co = null;
+            try {
+                co = bdManager.connect();
+                //id, date, student, presentation, presentation_sub, comment, fileId;
+                String[] keys = {TableMedia.date, TableMedia.comment};
+                java.sql.Date newDate = new java.sql.Date(dateModel.getValue().getTime());
+                String newComment = textAreaComments.getText();
+                String[] values = {newDate.toString(), newComment};
+                bdManager.updateValues(co, BDManager.tableMedia, keys, values, TableMedia.id + "=" + currentPicture.id);
+                currentPicture.date = newDate;
+                currentPicture.comments = newComment;
+            } finally {
+                BDManager.closeQuietly(co);
+            }
+        }));
 
         listNCAreas = new JList(new DefaultListModel());
         RawData.cdbAreasTarget.forEach(i -> ((DefaultListModel)listNCAreas.getModel()).addElement(
@@ -187,8 +182,8 @@ public class MediaForm {
         });
         listNCSubareas = new JList(new DefaultListModel());
         listNCSubareas.addListSelectionListener(e -> {
-            Integer selArea = listNCAreas.getSelectedIndex();
-            Integer selSubArea = listNCSubareas.getSelectedIndex();
+            int selArea = listNCAreas.getSelectedIndex();
+            int selSubArea = listNCSubareas.getSelectedIndex();
             if (e.getValueIsAdjusting() || selArea == -1 || selSubArea == -1) return;
             DefaultListModel model = (DefaultListModel)listNCTargets.getModel();
             model.clear();
@@ -242,25 +237,25 @@ public class MediaForm {
     }
 
     private Integer[] getMonths(){
-        switch (listClassrooms.getSelectedIndex()) {
-            case 0: return RawData.monthsOutcomesforEY;
-            case 1: case 2: return RawData.monthsOutcomesforFS;
-        }
-        return null;
+        return switch (listClassrooms.getSelectedIndex()) {
+            case 0 -> RawData.monthsOutcomesforEY;
+            case 1, 2 -> RawData.monthsOutcomesforFS;
+            default -> null;
+        };
     }
 
     private Double[] getYears(){
-        switch (listClassrooms.getSelectedIndex()) {
-            case 0: return  new Double[] {2.5};
-            case 1: return  new Double[] {5d, 6d};
-        }
-        return null;
+        return switch (listClassrooms.getSelectedIndex()) {
+            case 0 -> new Double[]{2.5};
+            case 1 -> new Double[]{5d, 6d};
+            default -> null;
+        };
     }
 
 
     private class SWLoadImages extends SwingWorker {
         ImageIcon blankImage;
-        Integer student;
+        final Integer student;
 
         public SWLoadImages(Integer student) {
             this.student = student;
@@ -293,7 +288,7 @@ public class MediaForm {
                             (String)cacheManager.presentations.get(currentPicture.presentation)[settingsManager.language]);
                     if (currentPicture.presentationSub != null && currentPicture.presentationSub != -1)
                         labelPresentationSub.setText(
-                                (String)cacheManager.presentationssub.get(currentPicture.presentationSub)[settingsManager.language]);
+                                (String)cacheManager.presentationsSub.get(currentPicture.presentationSub)[settingsManager.language]);
                     if (currentPicture.comments != null) textAreaComments.setText(currentPicture.comments);
                 }
                 @Override

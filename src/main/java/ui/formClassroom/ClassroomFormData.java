@@ -1,6 +1,5 @@
 package ui.formClassroom;
 
-import bd.BDManager;
 import utils.CacheManager;
 import utils.data.RawData;
 
@@ -23,7 +22,7 @@ public class ClassroomFormData {
     Integer stage = null;
     Integer area = null;
 
-    public ClassroomFormData(JPanel frame, CacheManager cacheManager, BDManager bdManager) {
+    public ClassroomFormData(JPanel frame, CacheManager cacheManager) {
         this.frame = frame;
         this.cacheManager = cacheManager;
         presentations = new ArrayList<>();
@@ -31,7 +30,7 @@ public class ClassroomFormData {
         dates = new ArrayList<>();
     }
 
-    public void setTables(JTable tablePresentations, JTable tablePlanning){
+    public void setTables(JTable tablePresentations){
         this.tablePresentations = tablePresentations;
     }
 

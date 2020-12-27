@@ -5,9 +5,9 @@ import java.awt.geom.Point2D;
 
 public class ImageTransform {
 
-    private AffineTransform at;
-    private int alturaImagen;
-    private int anchoImagen;
+    private final AffineTransform at;
+    private final int alturaImagen;
+    private final int anchoImagen;
     private double grados;
 
     public ImageTransform(int alturaImagen, int anchuraImagen) {

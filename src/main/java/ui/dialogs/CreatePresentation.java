@@ -12,12 +12,10 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class CreatePresentation extends JDialog {
-    private static final String TAG = CreatePresentation.class.getSimpleName();
     private static final Double[][] years = new Double[][]{{1.5, 2d, 2.5}, {3d, 3.5, 4d, 4.5, 5d, 5.5},
             {6d, 6.5, 7d, 7.5, 8d, 8.5, 9d, 9.5, 10d, 10.5, 11d, 11.5}};
-    private CacheManager cacheManager;
-    private BDManager bdManager;
-    private SettingsManager settingsManager;
+    private final CacheManager cacheManager;
+    private final SettingsManager settingsManager;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -32,18 +30,16 @@ public class CreatePresentation extends JDialog {
     private JComboBox cBYear;
     private JButton buttonAddPresentationSub;
 
-    private Integer stage;
+    private final Integer stage;
     private Integer area;
     private Integer subarea;
-    private Integer presentation;
+    private final Integer presentation;
     private ArrayList<Integer> areas;
     private ArrayList<Integer> subareas;
-    private ArrayList<Integer> presentations;
 
-    public CreatePresentation(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
+    public CreatePresentation(CacheManager cacheManager, SettingsManager settingsManager,
                               Integer stage, Integer area, Integer subarea, Integer presentation) {
         this.cacheManager = cacheManager;
-        this.bdManager = bdManager;
         this.settingsManager = settingsManager;
         this.stage = stage;
         this.area = area;
@@ -83,7 +79,7 @@ public class CreatePresentation extends JDialog {
     public static void main(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
                             Integer stage, Integer area, Integer subarea, Integer presentation) {
         if (stage == null) return;
-        CreatePresentation dialog = new CreatePresentation(cacheManager, bdManager, settingsManager, stage, area,
+        CreatePresentation dialog = new CreatePresentation(cacheManager, settingsManager, stage, area,
                 subarea, presentation);
         dialog.pack();
         dialog.setVisible(true);
@@ -118,7 +114,7 @@ public class CreatePresentation extends JDialog {
         for (Integer ar : newareas.keySet()) {
             areas.add(ar);
             cBArea.addItem(cacheManager.areasMontessori.get(ar)[settingsManager.language]);
-            if (ar == area) cBArea.setSelectedIndex(areas.indexOf(ar));
+            if (ar.equals(area)) cBArea.setSelectedIndex(areas.indexOf(ar));
         }
     }
 
@@ -127,7 +123,7 @@ public class CreatePresentation extends JDialog {
             String name = (String)cacheManager.subareasMontessori.get(id)[settingsManager.language];
             subareas.add(id);
             cBSubarea.addItem(name);
-            if (id == subarea) {
+            if (id.equals(subarea)) {
                 cBSubarea.setSelectedIndex(subareas.indexOf(id));
                 subarea = id;
             }
@@ -140,7 +136,7 @@ public class CreatePresentation extends JDialog {
     private void addPresentations() {
         double min = RawData.yearsmontessori[stage][0];
         double max = RawData.yearsmontessori[stage][1];
-        presentations = cacheManager.getPresentations(subarea, min, max);
+        ArrayList<Integer> presentations = cacheManager.getPresentations(subarea, min, max);
 
         cBPresentation = new JComboBox(new DefaultComboBoxModel());
         listPresentations = new JList(new DefaultListModel());
@@ -150,10 +146,8 @@ public class CreatePresentation extends JDialog {
             ((DefaultComboBoxModel)cBPresentation.getModel()).addElement(name);
             ((DefaultListModel)listPresentations.getModel()).addElement(name);
         }
-
         cBPresentation.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));
         listPresentations.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));
-
     }
 
 

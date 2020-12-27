@@ -66,7 +66,7 @@ public class ConfigForm {
         DriveGovernor governor;
         FileList folders;
         Connection co;
-        Boolean[] updates = {false, false, false, false};
+        final Boolean[] updates = {false, false, false, false};
 
         @Override
         protected Object doInBackground() throws Exception {

@@ -14,8 +14,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.Date;
 
@@ -27,11 +25,11 @@ public class MediaManager {
     private final PDDocument doc;
     private final PDFont font;
     private final float margin;
-    private Integer student;
+    private final Integer student;
     private final Date initialDate;
     private final Date finalDate;
     private final String  fileName;
-    DefaultListModel log;
+    final DefaultListModel log;
 
     public MediaManager(CacheManager cacheManager , SettingsManager settingsManager, BDManager bdManager, Integer student,
                         Date initialDate, Date finalDate, PDDocument doc, PDFont font, float margin, String fileName,
@@ -60,9 +58,7 @@ public class MediaManager {
         public SWLoadMedia() {
             try {
                 driveManager = new GoogleDriveManager();
-            } catch (IOException e) {
-                MyLogger.e(TAG, e);
-            } catch (GeneralSecurityException e) {
+            } catch (Exception e) {
                 MyLogger.e(TAG, e);
             }
         }
@@ -108,15 +104,16 @@ CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, flo
         }
 
         private String getCondition() {
-            String condition = TableMedia.student + " = " + student + " AND " + TableMedia.date + " >= '" + initialDate + "' AND " +
+            return TableMedia.student + " = " + student + " AND " + TableMedia.date + " >= '" + initialDate + "' AND " +
                     TableMedia.date + " <= '" + finalDate + "' ORDER BY " + TableMedia.date + " ASC;";
-            return condition;
         }
 
         public String[] getLinks(Integer presentation, Integer presentation_sub) {
             String[] result = {"", ""};
             Integer lastSubarea = -1;
-            String pair = presentation + "-" + (presentation_sub != -1 ? presentation_sub : 0);
+            Integer[] pair = new Integer[2];
+            pair[0] = presentation;
+            pair[1] = presentation_sub != -1 ? presentation_sub : 0;
 
             if (cacheManager.links.containsKey(pair)) {
                 for (Integer outcome : cacheManager.links.get(pair).outcomes) {
@@ -142,7 +139,7 @@ CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, flo
         private String getTargetText(String text, Integer lastSubarea, Object[] data) {
             Integer subarea = (Integer) data[2];
             Integer area = cacheManager.targetsubareaarea.get(subarea);
-            if (subarea != lastSubarea) {
+            if (!subarea.equals(lastSubarea)) {
                 text += cacheManager.areasTarget.get(area)[settingsManager.language] + " - ";
                 text += cacheManager.subareasTarget.get(subarea)[settingsManager.language] + "\n";
             }

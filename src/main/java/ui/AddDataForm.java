@@ -5,6 +5,7 @@ import ui.listeners.MyAddDataButtonsListener;
 import ui.models.*;
 import bd.BDManager;
 import utils.CacheManager;
+import utils.MyLogger;
 import utils.SettingsManager;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -139,6 +140,8 @@ public class AddDataForm {
                             if (confirm) confirm = false;
                             m.remove(values[i]);
                         }
+                    } catch (Exception ex) {
+                        MyLogger.e(TAG, ex);
                     } finally {
                         BDManager.closeQuietly(co);
                     }

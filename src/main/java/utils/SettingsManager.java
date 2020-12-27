@@ -29,10 +29,14 @@ public class SettingsManager {
     public static final String FILENAME     = "FILENAME";
     public static final String DOWNLOADURL  = "DOWNLOADURL";
     public static final String VERSIONURL   = "VERSIONURL";
+    public static final String EMAIL        = "EMAIL";
+    public static final String EMAIL_SERVER = "EMAIL_SERVER";
+    public static final String EMAIL_SOCKET = "EMAIL_SOCKET";
+    public static final String EMAIL_PWD    = "EMAIL_PWD";
 
     private final JFrame frame;
     private String dir;
-    private String separator ="/";
+    private final String separator;
     private final String filename           = "Settings.ini";
     private final HashMap<String, String> settings;
     private static FileManager fileManager;
@@ -54,10 +58,8 @@ public class SettingsManager {
 
         if ((dir.charAt(dir.length()-1)) == separator.charAt(0)) {
             dir = dir.substring(0, dir.lastIndexOf(separator));
-            dir = dir.substring(0, dir.lastIndexOf(separator)+1);
-        } else {
-            dir = dir.substring(0, dir.lastIndexOf(separator)+1);
         }
+        dir = dir.substring(0, dir.lastIndexOf(separator)+1);
         settings = new HashMap<>();
         readFile();
     }
@@ -74,11 +76,9 @@ public class SettingsManager {
             while ((line = bufferedReader.readLine()) != null) {
                 fields[0] = line.substring(0, line.indexOf("="));
                 fields[1] = line.substring(line.indexOf("=")+1);
-                if (fields.length == 2) {
-                    settings.put(fields[0], fields[1]);
-                    if (fields[0].equals(TEACHER)) teacher = Integer.valueOf(fields[1]);
-                    if (fields[0].equals(USER)) user = fields[1];
-                }
+                settings.put(fields[0], fields[1]);
+                if (fields[0].equals(TEACHER)) teacher = Integer.valueOf(fields[1]);
+                if (fields[0].equals(USER)) user = fields[1];
             }
             if (getValue(REPORTS_DIR) == null) {
                 File newDir = new File(dir + "reports"+separator);

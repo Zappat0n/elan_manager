@@ -52,8 +52,8 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
         removeValue(student, event_id, event_sub, date, MyPopUpMenuPresentations.planning_values[column-1]);
         tablePlanning.getModel().setValueAt(null, row, column);
         String id = event_id + "." + ((event_sub != null) ? event_sub : 0);
-        Integer row = formData.presentations.indexOf(id);
-        if (row != null && row != -1) {
+        int row = formData.presentations.indexOf(id);
+        if (row != -1) {
             int col = formData.students.indexOf(student)+1;
             tablePresentations.setValueAt(0, row, col);
         }

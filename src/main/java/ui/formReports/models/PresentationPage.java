@@ -24,8 +24,6 @@ public class PresentationPage extends PDPage {
     private static String TEXT_ACTIVITY;
     private static String TEXT_DATE;
     private static String TEXT_TARGETS;
-    //private static String TEXT_STEPS;
-    //private static String TEXT_WORKED;
     private static String TEXT_COMMENTS;
     private static String TEXT_NEXT;
     private static String TEXT_NEXT_LINKS;
@@ -33,7 +31,6 @@ public class PresentationPage extends PDPage {
     private final float margin;
     private BufferedImage picture;
     private final Date date;
-    private final int student;
     private final int presentation;
     private final Integer presentationSub;
     private Integer position;
@@ -44,7 +41,7 @@ public class PresentationPage extends PDPage {
     private final String outcomes;
     private final String targets;
     private final NextPresentation nextPresentation;
-    PDFont font;
+    final PDFont font;
 
     public PresentationPage(CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, float margin,
                             BufferedImage picture, Date date, int student, int presentation,
@@ -58,7 +55,6 @@ public class PresentationPage extends PDPage {
         this.margin = margin;
         this.picture = picture;
         this.date = date;
-        this.student = student;
         this.presentation = presentation;
         this.presentationSub = presentationSub;
         this.font = font;
@@ -113,9 +109,6 @@ public class PresentationPage extends PDPage {
         rowBuilder.add(Cell.withText(TEXT_TARGETS)
                 .setHorizontalAlignment(Cell.HorizontalAlignment.CENTER)
                 .withAllBorders());
-        /*rowBuilder.add(Cell.withText(" ")
-                .setHorizontalAlignment(Cell.HorizontalAlignment.CENTER)
-                .withAllBordersButLeft(1));*/
         tableBuilder.addRow(rowBuilder.build());
 /*
         rowBuilder = new Row.RowBuilder();
@@ -185,9 +178,11 @@ public class PresentationPage extends PDPage {
     private Table.TableBuilder createTableBuilder(int columns, int fontSize, float percentage) {
         Table.TableBuilder tableBuilder = new Table.TableBuilder();
         switch (columns) {
-            case 1: tableBuilder.addColumnOfWidth(Math.round(tableWidth)); break;
-            case 2: tableBuilder.addColumnOfWidth(Math.round(tableWidth * percentage));
-                    tableBuilder.addColumnOfWidth(Math.round(tableWidth * (1 - percentage))); break;
+            case 1 -> tableBuilder.addColumnOfWidth(Math.round(tableWidth));
+            case 2 -> {
+                tableBuilder.addColumnOfWidth(Math.round(tableWidth * percentage));
+                tableBuilder.addColumnOfWidth(Math.round(tableWidth * (1 - percentage)));
+            }
         }
         tableBuilder.setFontSize(8, fontSize);
         tableBuilder.setFont(font);
@@ -197,18 +192,17 @@ public class PresentationPage extends PDPage {
     private String getActivity() {
         return  cacheManager.presentations.get(presentation)[settingsManager.language] +
                 ((presentationSub != null && presentationSub != -1) ?
-                        " --> " + cacheManager.presentationssub.get(presentationSub)[settingsManager.language] : "");
+                        " --> " + cacheManager.presentationsSub.get(presentationSub)[settingsManager.language] : "");
     }
 
     private Float drawTable(Table.TableBuilder tableBuilder, int y) {
-        PDPageContentStream contents = null;
+        PDPageContentStream contents;
         try {
             Table table = tableBuilder.build();
             contents = new PDPageContentStream(doc, this, PDPageContentStream.AppendMode.APPEND, true);
             (new TableDrawer(contents, table, margin, y)).draw();
             contents.close();
-            Float result = table.getHeight();
-            return result;
+            return table.getHeight();
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }
@@ -217,7 +211,7 @@ public class PresentationPage extends PDPage {
 
     private Float addImage() {
         PDPageContentStream contentStream = null;
-        PDImageXObject pdImage = null;
+        PDImageXObject pdImage;
         try {
             calculateSize();
             picture = ImageUtils.resizeImage(picture, Math.round(pictureWidth), Math.round(pictureHeight));

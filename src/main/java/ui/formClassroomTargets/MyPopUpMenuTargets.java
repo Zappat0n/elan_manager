@@ -50,10 +50,10 @@ public class MyPopUpMenuTargets extends JPopupMenu implements ActionListener {
         //types = (row < ((MyTableModelTargets) tableTargets.getModel()).outcomes.size()) ? RawData.ncOutcomes_Types : RawData.ncTargets_Types;
 
         switch (item.getText()) {
-            case " " : newvalue = 0; break;
-            case "/" : newvalue = 1; break;
-            case "Λ" : newvalue = 2; break;
-            case "Δ" : newvalue = 3; break;
+            case " " -> newvalue = 0;
+            case "/" -> newvalue = 1;
+            case "Λ" -> newvalue = 2;
+            case "Δ" -> newvalue = 3;
         }
         try {
             SWDBUTargetsUpdater updater = new SWDBUTargetsUpdater(bdManager, settingsManager, cacheManager, tableTargets,
@@ -64,55 +64,4 @@ public class MyPopUpMenuTargets extends JPopupMenu implements ActionListener {
         }
     }
 
-/*
-    private Boolean writetoBd(String text) {
-        try {
-            co = bdManager.connect();
-            if (newvalue > oldvalue) addEvent(types[newvalue-1], null);
-            else {
-                if (newvalue == 0) {
-                    if (removeUpperValues(0)) tableTargets.setValueAt(newvalue, row, column);
-                } else {
-                    MySet set = bdManager.getValues(co, BDManager.tableEvents, getBasicCondition());
-                    Boolean neweventvalue = false;
-                    while (set.next()) {
-                        if (set.getInt(TableEvents.event_type) == types[newvalue - 1])
-                            neweventvalue = true;
-                        }
-                    Boolean result = removeUpperValues(newvalue);
-                    if (!neweventvalue) addEvent(types[newvalue-1], null);
-                    else if (result) tableTargets.setValueAt(newvalue, row, column);
-                }
-            }
-        } catch (Exception e) {
-            MyLogger.e(TAG, e);
-            JOptionPane.showMessageDialog(tableTargets, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            BDManager.closeQuietly(co);
-        }
-        return false;
-    }
-
-    private void addEvent(Integer type, String notes) {
-        Integer id = bdManager.addEvent(co, date, student, type, target, null, notes);
-        try {
-            if (id != null) tableTargets.setValueAt(newvalue, row, column);
-        } catch (Exception e) {
-            MyLogger.e(TAG, e);
-            JOptionPane.showMessageDialog(tableTargets, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private Boolean removeUpperValues(int start) {
-        int rs = 0;
-        for (int i = start; i < 3; i++) {
-            rs += bdManager.removeValue(co, BDManager.tableEvents,
-                    getBasicCondition() + " AND " + TableEvents.event_type + " = " + types[i], false);
-        }
-        return rs > 0;
-    }
-
-    private String getBasicCondition() {
-        return TableEvents.student + "=" + student + " AND " + TableEvents.event_id + "=" + target;
-    }*/
 }

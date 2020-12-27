@@ -20,7 +20,7 @@ public class EoYManager {
     private static final String TAG = EoYManager.class.getSimpleName();
     private final BDManager bdManager;
     private final SettingsManager settingsManager;
-    ArrayList<JTextArea> textAreas;
+    final ArrayList<JTextArea> textAreas;
     private Date date;
     private final Integer classroom;
     private final Integer student;

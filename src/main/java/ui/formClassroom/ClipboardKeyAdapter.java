@@ -22,7 +22,7 @@ public class ClipboardKeyAdapter extends KeyAdapter {
     private final JTextField textField;
 
 
-    public ClipboardKeyAdapter(JPanel frame, JTable table, JTextField textField, CacheManager cacheManager, ClassroomFormData formData) {
+    public ClipboardKeyAdapter(JTable table, JTextField textField, CacheManager cacheManager, ClassroomFormData formData) {
         this.table = table;
         this.cacheManager = cacheManager;
         this.textField = textField;
@@ -46,14 +46,12 @@ public class ClipboardKeyAdapter extends KeyAdapter {
             SwingUtilities.invokeLater(() -> {
                 if (event.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
                     if (textField == null || textField.getText() == null) return;
-                    StringBuilder bd = new StringBuilder();
-                    bd.append(textField.getText()).append(event.getKeyChar());
-                    textField.setText(bd.toString());
+                    textField.setText(textField.getText() + event.getKeyChar());
                 } else {
                     textField.setText(textField.getText().substring(0,
                             textField.getText().length()-1));
                 }
-                if (textField != null) textField.requestFocus();
+                textField.requestFocus();
             });
         }
     }

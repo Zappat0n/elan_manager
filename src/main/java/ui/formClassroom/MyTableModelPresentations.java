@@ -144,21 +144,21 @@ public class MyTableModelPresentations extends AbstractTableModel {
             int sub = Integer.parseInt(presentation[1]);
             if (sub == 0) return (String)cacheManager.presentations.get(
                     Integer.valueOf(presentation[0]))[settingsManager.language];
-            else return "->" + cacheManager.presentationssub.get(sub)[settingsManager.language];
+            else return "->" + cacheManager.presentationsSub.get(sub)[settingsManager.language];
         }
 
-        switch (data[rowIndex][columnIndex-1]) {
-            case 0: return "";
-            case 1: return "/";
-            case 2: return "Λ";
-            case 3: return "Δ";
-            case 4: return "M";
-            case 5: return "T";
-            case 6: return "W";
-            case 7: return "Th";
-            case 8: return "F";
-            default:return null;
-        }
+        return switch (data[rowIndex][columnIndex - 1]) {
+            case 0 -> "";
+            case 1 -> "/";
+            case 2 -> "Λ";
+            case 3 -> "Δ";
+            case 4 -> "M";
+            case 5 -> "T";
+            case 6 -> "W";
+            case 7 -> "Th";
+            case 8 -> "F";
+            default -> null;
+        };
     }
 
     @Override

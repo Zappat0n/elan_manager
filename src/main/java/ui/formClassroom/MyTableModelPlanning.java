@@ -84,7 +84,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
                 int row = formData.students.indexOf(student);
                 int col = MyTableModelPresentations.DayOfWeekToInt(notes)+1;
                 setValueAt(getValue(event_id, event_sub), row, col);
-                events[row][col-1] = event_id + ((event_sub != null) ? "." + event_sub : ".0");
+                events[row][col-1] = event_id + "." + event_sub;
             }
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
@@ -98,15 +98,15 @@ public class MyTableModelPlanning extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        switch (column) {
-            case 0: return "";
-            case 1: return "Monday";
-            case 2: return "Tuesday";
-            case 3: return "Wednesday";
-            case 4: return "Thursday";
-            case 5: return "Friday";
-            default: return null;
-        }
+        return switch (column) {
+            case 0 -> "";
+            case 1 -> "Monday";
+            case 2 -> "Tuesday";
+            case 3 -> "Wednesday";
+            case 4 -> "Thursday";
+            case 5 -> "Friday";
+            default -> null;
+        };
     }
 
     @Override
@@ -150,7 +150,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public String getValue(Integer event_id, Integer event_sub) {
         return cacheManager.presentations.get(event_id)[settingsManager.language] +
                 ((event_sub != null && event_sub != 0) ? " (" +
-                        cacheManager.presentationssub.get(event_sub)[settingsManager.language] + ")" : "");
+                        cacheManager.presentationsSub.get(event_sub)[settingsManager.language] + ")" : "");
     }
 
 }

@@ -22,10 +22,11 @@ public class MySet {
         this.rs = rs;
         this.table = table;
         this.keys = keys;
-        if (initKeys()) processData();
+        initKeys();
+        processData();
     }
 
-    private Boolean initKeys() {
+    private void initKeys() {
         if (keys == null) {
             keys = table.fields;
             types = table.field_def;
@@ -40,7 +41,6 @@ public class MySet {
                 }
             }
         }
-        return true;
     }
 
     private void processData() throws SQLException{
@@ -56,19 +56,17 @@ public class MySet {
 
     private Object getValue(String key, String type) throws SQLException {
         if (type.contains("VARCHAR")) type = "STRING";
-        switch (type) {
-            case "STRING" : return rs.getString(key);
-            case "INT" : return rs.getInt(key);
-            case "BOOLEAN" : return rs.getBoolean(key);
-            case "BIGINT" : return rs.getLong(key);
-            case "TIMESTAMP" : return rs.getTimestamp(key);
-            case "SMALLINT" : return rs.getInt(key);
-            case "BLOB" : return rs.getBlob(key);
-            case "DATE" : return rs.getDate(key);
-            case "DOUBLE" : return rs.getDouble(key);
-            case "LONGTEXT" : return rs.getString(key);
-            default: return null;
-        }
+        return switch (type) {
+            case "STRING", "LONGTEXT" -> rs.getString(key);
+            case "INT", "SMALLINT" -> rs.getInt(key);
+            case "BOOLEAN" -> rs.getBoolean(key);
+            case "BIGINT" -> rs.getLong(key);
+            case "TIMESTAMP" -> rs.getTimestamp(key);
+            case "BLOB" -> rs.getBlob(key);
+            case "DATE" -> rs.getDate(key);
+            case "DOUBLE" -> rs.getDouble(key);
+            default -> null;
+        };
     }
 
     public Boolean next() {

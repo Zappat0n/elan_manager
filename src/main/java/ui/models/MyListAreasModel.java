@@ -48,10 +48,8 @@ public class MyListAreasModel extends DefaultListModel<String> {
     public void addData(CacheManager cacheManager, int typeIndex, int yearIndex) {
         if (typeIndex == 0) {
             Set<Integer> subareas = cacheManager.stageAreaSubareaMontessori.get(yearIndex).keySet();
-            if (subareas!=null) {
-                for (Integer id: subareas){
-                    data.put(cacheManager.areasMontessori.get(id)[settingsManager.language], id);
-                }
+            for (Integer id: subareas){
+                data.put(cacheManager.areasMontessori.get(id)[settingsManager.language], id);
             }
         } else if (typeIndex == 1 || typeIndex == 2){
             double year = RawData.yearsperstage[yearIndex];

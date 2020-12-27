@@ -42,7 +42,7 @@ public class Pdf_Curriculum extends PDFForm_Curriculum {
                         ArrayList<Integer> presentations_sub = cacheManager.presentationssubperpresentation.get(presentation);
                         if (presentations_sub!= null){
                             for (int presentation_sub: presentations_sub) {
-                                position = addLine((String)cacheManager.presentationssub.get(presentation_sub)[settingsManager.language],
+                                position = addLine((String)cacheManager.presentationsSub.get(presentation_sub)[settingsManager.language],
                                         Math.round(margin) + col_size * 2, position, SIZE_PRESENTATION_SUB, false);
                             }
                         }

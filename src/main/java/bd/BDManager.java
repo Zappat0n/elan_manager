@@ -3,7 +3,6 @@ package bd;
 import bd.model.*;
 import utils.MyLogger;
 import utils.SettingsManager;
-import utils.data.RawData;
 
 import javax.swing.*;
 import java.io.*;
@@ -18,7 +17,6 @@ public class BDManager {
     private static final String TAG = BDManager.class.getSimpleName();
     public static final TableClassrooms tableClassrooms = new TableClassrooms();
     public static final TableContacts tableContacts = new TableContacts();
-    public static final TableDriveFolderKeys tableDriveFolderKeys = new TableDriveFolderKeys();
     public static final TableEvents tableEvents = new TableEvents();
     public static final TableEventsEoY tableEventsEoY = new TableEventsEoY();
     public static final TableEventsYet tableEventsYet = new TableEventsYet();
@@ -151,10 +149,6 @@ public class BDManager {
         return null;
     }
 
-    public void addFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
     private void showError(String error) {
         JOptionPane.showMessageDialog(frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
@@ -178,7 +172,7 @@ public class BDManager {
             ps = co.prepareStatement("INSERT INTO `Events` (`date`, `student`, " +
                             "`event_type`, `event_id`, `event_sub`, `notes`, `teacher`) VALUES (?, ?, ?, ?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
-            ps = prepareToAddEvent(ps, date, studentId, event_type, event_id, event_sub, notes);
+            prepareToAddEvent(ps, date, studentId, event_type, event_id, event_sub, notes);
             if (ps.executeUpdate() != 0) {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -195,8 +189,8 @@ public class BDManager {
         return null;
     }
 
-    private PreparedStatement prepareToAddEvent(PreparedStatement ps, Date date, Integer studentId, Integer event_type, Integer event_id,
-                                      Integer event_sub, String notes) {
+    private void prepareToAddEvent(PreparedStatement ps, Date date, Integer studentId, Integer event_type, Integer event_id,
+                                   Integer event_sub, String notes) {
         try {
             ps.setDate(1, date);
             if (studentId != null) ps.setInt(2, studentId);
@@ -214,7 +208,6 @@ public class BDManager {
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
         }
-        return ps;
     }
 
     public void addOrEditEventForStudentAndTypeAndId(Connection co, Date date, Integer studentId, Integer event_type,
@@ -317,10 +310,10 @@ public class BDManager {
         return executeQuery(connection, table.getValues(keysToString(keys), condition), table, keys);
     }
 
-    public int removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
-        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return 0;
-        if (table == null) return 0;
-        return executeQueryUpdate(co, table.removeValue(condition));
+    public void removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
+        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
+        if (table == null) return;
+        executeQueryUpdate(co, table.removeValue(condition));
     }
 
     public static String getSqlOrValues(String variable, int[] values) {
@@ -349,53 +342,52 @@ public class BDManager {
         return null;
     }
 
-    public synchronized int executeQueryUpdate(Connection connection, String query) {
+    public synchronized void executeQueryUpdate(Connection connection, String query) {
         try {
             st = connection.createStatement();
-            return st.executeUpdate(query);
+            st.executeUpdate(query);
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
             showError("No he podido realizar la operación\n"+e.getMessage());
         } finally {
             closeQuietlyStatement();
         }
-        return 0;
     }
 
     public static void closeQuietly(Connection connection, PreparedStatement ps) {
-        try { ps.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { ps.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection, Statement st) {
-        try { st.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection, Statement st, ResultSet rs) {
-        try { rs.close(); } catch (Exception e) {  }
-        try { st.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private void closeQuietlyStatement(){
-        try { st.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(ResultSet rs){
-        try { rs.close(); } catch (Exception e) {  }
+        try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(PreparedStatement ps){
-        try { ps.close(); } catch (Exception e) {  }
+        try { ps.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Statement st){
-        try { st.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection){
-        try {connection.close();} catch (Exception e) {  }
+        try {connection.close();} catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private String keysToString(String[] keys) {

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class SwingReportGenerator extends SwingWorker implements PropertyChangeListener {
+public class SwingReportGenerator extends SwingWorker<Object, Object> implements PropertyChangeListener {
     private static final String TAG = SwingReportGenerator.class.getSimpleName();
     final BDManager bdManager;
     final CacheManager cacheManager;
@@ -49,13 +49,14 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
     final String header;
     final String body;
     final ArrayList<Integer> students;
-    DefaultListModel log;
+    final DefaultListModel<String> log;
 
     public SwingReportGenerator(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
                                 JFrame frame, Integer student, Integer classroom, Date reportDate, Date changeDate,
                                 Boolean recordDate, Boolean sendEmail, Boolean doYetReport, Boolean doTargetsReport,
                                 Boolean doEoYReport, Boolean doEoYComments, Boolean doEoYPhotos, Boolean checkContacts,
-                                Boolean uploadToDrive, String header, String body, JProgressBar progressBar, DefaultListModel log) {
+                                Boolean uploadToDrive, String header, String body, JProgressBar progressBar,
+                                DefaultListModel<String> log) {
         this.bdManager = bdManager;
         this.cacheManager = cacheManager;
         this.settingsManager = settingsManager;
@@ -126,7 +127,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
                 }
                 if (f1!=null || f2!=null || f3!=null) {
                     if (sendEmail)
-                        EmailManager.sendEmail(cacheManager, bdManager, co, studentId, new File[] {f1,f2, f3},
+                        EmailManager.sendEmail(co, studentId, new File[] {f1,f2, f3},
                                 reportManager.getTextForEmail(header, studentId), reportManager.getTextForEmail(body, studentId));
                     if (uploadToDrive) {
                         File finalF1 = f1; File finalF2 = f2; File finalF3 = f3;
@@ -160,10 +161,10 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("progress" == evt.getPropertyName()) {
+        if ("progress".equals(evt.getPropertyName())) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
-            progressBar.setString(String.format("Completed %d%% of task.\n", Math.round(progress * 100 / max)));
+            progressBar.setString(String.format("Completed %d%% of task.\n", progress * 100 / max));
         }
     }
 
@@ -171,12 +172,12 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
         ArrayList<Integer> pending = new ArrayList<>();
         HashMap<Integer, ArrayList<String>> contacts = bdManager.getContacts(co, students);
         for (Integer student : students) {
-            if (!contacts.keySet().contains(student)) pending.add(student);
+            if (!contacts.containsKey(student)) pending.add(student);
         }
         if (pending.size() > 0) {
             StringBuilder names = new StringBuilder();
             for (Integer id : pending) {
-                names.append(cacheManager.students.get(id)[0] + "\n");
+                names.append(cacheManager.students.get(id)[0]).append("\n");
             }
             JOptionPane.showInternalMessageDialog(frame, "There are children without contact data", names.toString(),
                     JOptionPane.ERROR_MESSAGE);

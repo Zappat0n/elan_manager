@@ -28,7 +28,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -218,7 +217,8 @@ public class UploadForm {
 
             listSearchedPresentations.addListSelectionListener(e -> {
                 if (listSearchedPresentations.getSelectedIndex() == -1) return;
-                updatePresentationsSub(presentationssearched.get(listSearchedPresentations.getSelectedValue())[0]);
+                String searched = (String) listSearchedPresentations.getSelectedValue();
+                updatePresentationsSub(presentationssearched.get(searched)[0]);
             });
 
             listSearchedPresentations.addMouseMotionListener(new MouseMotionAdapter() {
@@ -227,9 +227,12 @@ public class UploadForm {
                     JList l = (JList) e.getSource();
                     int index = l.locationToIndex(e.getPoint());
                     if (index > -1) {
-                        Integer subarea = presentationssearched.get(l.getModel().getElementAt(index))[1];
+                        String searched = (String) l.getModel().getElementAt(index);
+                        Integer subarea = presentationssearched.get(searched)[1];
                         Object[] data = cacheManager.subareasMontessori.get(subarea);
-                        l.setToolTipText(cacheManager.areasMontessori.get(data[2])[settingsManager.language] + " -> " + data[settingsManager.language]);
+                        Integer area = (Integer) data[2];
+                        String area_name = (String) data[settingsManager.language];
+                        l.setToolTipText(cacheManager.areasMontessori.get(area)[settingsManager.language] + " -> " + area_name);
                     }
                 }
             });
@@ -238,7 +241,7 @@ public class UploadForm {
         buttonUpload.addActionListener(e -> {
             if (driveGovernor != null) {
                 try {
-                    Date date = labelDate.getText() != "" ? new SimpleDateFormat("dd/MM/yyyy").parse(labelDate.getText()) :
+                    Date date = !labelDate.getText().equals("") ? new SimpleDateFormat("dd/MM/yyyy").parse(labelDate.getText()) :
                             dateModel.getValue();
                     if (date == null) {
                         UploadForm.showMessage("Please select an estimated date for the picture");
@@ -263,16 +266,19 @@ public class UploadForm {
                     if (tabPresentations.getSelectedIndex() == 0) {
                         presentation = listPresentations.getSelectedIndex();
                         if (presentation != -1) presentation = presentations.get(presentation);
-                        else if (listSearchedPresentations.getSelectedIndex() != -1)
-                            presentation = presentationssearched.get(listSearchedPresentations.getSelectedValue())[0];
-                        else {
+                        else if (listSearchedPresentations.getSelectedIndex() != -1) {
+                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            presentation = presentationssearched.get(searched)[0];
+                        } else {
                             UploadForm.showMessage("Please select a presentation");
                             return;
                         }
                     } else {
                         presentation = listSearchedPresentations.getSelectedIndex();
-                        if (presentation != -1) presentation = presentationssearched.get(listSearchedPresentations.getSelectedValue())[0];
-                        else if (listPresentations.getSelectedIndex() != -1)
+                        if (presentation != -1) {
+                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            presentation = presentationssearched.get(searched)[0];
+                        } else if (listPresentations.getSelectedIndex() != -1)
                             presentation = presentations.get(listPresentations.getSelectedIndex());
                         else {
                             UploadForm.showMessage("Please select a presentation");
@@ -289,10 +295,8 @@ public class UploadForm {
                     }
 
                     driveGovernor.uploadPicture(student, date, presentation, presentationsub, mainImageFile, tAComments.getText());
-                } catch (ParseException ex) {
+                } catch (Exception ex) {
                     MyLogger.e(TAG, ex);
-                } catch (IOException ioException) {
-                    MyLogger.e(TAG, ioException);
                 }
             }
         });
@@ -312,7 +316,7 @@ public class UploadForm {
                     files = new File[]{chooser.getSelectedFile()};
                     settingsManager.addValue(SettingsManager.LASTDIR, chooser.getSelectedFile().getParent());
                 }
-                System.out.println("Selected files:" + files.length);
+                System.out.println("Selected files:" + Objects.requireNonNull(files).length);
                 SWLoadImages load = new SWLoadImages(files, imgs, labelDate);
                 load.execute();
             }
@@ -345,15 +349,14 @@ public class UploadForm {
     private void rotacionMainImagen(double grades) {
         mainOriginalImage = ImageUtils.rotateImage(mainOriginalImage, grades);
         mainImage = ImageUtils.rotateImage(mainImage, grades);
-        setMainImage(mainImageFile, mainImage, true);
+        setMainImage(mainImageFile, mainImage);
         imageRotated = true;
     }
 
-    private void setMainImage(File f, BufferedImage image, Boolean resize){
+    private void setMainImage(File f, BufferedImage image){
         mainImageFile = f;
-        if (resize) mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
+        mainImage = ImageUtils.resizeImage(image, Math.round(panelLabel.getWidth()), Math.round(panelLabel.getHeight()));
         //((Long)Math.round(panelLabel.getWidth() * 0.9)).intValue(),((Long)Math.round(panelLabel.getHeight() * 0.95)).intValue());
-        else mainImage = image;
         labelMainImg.setIcon(new ImageIcon(mainImage));
         labelMainImg.updateUI();
         imageRotated = false;
@@ -367,7 +370,7 @@ public class UploadForm {
             ArrayList<Integer> list = cacheManager.presentationssubperpresentation.get(presentation);
             if (list != null && list.size() > 0)
                 for (Integer id : list) {
-                    String name = (String)cacheManager.presentationssub.get(id)[settingsManager.language];
+                    String name = (String)cacheManager.presentationsSub.get(id)[settingsManager.language];
                     modelPresentationsSub.addElement(name);
                     presentationssub.add(id);
                 }
@@ -426,7 +429,7 @@ public class UploadForm {
             panelImgs.removeAll();
             for (final File f : files) {
                 try {
-                    BufferedImage img = null;
+                    BufferedImage img;
                     img = ImageIO.read(f);
                     System.out.println(f.getName());
                     imgs.add(img);
@@ -451,7 +454,7 @@ public class UploadForm {
                         System.out.println("Creating big image" + "");
                         labelDate.setText("");
                         mainOriginalImage = ImageUtils.resizeImage(img, img.getWidth(), img.getHeight());
-                        setMainImage(f, img, true);
+                        setMainImage(f, img);
                         try {
                             Metadata metadata = ImageMetadataReader.readMetadata(f);
                             ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);

@@ -1,4 +1,4 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import bd.BDManager;
 import bd.MySet;
@@ -21,14 +21,14 @@ public class SwingUpdater extends SwingWorker {
     public static final Integer UPDATER_LOAD = 0;
     public static final Integer UPDATER_SAVE = 1;
     public static final Integer UPDATER_CLEAR = 2;
-    BDManager bdManager;
-    CacheManager cacheManager;
-    JTabbedPane tabbedPane;
-    JTable tableContacts;
-    Integer action = null; // 0 load, 1 save;
-    Integer student;
+    final BDManager bdManager;
+    final CacheManager cacheManager;
+    final JTabbedPane tabbedPane;
+    final JTable tableContacts;
+    final Integer action; // 0 load, 1 save;
+    final Integer student;
     ChildrenPanel panel;
-    MyTableModel tableModel;
+    final MyTableModel tableModel;
     private ArrayList<Integer[]>brothers;
 
 
@@ -47,14 +47,13 @@ public class SwingUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0: {
+            case 0 -> {
                 clear();
                 load();
                 ReportsForm.yetChanged = false;
-                break;
             }
-            case 1: save(); break;
-            case 2: clear(); break;
+            case 1 -> save();
+            case 2 -> clear();
         }
         return null;
     }
@@ -63,17 +62,6 @@ public class SwingUpdater extends SwingWorker {
         for (int i = tabbedPane.getTabCount() - 1; i >= 0; i--) {
             tabbedPane.removeTabAt(i);
         }
-        /*
-        panel.tFName.setText(null);
-        panel.dMBirthday.setValue(null);
-        panel.cBClassroom.setSelectedIndex(-1);
-        panel.tFAddress.setText(null);
-        panel.dMFirstDayComundi.setValue(null);
-        panel.dMFirstDayCDB.setValue(null);
-        panel.dMFirstDayPrimary.setValue(null);
-        panel.dMExitDay.setValue(null);
-        panel.tANotes.setText(null);
-        */
         ((DefaultTableModel) tableContacts.getModel()).setRowCount(0);
     }
 

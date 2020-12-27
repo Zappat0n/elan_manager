@@ -5,8 +5,8 @@ import java.util.*;
 public class NextPresentation {
     private final CacheManager cacheManager;
     private final SettingsManager settingsManager;
-    Integer presentation;
-    Integer presentation_sub;
+    final Integer presentation;
+    final Integer presentation_sub;
 
     public Integer nextPresentation;
     public Integer nextPresentationSub;
@@ -28,7 +28,7 @@ public class NextPresentation {
     }
 
     public Boolean doExists() {
-        return (nextPresentation != null) ? true : false;
+        return nextPresentation != null;
     }
 
     public void setLinksText(String[] linksText) {
@@ -43,7 +43,7 @@ public class NextPresentation {
         ArrayList<Integer> presentations = cacheManager.presentationsperyearandsubarea.get(year).get(subarea);
 
         //Check same subarea
-        Integer index;
+        int index;
         if (currentPriority == null || currentPriority == 0) {
             Collections.sort(presentations);
             index = presentations.indexOf(presentation);
@@ -82,7 +82,7 @@ public class NextPresentation {
             Integer area = (Integer) cacheManager.subareasMontessori.get(subarea)[2];//name, nombre, area
             nextPresentationText += cacheManager.areasMontessori.get(area)[settingsManager.language] + " - ";
             nextPresentationText += cacheManager.subareasMontessori.get(subarea)[settingsManager.language] + "\n";
-            Object[] sub = cacheManager.presentationssub.get(nextPresentationSub); //name, nombre
+            Object[] sub = cacheManager.presentationsSub.get(nextPresentationSub); //name, nombre
             nextPresentationText += data[settingsManager.language] + ((sub != null) ? " --> " + sub[settingsManager.language] : "") + "\n";
         }
         return nextPresentationText;

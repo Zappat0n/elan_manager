@@ -46,14 +46,13 @@ public class SwingDBYetUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0: {
+            case 0 -> {
                 clear();
                 String[] result = yetManager.load();
                 fillTextArea(result);
                 ReportsForm.yetChanged = false;
-                break;
             }
-            case 1: yetManager.save(); break;
+            case 1 -> yetManager.save();
         }
         return null;
     }

@@ -106,9 +106,7 @@ public class SWDBUpdater extends SwingWorker {
     protected void addToBatch(Statement st, Integer student, Integer event_id, Integer event_sub,
                               Integer oldvalue, String text) throws SQLException {
         if (newvalue < 4) {
-            if (newvalue == oldvalue) {
-            }
-            else if (newvalue > oldvalue) {
+            if (newvalue > oldvalue) {
                 addBatchEvent(st, student, event_id, event_sub, RawData.montessoriEvent_Types[newvalue-1], null);
             } else {
                 if (oldvalue < 4) {
@@ -118,9 +116,7 @@ public class SWDBUpdater extends SwingWorker {
                 }
             }
         } else {
-            if (newvalue == oldvalue) {
-            }
-            else {
+            if (!newvalue.equals(oldvalue)) {
                 if (oldvalue > 3) removePlanning(st, student, event_id, event_sub, text);
                 addBatchEvent(st, student, event_id, event_sub, 13, MyPopUpMenuPresentations.planning_values[newvalue-4]);
             }
@@ -175,7 +171,7 @@ public class SWDBUpdater extends SwingWorker {
             for (Map.Entry<Integer[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
                 Integer sub = (condition.event_sub != null) ? condition.event_sub : 0;
                 Integer[] data = entry.getKey();
-                if (data[0] == condition.event_id && data[1] == sub) {
+                if (data[0].equals(condition.event_id) && data[1].equals(sub)) {
                     for (Integer outcome : entry.getValue().outcomes) {
                         deleteBrokenLink(condition, st, 10, outcome);
                     }
@@ -263,7 +259,7 @@ public class SWDBUpdater extends SwingWorker {
         boolean result = false;
         for (Map.Entry<Integer[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
             Integer[] data = entry.getKey();
-            if (data[0] == event_id && data[1] == event_sub) {
+            if (data[0].equals(event_id) && data[1].equals(event_sub)) {
                 for (Integer outcome : entry.getValue().outcomes) {
                     addBatchEvent(st, student, outcome, null, 10, String.valueOf(id));
                 }
@@ -289,7 +285,7 @@ public class SWDBUpdater extends SwingWorker {
         String id = event_id + "." + (event_sub != null ? event_sub : "0");
         int row = formData.presentations.indexOf(id);
         int col = formData.students.indexOf(student)+1;
-        if (row != -1 && col != -1) tablePresentations.setValueAt(newvalue, row, col);
+        if (row != -1) tablePresentations.setValueAt(newvalue, row, col);
         else MyLogger.d(TAG, "Data point lost");
         if (newvalue > 3) {
             MyTableModelPlanning model = (MyTableModelPlanning) tablePlanning.getModel();

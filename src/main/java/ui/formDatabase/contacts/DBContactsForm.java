@@ -1,51 +1,40 @@
-package ui.formDatabase.Contacts;
+package ui.formDatabase.contacts;
 
 import bd.BDManager;
 import drive.DriveGovernor;
 import utils.CacheManager;
 import utils.MyLogger;
-import utils.SettingsManager;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 public class DBContactsForm {
     private static final String TAG = DBContactsForm.class.getSimpleName();
 
     private static BDManager bdManager;
-    private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
 
     private JPanel mainPanel;
     private JList listClassrooms;
     private JTable tableContacts;
     private JList listStudents;
-    private JComboBox cBClassroom;
     private JButton buttonSave;
     private JButton buttonUpload;
-    private JButton buttonNew;
     private JButton buttonAddContact;
     private JTabbedPane tabbedPane;
     private JButton buttonAddChildren;
     private Integer student;
     private MyTableModel tableModel;
-    private ChildrenPanel childrenPanel;
 
-    public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
+    public static JPanel main(BDManager bdManager, CacheManager cacheManager) {
         DBContactsForm.bdManager = bdManager;
-        DBContactsForm.settingsManager = settingsManager;
         DBContactsForm.cacheManager = cacheManager;
         DBContactsForm form = new DBContactsForm();
         return form.mainPanel;
     }
 
     private void createUIComponents() {
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
         student = null;
         tabbedPane = new JTabbedPane();
 
@@ -89,17 +78,13 @@ public class DBContactsForm {
         });
 
         buttonSave = new JButton();
-        buttonNew = new JButton();
         buttonAddContact = new JButton();
         buttonAddChildren = new JButton();
 
-        buttonAddChildren.addActionListener(e -> {
-            tabbedPane.addTab("Unknown", ChildrenPanel.main(cacheManager).mainChildrenPanel);
-        });
+        buttonAddChildren.addActionListener(e ->
+                tabbedPane.addTab("Unknown", ChildrenPanel.main(cacheManager).mainChildrenPanel));
 
-        buttonAddContact.addActionListener(e -> {
-            tableModel.addEmptyRow();
-        });
+        buttonAddContact.addActionListener(e -> tableModel.addEmptyRow());
 
     }
 
