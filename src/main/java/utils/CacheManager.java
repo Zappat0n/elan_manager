@@ -53,7 +53,7 @@ public class CacheManager {
     public final HashMap<Integer, HashSet<Integer[]>> linksNCTargets;
     public final HashMap<Integer, HashMap<String, String>> globalVars;
 
-    public class PresentationLinks {
+    public static class PresentationLinks {
         public ArrayList<Integer> outcomes;
         public ArrayList<Integer> targets;
         public PresentationLinks() {
@@ -262,7 +262,7 @@ public class CacheManager {
             }
             labelAction.setText("Loading variables...");
             Calendar cal = Calendar.getInstance();
-            Integer year = cal.get(Calendar.YEAR);
+            int year = cal.get(Calendar.YEAR);
             year = cal.get(Calendar.MONTH) < 9 ? year - 1 : year;
             set = new MySet(st.executeQuery(query + TableGlobal_vars.table_name+ " WHERE year = " + year),
                     BDManager.tableGlobal_vars, null);
@@ -270,10 +270,10 @@ public class CacheManager {
                 String name = set.getString(TableGlobal_vars.name);
                 String value = set.getString(TableGlobal_vars.value);
                 switch (name) {
-                    case SettingsManager.START_OF_YEAR          : settingsManager.setDate_SY(value); break;
-                    case SettingsManager.FIRST_TERM             : settingsManager.setDate_FT(value); break;
-                    case SettingsManager.SECOND_TERM            : settingsManager.setDate_ST(value); break;
-                    case SettingsManager.THIRD_TERM             : settingsManager.setDate_TT(value); break;
+                    case SettingsManager.START_OF_YEAR -> settingsManager.setDate_SY(value);
+                    case SettingsManager.FIRST_TERM -> settingsManager.setDate_FT(value);
+                    case SettingsManager.SECOND_TERM -> settingsManager.setDate_ST(value);
+                    case SettingsManager.THIRD_TERM -> settingsManager.setDate_TT(value);
                 }
             }
         } finally {
@@ -363,28 +363,22 @@ public class CacheManager {
     }
 
     public Integer getStageofClassroom(Integer classroom) {
-        switch (classroom) {
-            case 1 : return 0;
-            case 2 :
-            case 3 :
-                return 1;
-            case 4 : return 2;
-        }
-        return null;
+        return switch (classroom) {
+            case 1 -> 0;
+            case 2, 3 -> 1;
+            case 4 -> 2;
+            default -> null;
+        };
     }
 
     public String getNameStageofClassroom(Integer classroom) {
-        switch (classroom) {
-            case 1 : return LanguageManager.INFANT_COMMUNITY[settingsManager.language];
-            case 2 :
-            case 3 :
-                return LanguageManager.CHILDRENS_HOUSE[settingsManager.language];
-            case 4 :
-            case 5 :
-                return LanguageManager.PRIMARY[settingsManager.language];
-            case 6 : return "Children's House";
-        }
-        return null;
+        return switch (classroom) {
+            case 1 -> LanguageManager.INFANT_COMMUNITY[settingsManager.language];
+            case 2, 3 -> LanguageManager.CHILDRENS_HOUSE[settingsManager.language];
+            case 4, 5 -> LanguageManager.PRIMARY[settingsManager.language];
+            case 6 -> "Children's House";
+            default -> null;
+        };
     }
 
 
@@ -407,7 +401,7 @@ public class CacheManager {
 
         LinkedList<Map.Entry<Integer, Date>> list = new LinkedList(map.entrySet());
         Comparator<Map.Entry<Integer, Date>> comparator = Comparator.comparing(Map.Entry::getValue);
-        Collections.sort(list, comparator.reversed());
+        list.sort(comparator.reversed());
 
         ArrayList<Integer> temp = new ArrayList<>();
         for ( Map.Entry<Integer, Date> pair : list) {

@@ -33,7 +33,6 @@ public class PresentationPage extends PDPage {
     private final float margin;
     private BufferedImage picture;
     private final Date date;
-    private final int student;
     private final int presentation;
     private final Integer presentationSub;
     private Integer position;
@@ -58,7 +57,6 @@ public class PresentationPage extends PDPage {
         this.margin = margin;
         this.picture = picture;
         this.date = date;
-        this.student = student;
         this.presentation = presentation;
         this.presentationSub = presentationSub;
         this.font = font;
@@ -185,9 +183,11 @@ public class PresentationPage extends PDPage {
     private Table.TableBuilder createTableBuilder(int columns, int fontSize, float percentage) {
         Table.TableBuilder tableBuilder = new Table.TableBuilder();
         switch (columns) {
-            case 1: tableBuilder.addColumnOfWidth(Math.round(tableWidth)); break;
-            case 2: tableBuilder.addColumnOfWidth(Math.round(tableWidth * percentage));
-                    tableBuilder.addColumnOfWidth(Math.round(tableWidth * (1 - percentage))); break;
+            case 1 -> tableBuilder.addColumnOfWidth(Math.round(tableWidth));
+            case 2 -> {
+                tableBuilder.addColumnOfWidth(Math.round(tableWidth * percentage));
+                tableBuilder.addColumnOfWidth(Math.round(tableWidth * (1 - percentage)));
+            }
         }
         tableBuilder.setFontSize(8, fontSize);
         tableBuilder.setFont(font);
@@ -207,8 +207,7 @@ public class PresentationPage extends PDPage {
             contents = new PDPageContentStream(doc, this, PDPageContentStream.AppendMode.APPEND, true);
             (new TableDrawer(contents, table, margin, y)).draw();
             contents.close();
-            Float result = table.getHeight();
-            return result;
+            return table.getHeight();
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }

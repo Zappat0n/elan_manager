@@ -354,7 +354,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
     }
 
     private Integer getNumberRows(Point point) {
-        return ((Double)(Math.floor(point.name.length() / 84)+1)).intValue();
+        return (point.name.length() / 84) + 1;
     }
 
     private void calculateAvailableRows() {

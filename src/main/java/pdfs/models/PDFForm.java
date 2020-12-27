@@ -55,7 +55,7 @@ public class PDFForm {
         PDPageContentStream contents = new PDPageContentStream(doc, page,
                 PDPageContentStream.AppendMode.APPEND, true);
         contents.beginText();
-        contents.setFont(false ? font : PDType1Font.HELVETICA_BOLD, 14);
+        contents.setFont(PDType1Font.HELVETICA_BOLD, 14);
         contents.setStrokingColor(Color.black);
         contents.setNonStrokingColor(Color.black);
         contents.newLineAtOffset(x, y);

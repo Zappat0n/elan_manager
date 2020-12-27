@@ -354,20 +354,12 @@ public class PDFForm_Reports {
             Object[] outcome = cacheManager.outcomes.get(outcomeId); //name,nombre,subarea,start_month,end_month
             int subareaId = (int)outcome[2];
 
-            periods = subarea.get(subareaId);
-            if (periods == null) {
-                periods = new LinkedHashMap<>();
-                subarea.put(subareaId, periods);
-            }
+            periods = subarea.computeIfAbsent(subareaId, k -> new LinkedHashMap<>());
 
             Integer[] period = {(int)outcome[3], (int)outcome[4]};
             if (period[0] == 0) continue;
 
-            outcomes = periods.get(period);
-            if (outcomes == null) {
-                outcomes = new LinkedHashMap<>();
-                periods.put(period, outcomes);
-            }
+            outcomes = periods.computeIfAbsent(period, k -> new LinkedHashMap<>());
             outcomes.put(outcomeId, cacheManager.getOutcomeYear((int)outcome[4]));
         }
         return subarea;
@@ -418,21 +410,23 @@ public class PDFForm_Reports {
         while (set.next()) {
             Integer event_type = set.getInt(TableEvents.event_type);
             switch (event_type) {
-                case 2:  processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 4:  processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 5:  processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 9:  processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 10: processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 11: processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
-                         set.getDate(TableEvents.date)); break;
-                case 12: notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes)); break;
-                case 15: java.util.Date date = set.getDate(TableEvents.date);
-                         if (lastReportDate == null || date.after(lastReportDate)) lastReportDate = date; break;
+                case 2 -> processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 4 -> processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 5 -> processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 9 -> processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 10 -> processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 11 -> processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date));
+                case 12 -> notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes));
+                case 15 -> {
+                    java.util.Date date = set.getDate(TableEvents.date);
+                    if (lastReportDate == null || date.after(lastReportDate)) lastReportDate = date;
+                }
             }
         }
         if (lastReportDate != null)

@@ -36,7 +36,6 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
     SettingsManager settingsManager;
 
     private EoYManager eoyManager;
-    private ReportManager reportManager;
     private java.sql.Date date;
     private HashMap<Integer, String> data;
     public Boolean isEmpty = false;
@@ -51,7 +50,6 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
             this.bdManager = bdManager;
             this.cacheManager = cacheManager;
             this.settingsManager = settingsManager;
-            this.reportManager = reportManager;
             this.log = log;
 
             eoyManager = new EoYManager(bdManager, settingsManager, reportManager, null,
@@ -306,12 +304,12 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
 
     private String getTeachers() {
         if (co == null) co = bdManager.connect();
-        String result = null;
+        StringBuilder result = null;
         MySet set = bdManager.getValues(co, BDManager.tableTeachers, TableTeachers.classroom + "=" + classroom);
         while (set.next()) {
-            if (result == null) result = set.getString(TableTeachers.nick);
-            else result += " y " + set.getString(TableTeachers.nick);
+            if (result == null) result = new StringBuilder(set.getString(TableTeachers.nick));
+            else result.append(" y ").append(set.getString(TableTeachers.nick));
         }
-        return result;
+        return result.toString();
     }
 }

@@ -50,10 +50,10 @@ public class MyPopUpMenuTargets extends JPopupMenu implements ActionListener {
         //types = (row < ((MyTableModelTargets) tableTargets.getModel()).outcomes.size()) ? RawData.ncOutcomes_Types : RawData.ncTargets_Types;
 
         switch (item.getText()) {
-            case " " : newvalue = 0; break;
-            case "/" : newvalue = 1; break;
-            case "Λ" : newvalue = 2; break;
-            case "Δ" : newvalue = 3; break;
+            case " " -> newvalue = 0;
+            case "/" -> newvalue = 1;
+            case "Λ" -> newvalue = 2;
+            case "Δ" -> newvalue = 3;
         }
         try {
             SWDBUTargetsUpdater updater = new SWDBUTargetsUpdater(bdManager, settingsManager, cacheManager, tableTargets,

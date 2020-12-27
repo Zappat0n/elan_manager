@@ -74,15 +74,15 @@ public class ChildForm {
         List<Integer> areas;
 
         for (int i = 0; i < 6; i++) {
-            switch (i) {
-                case 0 : year = 2.5; break;//tPTargetsEYs
-                case 1 : year = 5;   break;//tPTargetsFS
-                case 2 : year = 6;   break;//tPTargetsY1
-                case 3 : year = 7;   break;//tPTargetsY2
-                case 4 : year = 8;   break;//tPTargetsY3
-                case 5 : year = 9;   break;//tPTargetsY4
-                default: year = 0;   break;
-            }
+            year = switch (i) {
+                case 0 -> 2.5;
+                case 1 -> 5;
+                case 2 -> 6;
+                case 3 -> 7;
+                case 4 -> 8;
+                case 5 -> 9;
+                default -> 0;
+            };
             areas = RawData.areasTargetperStage.get(year);
             for (Integer area : areas) {
                 DefaultMutableTreeNode node = new DefaultMutableTreeNode(cacheManager.areasTarget.get(area));

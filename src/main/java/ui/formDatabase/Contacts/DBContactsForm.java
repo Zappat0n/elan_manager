@@ -25,7 +25,6 @@ public class DBContactsForm {
     private JComboBox cBClassroom;
     private JButton buttonSave;
     private JButton buttonUpload;
-    private JButton buttonNew;
     private JButton buttonAddContact;
     private JTabbedPane tabbedPane;
     private JButton buttonAddChildren;
@@ -89,17 +88,14 @@ public class DBContactsForm {
         });
 
         buttonSave = new JButton();
-        buttonNew = new JButton();
+        JButton buttonNew = new JButton();
         buttonAddContact = new JButton();
         buttonAddChildren = new JButton();
 
-        buttonAddChildren.addActionListener(e -> {
-            tabbedPane.addTab("Unknown", ChildrenPanel.main(cacheManager).mainChildrenPanel);
-        });
+        buttonAddChildren.addActionListener(e ->
+                tabbedPane.addTab("Unknown", ChildrenPanel.main(cacheManager).mainChildrenPanel));
 
-        buttonAddContact.addActionListener(e -> {
-            tableModel.addEmptyRow();
-        });
+        buttonAddContact.addActionListener(e -> tableModel.addEmptyRow());
 
     }
 

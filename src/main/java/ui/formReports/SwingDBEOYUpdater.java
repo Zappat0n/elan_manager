@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class SwingDBEOYUpdater extends SwingWorker {
     private static final String TAG = SwingDBEOYUpdater.class.getSimpleName();
-    private ArrayList<JTextArea> textAreas;
+    private final ArrayList<JTextArea> textAreas;
 
     final Integer classroom;
     final Integer student;
@@ -42,13 +42,13 @@ public class SwingDBEOYUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0: {
+            case 0 -> {
                 clear();
                 eoyManager.load();
                 ReportsForm.yetChanged = false;
                 break;
             }
-            case 1: eoyManager.save(); break;
+            case 1 -> eoyManager.save();
         }
         return null;
     }

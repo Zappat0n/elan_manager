@@ -28,7 +28,7 @@ public class NextPresentation {
     }
 
     public Boolean doExists() {
-        return (nextPresentation != null) ? true : false;
+        return nextPresentation != null;
     }
 
     public void setLinksText(String[] linksText) {
@@ -43,7 +43,7 @@ public class NextPresentation {
         ArrayList<Integer> presentations = cacheManager.presentationsperyearandsubarea.get(year).get(subarea);
 
         //Check same subarea
-        Integer index;
+        int index;
         if (currentPriority == null || currentPriority == 0) {
             Collections.sort(presentations);
             index = presentations.indexOf(presentation);

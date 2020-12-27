@@ -289,10 +289,8 @@ public class UploadForm {
                     }
 
                     driveGovernor.uploadPicture(student, date, presentation, presentationsub, mainImageFile, tAComments.getText());
-                } catch (ParseException ex) {
+                } catch (Exception ex) {
                     MyLogger.e(TAG, ex);
-                } catch (IOException ioException) {
-                    MyLogger.e(TAG, ioException);
                 }
             }
         });

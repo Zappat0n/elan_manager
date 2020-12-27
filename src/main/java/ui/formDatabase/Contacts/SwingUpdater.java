@@ -47,14 +47,14 @@ public class SwingUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0: {
+            case 0 -> {
                 clear();
                 load();
                 ReportsForm.yetChanged = false;
                 break;
             }
-            case 1: save(); break;
-            case 2: clear(); break;
+            case 1 -> save();
+            case 2 -> clear();
         }
         return null;
     }

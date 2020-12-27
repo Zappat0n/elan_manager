@@ -54,10 +54,8 @@ public class SettingsManager {
 
         if ((dir.charAt(dir.length()-1)) == separator.charAt(0)) {
             dir = dir.substring(0, dir.lastIndexOf(separator));
-            dir = dir.substring(0, dir.lastIndexOf(separator)+1);
-        } else {
-            dir = dir.substring(0, dir.lastIndexOf(separator)+1);
         }
+        dir = dir.substring(0, dir.lastIndexOf(separator)+1);
         settings = new HashMap<>();
         readFile();
     }

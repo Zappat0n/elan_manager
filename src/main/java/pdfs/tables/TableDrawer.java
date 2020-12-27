@@ -204,18 +204,16 @@ public class TableDrawer {
         float xOffset = moveX + cell.getPaddingLeft();
         float yOffset = moveY + cell.getPaddingBottom();
         final String[] lines = cell.getText().split("\n");
-        Boolean firstLine = true;
+        boolean firstLine = true;
 
         for ( String line : lines) {
             final float textWidth = (table.getFont().getStringWidth(line) / 1000f) * table.getFontSize();
-            switch (cell.getHorizontalAlignment()){
-                case RIGHT:
-                    xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
-                    break;
-                case CENTER:
+            switch (cell.getHorizontalAlignment()) {
+                case RIGHT -> xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+                case CENTER -> {
                     final float diff = (columnWidth - textWidth) / 2;
                     xOffset = moveX + diff;
-                    break;
+                }
             }
             if (firstLine) {
                 contentStream.newLineAtOffset(xOffset, yOffset);

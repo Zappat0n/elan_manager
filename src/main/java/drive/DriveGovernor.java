@@ -69,12 +69,12 @@ public class DriveGovernor {
         String folderDocuments = createFolder(parentFolder, STUDENTS_FOLDER_DOCUMENTS);
         String folderPhotos = createFolder(parentFolder, STUDENTS_FOLDER_PHOTOS);
         String folderReports = createFolder(parentFolder, STUDENTS_FOLDER_REPORTS);
-        switch (folderType) {
-            case STUDENTS_FOLDER_DOCUMENTS: return folderDocuments;
-            case STUDENTS_FOLDER_PHOTOS: return folderPhotos;
-            case STUDENTS_FOLDER_REPORTS: return folderReports;
-        }
-        return null;
+        return switch (folderType) {
+            case STUDENTS_FOLDER_DOCUMENTS -> folderDocuments;
+            case STUDENTS_FOLDER_PHOTOS -> folderPhotos;
+            case STUDENTS_FOLDER_REPORTS -> folderReports;
+            default -> null;
+        };
     }
 
     private String getStudentFolder(Integer student) throws IOException {

@@ -17,7 +17,6 @@ import java.net.URLConnection;
 public class UpdateInfoForm  extends JDialog {
     private static final String TAG = UpdateInfoForm.class.getSimpleName();
     private final SettingsManager settingsManager;
-    private final Boolean isAdmin;
     private final String root;
     private final JFrame frame;
     private JEditorPane infoPane;
@@ -29,7 +28,6 @@ public class UpdateInfoForm  extends JDialog {
         super(owner, "Actualización", true);
         frame = owner;
         this.settingsManager = settingsManager;
-        this.isAdmin = isAdmin;
         root = settingsManager.getDir() + "update" + settingsManager.getSeparator();
         initComponents();
         infoPane.setText(info);

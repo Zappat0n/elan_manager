@@ -37,16 +37,14 @@ public class BoxedText {
                     if (lastSpace < 0) lastSpace = spaceIndex;
                     subString = text.substring(0, lastSpace);
                     lines.add(subString);
-                    text = text.substring(lastSpace).trim();//+ "\n";
-                    lastSpace = -1;
                 } else {
                     lastSpace = spaceIndex-1;
                     subString = text.substring(0, lastSpace);
                     lines.add(subString);
                     shortlines.add(lines.indexOf(subString));
-                    text = text.substring(lastSpace).trim();
-                    lastSpace = -1;
                 }
+                text = text.substring(lastSpace).trim();//+ "\n";
+                lastSpace = -1;
             } else {
                 float size = fontSize * font.getStringWidth(subString) / 1000;
                 if (size > lineWidth) {

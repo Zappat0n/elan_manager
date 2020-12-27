@@ -163,7 +163,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
         if ("progress" == evt.getPropertyName()) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
-            progressBar.setString(String.format("Completed %d%% of task.\n", Math.round(progress * 100 / max)));
+            progressBar.setString(String.format("Completed %d%% of task.\n", progress * 100 / max));
         }
     }
 
@@ -176,7 +176,7 @@ public class SwingReportGenerator extends SwingWorker implements PropertyChangeL
         if (pending.size() > 0) {
             StringBuilder names = new StringBuilder();
             for (Integer id : pending) {
-                names.append(cacheManager.students.get(id)[0] + "\n");
+                names.append(cacheManager.students.get(id)[0]).append("\n");
             }
             JOptionPane.showInternalMessageDialog(frame, "There are children without contact data", names.toString(),
                     JOptionPane.ERROR_MESSAGE);

@@ -67,6 +67,7 @@ public class CurriculumForm {
                 try {
                     tip = getValueAt(rowIndex, colIndex).toString();
                 } catch (RuntimeException e1) {
+                    MyLogger.e(TAG, e1);
                 }
                 return tip;
             }
@@ -80,6 +81,7 @@ public class CurriculumForm {
                 try {
                     tip = getValueAt(rowIndex, colIndex).toString();
                 } catch (RuntimeException e1) {
+                    MyLogger.e(TAG, e1);
                 }
                 return tip;
             }
@@ -177,7 +179,7 @@ public class CurriculumForm {
         });
     }
 
-    private class TableLinksGovernor {
+    private static class TableLinksGovernor {
         DefaultTableModel model;
 
         public TableLinksGovernor(DefaultTableModel model) {
@@ -208,8 +210,8 @@ public class CurriculumForm {
         }
 
         private void addRow(String presentation, String presentation_sub, String outcome, String target) {
-            model.addRow(new Object[]{presentation, presentation_sub != null ? presentation_sub : null,
-                    outcome != null ? outcome : null, target != null ? target : null});
+            model.addRow(new Object[]{presentation, presentation_sub,
+                    outcome, target});
         }
 
         public void clear() {
@@ -217,7 +219,7 @@ public class CurriculumForm {
         }
     }
 
-    private class TableCurriculumGovernor {
+    private static class TableCurriculumGovernor {
         DefaultTableModel model;
 
         public TableCurriculumGovernor(DefaultTableModel model) {
@@ -248,8 +250,8 @@ public class CurriculumForm {
         }
 
         private void addRow(String presentation, String presentation_sub, String outcome, String target) {
-            model.addRow(new Object[]{presentation, presentation_sub != null ? presentation_sub : null,
-                    outcome != null ? outcome : null, target != null ? target : null});
+            model.addRow(new Object[]{presentation, presentation_sub,
+                    outcome, target});
         }
 
         public void clear() {

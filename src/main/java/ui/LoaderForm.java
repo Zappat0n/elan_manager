@@ -87,7 +87,7 @@ public class LoaderForm {
                 new UpdateInfoForm(frame, ApplicationLoader.settingsManager, Updater.getWhatsNew(), false);
             }
         } catch (Exception ex) {
-            System.out.print(ex);
+            System.out.print(ex.toString());
         }
     }
 

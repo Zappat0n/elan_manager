@@ -3,7 +3,6 @@ package bd;
 import bd.model.*;
 import utils.MyLogger;
 import utils.SettingsManager;
-import utils.data.RawData;
 
 import javax.swing.*;
 import java.io.*;
@@ -363,39 +362,39 @@ public class BDManager {
     }
 
     public static void closeQuietly(Connection connection, PreparedStatement ps) {
-        try { ps.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { ps.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection, Statement st) {
-        try { st.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection, Statement st, ResultSet rs) {
-        try { rs.close(); } catch (Exception e) {  }
-        try { st.close(); } catch (Exception e) {  }
-        try { connection.close(); } catch (Exception e) {  }
+        try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+        try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private void closeQuietlyStatement(){
-        try { st.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(ResultSet rs){
-        try { rs.close(); } catch (Exception e) {  }
+        try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(PreparedStatement ps){
-        try { ps.close(); } catch (Exception e) {  }
+        try { ps.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Statement st){
-        try { st.close(); } catch (Exception e) {  }
+        try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     public static void closeQuietly(Connection connection){
-        try {connection.close();} catch (Exception e) {  }
+        try {connection.close();} catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private String keysToString(String[] keys) {

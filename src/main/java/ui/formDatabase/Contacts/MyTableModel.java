@@ -16,7 +16,6 @@ public class MyTableModel extends DefaultTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        if (row == rowEditable) return true;
-        else return false;
+        return row == rowEditable;
     }
 }

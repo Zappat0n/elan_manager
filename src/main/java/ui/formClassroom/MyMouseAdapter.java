@@ -65,10 +65,16 @@ public class MyMouseAdapter extends MouseAdapter {
         boolean validRow = false;
         boolean validColumn = false;
         for (int sRow: selectedRows) {
-            if (sRow == row) validRow = true;
+            if (sRow == row) {
+                validRow = true;
+                break;
+            }
         }
         for (int sColumn: selectedColumns) {
-            if (sColumn == column) validColumn = true;
+            if (sColumn == column) {
+                validColumn = true;
+                break;
+            }
         }
         return validRow && validColumn;
     }

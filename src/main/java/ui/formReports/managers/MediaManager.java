@@ -27,7 +27,7 @@ public class MediaManager {
     private final PDDocument doc;
     private final PDFont font;
     private final float margin;
-    private Integer student;
+    private final Integer student;
     private final Date initialDate;
     private final Date finalDate;
     private final String  fileName;
@@ -60,9 +60,7 @@ public class MediaManager {
         public SWLoadMedia() {
             try {
                 driveManager = new GoogleDriveManager();
-            } catch (IOException e) {
-                MyLogger.e(TAG, e);
-            } catch (GeneralSecurityException e) {
+            } catch (Exception e) {
                 MyLogger.e(TAG, e);
             }
         }
@@ -108,9 +106,8 @@ CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, flo
         }
 
         private String getCondition() {
-            String condition = TableMedia.student + " = " + student + " AND " + TableMedia.date + " >= '" + initialDate + "' AND " +
+            return TableMedia.student + " = " + student + " AND " + TableMedia.date + " >= '" + initialDate + "' AND " +
                     TableMedia.date + " <= '" + finalDate + "' ORDER BY " + TableMedia.date + " ASC;";
-            return condition;
         }
 
         public String[] getLinks(Integer presentation, Integer presentation_sub) {
