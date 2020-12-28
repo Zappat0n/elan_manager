@@ -10,10 +10,10 @@ public class MyTablePlanningRenderer extends JList<String> implements TableCellR
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         if (value instanceof ArrayList) {
-            ArrayList<String> list = ((ArrayList) value);
+            ArrayList list = (ArrayList) value;
             String[] values = new String[list.size()];
             for (int i = 0; i < list.size(); i++) {
-                values[i] = list.get(i);
+                values[i] = list.get(i).toString();
             }
             setListData(values);
         }

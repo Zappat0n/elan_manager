@@ -86,7 +86,7 @@ public class PDFForm_Reports {
         this.reportDate = reportDate;
         this.changeDate = changeDate;
         doc = new PDDocument();
-        notes = new TreeMap();
+        notes = new TreeMap<>();
         try {
             font = //PDType1Font.HELVETICA;
                     PDType0Font.load(doc, getClass().getResourceAsStream("Verdana.ttf"));
@@ -249,7 +249,7 @@ public class PDFForm_Reports {
                         charSpacing = free / (line.length() - 1);
                     }
                 }
-                if (!bt.shortlines.contains(bt.lines.indexOf(line))) contents.setCharacterSpacing(charSpacing);
+                if (!bt.shortLines.contains(bt.lines.indexOf(line))) contents.setCharacterSpacing(charSpacing);
                 else contents.setCharacterSpacing(0);
                 contents.showText(line);
                 contents.newLineAtOffset(0, -bt.leading);
@@ -371,7 +371,7 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsperyearandsubarea.get(year);
-            for (Integer areaId : RawData.areasTargetperStage.get(year)) {
+            for (Object areaId : RawData.areasTargetperStage.get(year)) {
                 ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(areaId);
                 if (subareas != null) {
                     subarea = area.get(areaId);
@@ -387,7 +387,7 @@ public class PDFForm_Reports {
                             subarea.put(subareaId, items);
                         } else if (items == null) subarea.put(subareaId, new LinkedHashMap<>());
                     }
-                    area.put(areaId, subarea);
+                    area.put((Integer) areaId, subarea);
                 }
             }
         }

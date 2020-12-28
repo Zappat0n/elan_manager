@@ -8,6 +8,7 @@ import utils.SettingsManager;
 
 import javax.swing.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -55,7 +56,7 @@ public class Pdf_Planning extends PDFForm{
                 data[i] = new String[6];
                 data2[i] = new String[2];
                 for (int j = 0; j < 6; j++) {
-                    String cell = (String)model.getValueAt(i, j);
+                    String cell = String.join(",", (String[]) model.getValueAt(i, j).toArray());
                     if (j == 0 && cell.contains(" "))  cell = cell.substring(0, cell.indexOf(" ")+2)+".";
                     cell = cell != null ? cell : "";
                     data[i][j] = cell;

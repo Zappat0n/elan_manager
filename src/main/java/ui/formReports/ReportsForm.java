@@ -31,8 +31,8 @@ public class ReportsForm {
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
     private JPanel mainPanel;
-    private JList listClassrooms;
-    private JList listStudents;
+    private JList<String> listClassrooms;
+    private JList<String> listStudents;
     private JCheckBox checkBoxRecord;
     private JCheckBox checkBoxEmail;
     private JButton buttonGenerateReports;
@@ -76,7 +76,7 @@ public class ReportsForm {
     private JCheckBox checkBoxEoYPhotos;
     private JCheckBox checkBoxEoYComments;
     private JCheckBox checkBoxDrive;
-    private JList listLog;
+    private JList<String> listLog;
     private UtilDateModel dateModelMultiple;
     private UtilDateModel dateModelYet;
     private UtilDateModel dateModelEoY;
@@ -125,8 +125,8 @@ public class ReportsForm {
         }
 
         progressBar = new JProgressBar();
-        listClassrooms = new JList(RawData.classrooms);
-        listStudents = new JList(new DefaultListModel());
+        listClassrooms = new JList<>(RawData.classrooms);
+        listStudents = new JList<>(new DefaultListModel<>());
         students = new ArrayList<>();
         listClassrooms.addListSelectionListener(listSelectionEvent -> {
             if (listSelectionEvent.getValueIsAdjusting()) return;
@@ -136,7 +136,7 @@ public class ReportsForm {
                 if (currentClassroom != null) listClassrooms.setSelectedIndex(currentClassroom-1);
                 return;
             } else {
-                DefaultListModel model = (DefaultListModel)listStudents.getModel();
+                DefaultListModel<String> model = (DefaultListModel<String>)listStudents.getModel();
                 model.clear();
 
                 currentClassroom = listClassrooms.getSelectedIndex() + 1;
@@ -146,7 +146,7 @@ public class ReportsForm {
                 if (listStudents != null)
                     for (Integer id : listStudents) {
                         students.add(id);
-                        model.addElement(cacheManager.students.get(id)[0]);
+                        model.addElement((String)cacheManager.students.get(id)[0]);
                     }
             }
             second = false;
@@ -169,7 +169,7 @@ public class ReportsForm {
     }
 
     private void createReportGeneratorTab(){
-        listLog = new JList(new DefaultListModel());
+        listLog = new JList<>(new DefaultListModel<>());
         dateModelMultiple = new UtilDateModel();
         JDatePanelImpl datePanel = new JDatePanelImpl(dateModelMultiple, p);
         datePickerMultiple = new JDatePickerImpl(datePanel, new DateLabelFormatter());
@@ -187,7 +187,7 @@ public class ReportsForm {
                         checkBoxTargets.isSelected(), checkBoxEoY.isSelected(), checkBoxEoYComments.isSelected(),
                         checkBoxEoYPhotos.isSelected(), checkContacts.isSelected(), checkBoxDrive.isSelected(),
                         textFieldSubject.getText(), textAreaBody.getText(), progressBar,
-                        (DefaultListModel) listLog.getModel());
+                        (DefaultListModel<String>) listLog.getModel());
                 generator.addPropertyChangeListener(generator);
                 generator.execute();
             }
@@ -257,7 +257,7 @@ public class ReportsForm {
                         settingsManager, frame, student, index+1, dateModelYet.getValue(), null,
                         false, false, false, true, false,
                         false, false, false, false,null,
-                        null, progressBar, (DefaultListModel) listLog.getModel());
+                        null, progressBar, (DefaultListModel<String>) listLog.getModel());
                 generator.addPropertyChangeListener(generator);
                 generator.execute();
             }
@@ -364,7 +364,7 @@ public class ReportsForm {
             Pdf_EoY_Reports report = new Pdf_EoY_Reports(bdManager, null, cacheManager, settingsManager,
                     currentStudent, listClassrooms.getSelectedIndex() + 1, date, logo, reportManager,
                     checkBoxEoYComments.isSelected(), checkBoxEoYPhotos.isSelected(),
-                    (DefaultListModel) listLog.getModel());
+                    (DefaultListModel<String>) listLog.getModel());
         });
 
         tAEoY0 = new JTextArea();

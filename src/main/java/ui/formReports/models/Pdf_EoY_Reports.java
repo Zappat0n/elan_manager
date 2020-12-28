@@ -39,12 +39,12 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
     private java.sql.Date date;
     private HashMap<Integer, String> data;
     public Boolean isEmpty = false;
-    DefaultListModel log;
+    DefaultListModel<String> log;
 
     public Pdf_EoY_Reports(BDManager bdManager, Connection co, CacheManager cacheManager, SettingsManager settingsManager,
                            Integer studentId, Integer classroom, Date reportDate, BufferedImage logo,
                            ReportManager reportManager, Boolean addCommentsSection, Boolean includePictures,
-                           DefaultListModel log) {
+                           DefaultListModel<String> log) {
         super(bdManager, cacheManager, settingsManager, co, studentId, classroom, reportDate, "EoY", logo);
         try {
             this.bdManager = bdManager;

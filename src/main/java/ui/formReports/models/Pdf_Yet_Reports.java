@@ -32,14 +32,14 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
     public Integer teacher;
     private LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, Double>>> model;
     public Boolean isEmpty = false;
-    DefaultListModel log;
+    DefaultListModel<String> log;
     String[] data;
     YetManager yetManager;
     ReportManager reportManager;
 
     public Pdf_Yet_Reports(BDManager bdManager, Connection co, CacheManager cacheManager, SettingsManager settingsManager,
                            Integer studentId, Integer classroom, Date reportDate, BufferedImage logo,
-                           ReportManager reportManager, DefaultListModel log) {
+                           ReportManager reportManager, DefaultListModel<String> log) {
         super(bdManager, cacheManager, settingsManager, co, studentId, classroom, reportDate, "Yet", logo);
         try {
             this.reportManager = reportManager;

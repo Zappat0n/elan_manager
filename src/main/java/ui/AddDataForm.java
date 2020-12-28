@@ -24,13 +24,13 @@ public class AddDataForm {
     private static final String TAG = AddDataForm.class.getSimpleName();
     public static JFrame frame;
     public JPanel panel1;
-    private JList listClassrooms;
-    public JList listMontessori_NC;
-    public JList listAreas;
+    private JList<String> listClassrooms;
+    public JList<String> listMontessori_NC;
+    public JList<String> listAreas;
     private JDatePickerImpl datePicker;
-    public JList listStudents;
-    public JList listInserted;
-    public JList listItems;
+    public JList<String> listStudents;
+    public JList<String> listInserted;
+    public JList<String> listItems;
     private JList listYears;
     public JButton button1;
     public JButton button2;
@@ -38,7 +38,7 @@ public class AddDataForm {
     private JButton buttonRemove;
     public JTextArea taNotes;
     private JPanel panelButtons;
-    public JList listSub;
+    public JList<String> listSub;
     private JScrollPane scrollPanePresentations;
     private JSplitPane splitPaneItems;
     private JSplitPane splitPaneNotes;
@@ -69,7 +69,7 @@ public class AddDataForm {
         JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         dateModel.setValue(new Date());
-        listClassrooms = new JList(cacheManager.getClasroomsName());
+        listClassrooms = new JList<>(cacheManager.getClasroomsName());
         listClassrooms.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
             ListModel m = listClassrooms.getModel();
@@ -79,17 +79,17 @@ public class AddDataForm {
         });
 
         listYears = new JList();
-        listMontessori_NC = new JList();
+        listMontessori_NC = new JList<>();
         listYears.addListSelectionListener(this::selectionStageOrTypeChanged);
         listMontessori_NC.addListSelectionListener(this::selectionStageOrTypeChanged);
 
         splitPaneItems = new JSplitPane();
         splitPaneNotes = new JSplitPane();
-        listStudents = new JList(new MyListStudentsModel());
-        listAreas = new JList(new MyListAreasModel(settingsManager));
+        listStudents = new JList<>(new MyListStudentsModel());
+        listAreas = new JList<>(new MyListAreasModel(settingsManager));
         scrollPanePresentations = new JScrollPane();
-        listItems = new JList(new MyListItemsModel(this));
-        listSub = new JList(new MyListSubModel(settingsManager, this));
+        listItems = new JList<>(new MyListItemsModel(this));
+        listSub = new JList<>(new MyListSubModel(settingsManager, this));
         listAreas.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
             MyListItemsModel m = (MyListItemsModel)listItems.getModel();
@@ -115,7 +115,7 @@ public class AddDataForm {
                 }
             }
         });
-        listInserted = new JList(new MyListInsertedModel(this));
+        listInserted = new JList<>(new MyListInsertedModel(this));
 
         panelButtons = new JPanel();
         MyAddDataButtonsListener myAddDataButtonsListener = new MyAddDataButtonsListener(this);

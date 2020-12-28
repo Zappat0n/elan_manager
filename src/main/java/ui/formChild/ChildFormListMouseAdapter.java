@@ -19,6 +19,7 @@ public class ChildFormListMouseAdapter extends MouseAdapter {
         this.form = form;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void mouseClicked(MouseEvent e) {
         subs.clear();

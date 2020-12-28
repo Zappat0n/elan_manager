@@ -32,8 +32,8 @@ public class MediaForm {
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
     private JPanel mainPanel;
-    private JList listClassrooms;
-    private JList listStudents;
+    private JList<String> listClassrooms;
+    private JList<String> listStudents;
     private JPanel panelImgs;
     private JTextArea textAreaComments;
     private JLabel labelPresentation;
@@ -44,9 +44,9 @@ public class MediaForm {
     private JButton buttonDelete;
     private JLabel labelMainImg;
     private JLabel labelProgress;
-    private JList listNCAreas;
-    private JList listNCSubareas;
-    private JList listNCTargets;
+    private JList<String> listNCAreas;
+    private JList<String> listNCSubareas;
+    private JList<String> listNCTargets;
     private JCheckBox cBTargetOrOutcome;
     private JButton buttonTurnRight;
     private JButton buttonUpload;
@@ -91,8 +91,8 @@ public class MediaForm {
         datePickerImplPictureDate = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         dateModel.setValue(new Date());
 
-        listClassrooms = new JList(cacheManager.getClassroomsListModel());
-        listStudents = new JList();
+        listClassrooms = new JList<>(cacheManager.getClassroomsListModel());
+        listStudents = new JList<>();
         listClassrooms.addListSelectionListener(e -> {
             if (listClassrooms.getSelectedIndex() != -1)
                 listStudents.setModel(cacheManager.getStudentsListModel(listClassrooms.getSelectedIndex()+1));
@@ -145,15 +145,15 @@ public class MediaForm {
             }
         }));
 
-        listNCAreas = new JList(new DefaultListModel());
-        RawData.cdbAreasTarget.forEach(i -> ((DefaultListModel)listNCAreas.getModel()).addElement(
+        listNCAreas = new JList<>(new DefaultListModel<>());
+        RawData.cdbAreasTarget.forEach(i -> ((DefaultListModel<String>)listNCAreas.getModel()).addElement(
                 cacheManager.areasTarget.get(i)[settingsManager.language]));
 
         listNCAreas.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
             subareas.clear();
             Integer area = RawData.cdbAreasTarget.get(listNCAreas.getSelectedIndex());
-            DefaultListModel model = (DefaultListModel)listNCSubareas.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>)listNCSubareas.getModel();
             model.clear();
             cacheManager.subareasTargetperarea.get(area).forEach(subarea -> {
                 if (!cBTargetOrOutcome.isSelected()) {
@@ -180,12 +180,12 @@ public class MediaForm {
                 }
             });
         });
-        listNCSubareas = new JList(new DefaultListModel());
+        listNCSubareas = new JList<>(new DefaultListModel<>());
         listNCSubareas.addListSelectionListener(e -> {
             int selArea = listNCAreas.getSelectedIndex();
             int selSubArea = listNCSubareas.getSelectedIndex();
             if (e.getValueIsAdjusting() || selArea == -1 || selSubArea == -1) return;
-            DefaultListModel model = (DefaultListModel)listNCTargets.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>)listNCTargets.getModel();
             model.clear();
             Integer area = RawData.cdbAreasTarget.get(selArea);
             Integer subarea = cacheManager.subareasTargetperarea.get(area).get(selSubArea);
@@ -195,7 +195,7 @@ public class MediaForm {
                     for (Integer month : months) {
                         ArrayList<Integer> outcomes = cacheManager.outcomespermonthandsubarea.get(month).get(subarea);
                         if (outcomes != null) {
-                            outcomes.forEach(o -> model.addElement(cacheManager.outcomes.get(o)[settingsManager.language]));
+                            outcomes.forEach(o -> model.addElement((String)cacheManager.outcomes.get(o)[settingsManager.language]));
                         }
                     }
             } else {
@@ -204,12 +204,12 @@ public class MediaForm {
                     for (Double year : years) {
                         ArrayList<Integer> targets = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
                         if (targets != null) {
-                            targets.forEach(t -> model.addElement(cacheManager.targets.get(t)[settingsManager.language]));
+                            targets.forEach(t -> model.addElement((String)cacheManager.targets.get(t)[settingsManager.language]));
                         }
                     }
             }
         });
-        listNCTargets = new JList(new DefaultListModel());
+        listNCTargets = new JList<>(new DefaultListModel<>());
 
         buttonTurnLeft = new JButton();
         buttonTurnLeft.addActionListener(actionEvent -> {
@@ -238,8 +238,8 @@ public class MediaForm {
 
     private Integer[] getMonths(){
         return switch (listClassrooms.getSelectedIndex()) {
-            case 0 -> RawData.monthsOutcomesforEY;
-            case 1, 2 -> RawData.monthsOutcomesforFS;
+            case 0 -> RawData.monthsOutcomesForEY;
+            case 1, 2 -> RawData.monthsOutcomesForFS;
             default -> null;
         };
     }

@@ -22,9 +22,9 @@ public class ClassroomFormTargets {
     private static CacheManager cacheManager;
     private JPanel mainPanel;
     private JTable tableTargets;
-    private JList listClassrooms;
-    private JList listStages;
-    private JList listAreas;
+    private JList<String> listClassrooms;
+    private JList<String> listStages;
+    private JList<String> listAreas;
     private UtilDateModel dateModel;
     private JDatePickerImpl datePicker;
     private JButton buttonPrint;
@@ -61,17 +61,17 @@ public class ClassroomFormTargets {
         tableTargets.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager,
                 new java.sql.Date(dateModel.getValue().getTime())));
 
-        listClassrooms = new JList();
-        listStages = new JList(RawData.stagesNC);
-        listAreas = new JList(new DefaultListModel());
+        listClassrooms = new JList<>();
+        listStages = new JList<>(RawData.stagesNC);
+        listAreas = new JList<>(new DefaultListModel<>());
         listStages.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int index = listStages.getSelectedIndex();
                 if (index != -1) {
-                    DefaultListModel model = (DefaultListModel) listAreas.getModel();
+                    DefaultListModel<String> model = (DefaultListModel<String>) listAreas.getModel();
                     model.clear();
-                    for (Integer item : RawData.areasTargetperStageData[index]) {
-                        model.addElement(cacheManager.areasTarget.get(item)[settingsManager.language]);
+                    for (Object item : RawData.areasTargetPerStageData[index]) {
+                        model.addElement(cacheManager.areasTarget.get((Integer)item)[settingsManager.language]);
                     }
                 }
             }
@@ -100,7 +100,7 @@ public class ClassroomFormTargets {
         int stage = listStages.getSelectedIndex();
 
         if (classroom != -1 && stage != -1) {
-            Integer area = RawData.areasTargetperStageData[stage].get(listAreas.getSelectedIndex());
+            Integer area = (Integer) RawData.areasTargetPerStageData[stage].get(listAreas.getSelectedIndex());
             if (area != -1) {
                 SwingUtilities.invokeLater(() -> {
                     ((MyTableModelTargets) tableTargets.getModel()).loadData(classroom, stage, area);

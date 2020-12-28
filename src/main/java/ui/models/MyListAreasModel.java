@@ -53,8 +53,8 @@ public class MyListAreasModel extends DefaultListModel<String> {
             }
         } else if (typeIndex == 1 || typeIndex == 2){
             double year = RawData.yearsperstage[yearIndex];
-            for (Integer id: RawData.areasTargetperStage.get(year)){
-                data.put(cacheManager.areasTarget.get(id)[0], id);
+            for (Object id: RawData.areasTargetperStage.get(year)){
+                data.put(cacheManager.areasTarget.get(id)[0], (Integer) id);
             }
         } else if (typeIndex == 3){
             fireIntervalRemoved(this, 0, size());

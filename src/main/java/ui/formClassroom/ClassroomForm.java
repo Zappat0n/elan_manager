@@ -29,10 +29,10 @@ public class ClassroomForm {
     private static Connection co;
 
     public JPanel mainPanel;
-    private JList listClassrooms;
+    private JList<String> listClassrooms;
     private JTable tablePresentations;
-    private JList listStage;
-    private JList listArea;
+    private JList<String> listStage;
+    private JList<String> listArea;
     private JButton buttonCopy;
     private JTextField tFSearch;
     private UtilDateModel dateModel;
@@ -42,7 +42,7 @@ public class ClassroomForm {
     private JSplitPane mainSP;
     private JList<String> listSearch;
     ArrayList<Integer> areas;
-    private LinkedHashMap<String, Integer[]> presentationssearched;
+    private LinkedHashMap<String, Integer[]> presentationsSearched;
 
     public static JPanel main(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager) {
         ClassroomForm.bdManager = bdManager;
@@ -54,7 +54,7 @@ public class ClassroomForm {
     }
 
     private void createUIComponents() {
-        presentationssearched = new LinkedHashMap<>();
+        presentationsSearched = new LinkedHashMap<>();
         areas = new ArrayList<>();
         dateModel = new UtilDateModel();
         Properties p = new Properties();
@@ -112,7 +112,7 @@ public class ClassroomForm {
                     new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
             formData.setTables(tablePresentations);
 
-            listClassrooms = new JList();
+            listClassrooms = new JList<>();
             listClassrooms.addListSelectionListener(e -> {
                 if (e.getValueIsAdjusting()) return;
                 listStage.clearSelection();
@@ -123,14 +123,14 @@ public class ClassroomForm {
                 model.loadData();
             });
 
-            listStage = new JList();
+            listStage = new JList<>();
             listStage.addListSelectionListener(e -> {
                 int index = listStage.getSelectedIndex();
                 if (index == -1) return;
 
                 Set<Integer> _areas = cacheManager.stageAreaSubareaMontessori.get(index).keySet();
                 areas.clear();
-                Vector areas_names = new Vector();
+                Vector<String> areas_names = new Vector<>();
                 for (int area: _areas) {
                     areas.add(area);
                     areas_names.add(cacheManager.areasMontessori.get(area)[settingsManager.language]);
@@ -139,7 +139,7 @@ public class ClassroomForm {
                 formData.area = null;
             });
 
-            listArea = new JList();
+            listArea = new JList<>();
             listArea.addListSelectionListener(e -> loadData());
 
             buttonCopy = new JButton();
@@ -170,7 +170,7 @@ public class ClassroomForm {
             listSearch = new JList<>(new DefaultListModel<>());
             listSearch.addListSelectionListener(e -> {
                 if (listSearch.getSelectedIndex() == -1) return;
-                Integer[] datos = presentationssearched.get(listSearch.getSelectedValue()); //id, subarea
+                Integer[] datos = presentationsSearched.get(listSearch.getSelectedValue()); //id, subarea
                 Integer area = (Integer) cacheManager.subareasMontessori.get(datos[1])[ApplicationLoader.settingsManager.language]; //name, nombre, area
                 SwingUtilities.invokeLater(() -> {
                     listArea.setSelectedIndex(areas.indexOf(area));
@@ -194,7 +194,7 @@ public class ClassroomForm {
         for (int row = 0; row < last; row++) {
             int rows = 0;
             for (int column = 0; column < tablePlanning.getColumnCount(); column++) {
-                ArrayList<String> value = (ArrayList) tablePlanning.getValueAt(row, column);
+                ArrayList value = ((MyTableModelPlanning)tablePlanning.getModel()).getValueAt(row, column);
                 int x = (value != null) ? value.size() : 0;
                 rows = Math.max(rows, x);
             }
@@ -290,13 +290,13 @@ public class ClassroomForm {
 
     private void updateSearch(){
         SwingUtilities.invokeLater(() -> {
-            DefaultListModel model = (DefaultListModel) listSearch.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>) listSearch.getModel();
             String text = tFSearch.getText();
             model.clear();
             if (text.length() < 3 || listStage.getSelectedIndex() == 0) return;
             // Name -> Id, subarea
-            presentationssearched = cacheManager.searchPresentationWithText(text, listStage.getSelectedIndex());
-            for (String name: presentationssearched.keySet()) {
+            presentationsSearched = cacheManager.searchPresentationWithText(text, listStage.getSelectedIndex());
+            for (String name: presentationsSearched.keySet()) {
                 model.addElement(name);
             }
         });

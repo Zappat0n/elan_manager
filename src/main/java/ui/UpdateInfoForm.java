@@ -134,7 +134,7 @@ public class UpdateInfoForm  extends JDialog {
         File f = new File(root+filename);
         if (!f.delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());
         remove(new File(root));
-        if(!new File(root).delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());;
+        if(!new File(root).delete()) MyLogger.d(TAG, ERROR_DELETING + f.getName());
     }
 
     private void remove(File f) {

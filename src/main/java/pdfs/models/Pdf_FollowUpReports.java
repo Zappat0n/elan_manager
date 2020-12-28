@@ -42,13 +42,13 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
     int available_rows;
     int current_rows;
     int lang;
-    DefaultListModel log;
+    DefaultListModel<String> log;
 
     public Pdf_FollowUpReports(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
                                Connection connection, Integer studentId, Integer classroom, Date reportDate,
-                               Date changeDate, BufferedImage logo, Boolean addComment, DefaultListModel log) {
+                               Date changeDate, BufferedImage logo, Boolean addComment, DefaultListModel<String> log) {
         super(bdManager, cacheManager, settingsManager, connection, "Targets", studentId, classroom, reportDate, changeDate, logo);
-
+        this.log = log;
         try {
             if (connection == null) {co = bdManager.connect(); closeco = true; } else co = connection;
             LocalDate d1 = reportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

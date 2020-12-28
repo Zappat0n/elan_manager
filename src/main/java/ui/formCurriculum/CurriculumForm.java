@@ -1,6 +1,5 @@
 package ui.formCurriculum;
 
-import com.drew.lang.annotations.NotNull;
 import com.google.common.io.Files;
 import ui.formCurriculum.curriculumTypes.CurriculumSubareaYear;
 import utils.CacheManager;
@@ -8,6 +7,7 @@ import utils.MyLogger;
 import utils.SettingsManager;
 import utils.data.RawData;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -27,12 +27,12 @@ public class CurriculumForm {
     private JPanel mainPanel;
     private JList listStages;
     private JTable tableCurriculum;
-    private JList listAreas;
+    private JList<String> listAreas;
     private JButton buttonPdf;
     private JButton buttonTxt;
     private JButton buttonLoadLinks;
     private JTable tableImportLinks;
-    private JList listSubareas;
+    private JList<String> listSubareas;
     private JTable tableLinks;
     private ArrayList<Integer> areasList;
     private ArrayList<Integer> subareasList;
@@ -47,17 +47,17 @@ public class CurriculumForm {
     }
 
     private void createUIComponents() {
-        areasList = new ArrayList();
+        areasList = new ArrayList<>();
         subareasList = new ArrayList<>();
-        listStages = new JList();
-        listAreas = new JList(new DefaultListModel());
-        listSubareas = new JList(new DefaultListModel());
+        listStages = new JList<>();
+        listAreas = new JList<>(new DefaultListModel<>());
+        listSubareas = new JList<>(new DefaultListModel<>());
         buttonPdf = new JButton();
         buttonTxt = new JButton();
         buttonLoadLinks = new JButton();
         DefaultTableModel modelLinks = new DefaultTableModel();
         tableLinks = new JTable(modelLinks) {
-            public String getToolTipText(@NotNull MouseEvent e) {
+            public String getToolTipText(@Nonnull MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
@@ -71,7 +71,7 @@ public class CurriculumForm {
             }
         };
         tableCurriculum = new JTable(new DefaultTableModel()) {
-            public String getToolTipText(@NotNull MouseEvent e) {
+            public String getToolTipText(@Nonnull MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
@@ -118,7 +118,7 @@ public class CurriculumForm {
 
         listStages.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
-            DefaultListModel model = (DefaultListModel) listAreas.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>) listAreas.getModel();
             model.clear();
             areasList.clear();
             Object[] areas = cacheManager.stageAreaSubareaMontessori.get(listStages.getSelectedIndex()).keySet().toArray();
@@ -131,7 +131,7 @@ public class CurriculumForm {
 
         listAreas.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting() || listAreas.getSelectedIndex() == -1)  return;
-            DefaultListModel model = (DefaultListModel) listSubareas.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>) listSubareas.getModel();
             model.clear();
             subareasList.clear();
             int stage = listStages.getSelectedIndex();
@@ -141,7 +141,7 @@ public class CurriculumForm {
             if (subs != null) {
                 curriculum = new CurriculumSubareaYear(cacheManager, settingsManager, stage, area);
                 for (Integer sub : subs) {
-                    model.addElement(cacheManager.subareasMontessori.get(sub)[settingsManager.language]);
+                    model.addElement((String)cacheManager.subareasMontessori.get(sub)[settingsManager.language]);
                     subareasList.add(sub);
                 }
                 tableCurriculum.setModel(curriculum.getTableModel());

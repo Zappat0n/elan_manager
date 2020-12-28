@@ -13,12 +13,12 @@ public class BoxedText {
     public final float innerMargin;
     public final float lineWidth;
     public final ArrayList<String> lines;
-    public final ArrayList<Integer> shortlines;
+    public final ArrayList<Integer> shortLines;
 
     public BoxedText(String text, int fontSize, float width, PDFont font) throws IOException {
         leading = 1.5f * fontSize;
-        lines = new ArrayList();
-        shortlines = new ArrayList();
+        lines = new ArrayList<>();
+        shortLines = new ArrayList<>();
         int lastSpace = -1;
         if (text == null) text = "";
 
@@ -41,7 +41,7 @@ public class BoxedText {
                     lastSpace = spaceIndex-1;
                     subString = text.substring(0, lastSpace);
                     lines.add(subString);
-                    shortlines.add(lines.indexOf(subString));
+                    shortLines.add(lines.indexOf(subString));
                 }
                 text = text.substring(lastSpace).trim();//+ "\n";
                 lastSpace = -1;
@@ -55,7 +55,7 @@ public class BoxedText {
                     lastSpace = -1;
                 } else if (spaceIndex == text.length()) {
                     lines.add(text);
-                    shortlines.add(lines.indexOf(subString));
+                    shortLines.add(lines.indexOf(subString));
                     text = "";
                 } else {
                     lastSpace = spaceIndex;

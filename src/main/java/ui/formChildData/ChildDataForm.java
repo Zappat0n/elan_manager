@@ -77,8 +77,8 @@ public class ChildDataForm {
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
     private HashMap<String, Integer> students;
-    private String studentName;
     private Integer studentId;
+    private String studentName;
     private HashMap<Double, HashMap<Integer, String>>oldTexts;
     private HashMap<Double, HashMap<Integer, JTextArea>>textAreas;
     private ChildDataFormRenderer renderer;
@@ -396,11 +396,11 @@ public class ChildDataForm {
         }
         comboBoxStudents.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                String name = (String) e.getItem();
-                loadDataforStudent(name);
+                studentName = (String) e.getItem();
+                loadDataforStudent(studentName);
             }
         });
-        comboBoxClassrooms = new JComboBox(cacheManager.getClasroomsName());
+        comboBoxClassrooms = new JComboBox<>(cacheManager.getClasroomsName());
         comboBoxClassrooms.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) loadStudentsForClassroom(
                     ((JComboBox)e.getSource()).getSelectedIndex()+1);
@@ -486,8 +486,8 @@ public class ChildDataForm {
             List<Integer> areas;
             String firstname;
             switch (year.intValue()) {
-                case 5: pane = tPEndOfFS; areas = RawData.areasTargetperStageData[1]; firstname = "5."; break;
-                case 6: pane = tPEndOfY1; areas = RawData.areasTargetperStageData[2]; firstname = "6."; break;
+                case 5: pane = tPEndOfFS; areas = RawData.areasTargetPerStageData[1]; firstname = "5."; break;
+                case 6: pane = tPEndOfY1; areas = RawData.areasTargetPerStageData[2]; firstname = "6."; break;
                 default: continue;
             }
             for (Integer area : areas) {
@@ -536,7 +536,7 @@ public class ChildDataForm {
         ChildDataFormListModel model = new ChildDataFormListModel(cacheManager, settingsManager, startYear, endYear, subarea);
         if (model.getSize() == 0) return null;
         else {
-            JList list = new JList(model);
+            JList<ChildDataFormListItem> list = new JList<>(model);
             list.setCellRenderer(renderer);
             list.addMouseListener(new ChildDataFormListMouseAdapter(this));
             models.put(getModelString(2, endYear, subarea), model);
@@ -548,7 +548,7 @@ public class ChildDataForm {
         ChildDataFormListModel model = new ChildDataFormListModel(cacheManager, settingsManager, year, area);
         if (model.getSize() == 0) return null;
         else {
-            JList list = new JList(model);
+            JList<ChildDataFormListItem> list = new JList<>(model);
             list.setCellRenderer(renderer);
             list.addMouseListener(new ChildDataFormListMouseAdapter(this));
             models.put(getModelString(1, year, area), model);
@@ -658,7 +658,6 @@ public class ChildDataForm {
             return;
         }
 
-        studentName = student.toString();
         Connection co = null;
         Integer event_type= null;
         Integer event_id = null;
