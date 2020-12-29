@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.Properties;
 
 class ChildDataFormWritetodbDialog extends JDialog {
-    private static final String TAG = ChildDataFormWritetodbDialog.class.getSimpleName();
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -35,7 +34,7 @@ class ChildDataFormWritetodbDialog extends JDialog {
     private final Boolean add;
 
     private ChildDataFormWritetodbDialog(SettingsManager settingsManager, Byte type, int studentId,
-                                         String studentName, int index, Integer[] events, ChildDataFormListItem item,
+                                         String studentName, int index, ChildDataFormListItem item,
                                          ArrayList<ChildDataFormListItem> subitems, Boolean add) {
         this.settingsManager = settingsManager;
         this.studentId = studentId;
@@ -88,7 +87,7 @@ class ChildDataFormWritetodbDialog extends JDialog {
                             int index, Integer[] events, ChildDataFormListItem item,
                             ArrayList<ChildDataFormListItem> subitems, Boolean add) {
         ChildDataFormWritetodbDialog dialog = new ChildDataFormWritetodbDialog(settingsManager, type, studentId,
-                studentName, index, events, item, subitems, add);
+                studentName, index, item, subitems, add);
         dialog.pack();
         dialog.setVisible(true);
     }

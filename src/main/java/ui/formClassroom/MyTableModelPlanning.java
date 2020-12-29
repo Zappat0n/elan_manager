@@ -25,7 +25,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
     private final UtilDateModel dateModel;
 
     private Connection co;
-    private ArrayList<String>[][] data;
+    private ArrayList[][] data;
     public String[][] events;
     private final JPanel frame;
 
@@ -62,11 +62,11 @@ public class MyTableModelPlanning extends AbstractTableModel {
         java.sql.Date ini = new java.sql.Date(c.getTimeInMillis());
         c.add(Calendar.DATE, 7);
         java.sql.Date end = new java.sql.Date(c.getTimeInMillis());
-        String query = "SELECT * FROM zgbpq88q_montessano.Events " +
-                "INNER JOIN zgbpq88q_montessano.Students ON Events.student = Students.id " +
-                "WHERE zgbpq88q_montessano.Students.classroom="+formData.classroom+
-                " AND event_type=13 AND zgbpq88q_montessano.Events.date BETWEEN '"+ini+"' AND '"+end+"' "+
-                "ORDER BY zgbpq88q_montessano.Events.event_id, zgbpq88q_montessano.Events.event_sub ASC;";
+        String query = "SELECT * FROM Events " +
+                "INNER JOIN Students ON Events.student = Students.id " +
+                "WHERE Students.classroom="+formData.classroom+
+                " AND event_type=13 AND Events.date BETWEEN '"+ini+"' AND '"+end+"' "+
+                "ORDER BY Events.event_id, Events.event_sub ASC;";
         Statement st = null;
         ResultSet rs = null;
 
@@ -123,17 +123,18 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 0) return;
 
-        ArrayList<String> list = data[rowIndex][columnIndex-1];
+        ArrayList list = data[rowIndex][columnIndex-1];
         if (list == null) {
-            list = new ArrayList<>();
+            list = new ArrayList();
             data[rowIndex][columnIndex-1] = list;
         }
-        list.add((String)aValue);
+        //noinspection unchecked
+        list.add(aValue);
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public ArrayList getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             ArrayList<String> list = new ArrayList<>();
             list.add((String)cacheManager.students.get(formData.students.get(rowIndex))[0]);

@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public class SwingUpdater extends SwingWorker {
     private static final String TAG = SwingUpdater.class.getSimpleName();
     public static final Integer UPDATER_LOAD = 0;

@@ -1,6 +1,5 @@
 package ui.dialogs;
 
-import bd.BDManager;
 import utils.CacheManager;
 import utils.SettingsManager;
 import utils.data.RawData;
@@ -19,15 +18,15 @@ public class CreatePresentation extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JComboBox cBArea;
-    private JComboBox cBSubarea;
-    private JComboBox cBPresentation;
+    private JComboBox<String> cBArea;
+    private JComboBox<String> cBSubarea;
+    private JComboBox<String> cBPresentation;
     private JTextField textField1;
     private JTextField textField2;
-    private JList listPresentations;
+    private JList<String> listPresentations;
     private JButton buttonAddPresentation;
     private JList listPresentationsSub;
-    private JComboBox cBYear;
+    private JComboBox<Double> cBYear;
     private JButton buttonAddPresentationSub;
 
     private final Integer stage;
@@ -76,7 +75,7 @@ public class CreatePresentation extends JDialog {
         dispose();
     }
 
-    public static void main(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
+    public static void main(CacheManager cacheManager, SettingsManager settingsManager,
                             Integer stage, Integer area, Integer subarea, Integer presentation) {
         if (stage == null) return;
         CreatePresentation dialog = new CreatePresentation(cacheManager, settingsManager, stage, area,
@@ -89,20 +88,20 @@ public class CreatePresentation extends JDialog {
         areas = new ArrayList<>();
         subareas = new ArrayList<>();
 
-        cBArea = new JComboBox();
+        cBArea = new JComboBox<>();
         addAreas();
-        cBSubarea = new JComboBox();
+        cBSubarea = new JComboBox<>();
 
         if (area == null && areas.size() != 0) area = areas.get(0);
         if (area != null) addSubareas();
 
-        cBPresentation = new JComboBox();
+        cBPresentation = new JComboBox<>();
 
         if (stage != null)
-        cBYear = new JComboBox(new DefaultComboBoxModel(years[stage]));
+        cBYear = new JComboBox<>(new DefaultComboBoxModel<>(years[stage]));
 
 
-        listPresentations = new JList();
+        listPresentations = new JList<>();
         buttonAddPresentation = new JButton();
         buttonAddPresentationSub = new JButton();
 
@@ -138,13 +137,13 @@ public class CreatePresentation extends JDialog {
         double max = RawData.yearsmontessori[stage][1];
         ArrayList<Integer> presentations = cacheManager.getPresentations(subarea, min, max);
 
-        cBPresentation = new JComboBox(new DefaultComboBoxModel());
-        listPresentations = new JList(new DefaultListModel());
+        cBPresentation = new JComboBox<>(new DefaultComboBoxModel<>());
+        listPresentations = new JList<>(new DefaultListModel<>());
 
         for (Integer id : presentations) {
             String name = (String) cacheManager.presentations.get(id)[settingsManager.language];
-            ((DefaultComboBoxModel)cBPresentation.getModel()).addElement(name);
-            ((DefaultListModel)listPresentations.getModel()).addElement(name);
+            ((DefaultComboBoxModel<String>)cBPresentation.getModel()).addElement(name);
+            ((DefaultListModel<String>)listPresentations.getModel()).addElement(name);
         }
         cBPresentation.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));
         listPresentations.setSelectedIndex(presentations.indexOf(presentation != null ? presentation : presentations.get(0)));

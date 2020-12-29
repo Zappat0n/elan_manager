@@ -14,7 +14,7 @@ public class ChildrenPanel {
     private static CacheManager cacheManager;
     public JTextField tFName;
     public JDatePickerImpl datePickerBirthday;
-    public JComboBox cBClassroom;
+    public JComboBox<String> cBClassroom;
     public JTextField tFAddress;
     public JDatePickerImpl datePickerFirstDayComundi;
     public JDatePickerImpl datePickerFirstDayCDB;
@@ -45,9 +45,7 @@ public class ChildrenPanel {
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        cBClassroom = new JComboBox();
-
-        cBClassroom = new JComboBox(cacheManager.classrooms.values().toArray());
+        cBClassroom = new JComboBox<>((String[])cacheManager.classrooms.values().toArray());
         cBClassroom.setSelectedIndex(-1);
 
         dMBirthday = new UtilDateModel();

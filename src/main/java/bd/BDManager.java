@@ -118,7 +118,7 @@ public class BDManager {
             MySet set = getValues(co, table, null);
 
             if (set.getCount() == 0) return null;
-            LinkedHashMap<String, Integer> data = new LinkedHashMap(set.getCount());
+            LinkedHashMap<String, Integer> data = new LinkedHashMap<>(set.getCount());
             while (set.next()) {
                 data.put(set.getString("name"), set.getInt("id"));
             }

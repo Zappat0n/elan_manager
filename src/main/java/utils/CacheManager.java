@@ -62,7 +62,7 @@ public class CacheManager {
 
     private final JLabel labelAction;
 
-    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) throws SQLException {
+    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) {
         this.bdManager = bdManager;
         this.settingsManager = settingsManager;
         this.labelAction = labelAction;
@@ -94,7 +94,7 @@ public class CacheManager {
         loadData();
     }
 
-    private void loadData() throws SQLException {
+    private void loadData() {
         Connection co = null;
         Statement st = null;
         try {
@@ -398,7 +398,7 @@ public class CacheManager {
             map.put(id, (Date) students.get(id)[1]);
         }
 
-        LinkedList<Map.Entry<Integer, Date>> list = new LinkedList(map.entrySet());
+        LinkedList<Map.Entry<Integer, Date>> list = new LinkedList<>(map.entrySet());
         Comparator<Map.Entry<Integer, Date>> comparator = Map.Entry.comparingByValue();
         list.sort(comparator.reversed());
 
@@ -427,18 +427,18 @@ public class CacheManager {
         return result;
     }
 
-    public DefaultListModel getClassroomsListModel(){
-        DefaultListModel model = new DefaultListModel();
+    public DefaultListModel<String> getClassroomsListModel(){
+        DefaultListModel<String> model = new DefaultListModel<>();
         for (String classroom : RawData.classrooms) {
             model.addElement(classroom);
         }
         return model;
     }
 
-    public DefaultListModel getStudentsListModel(int classroom){
-        DefaultListModel model = new DefaultListModel();
+    public DefaultListModel<String> getStudentsListModel(int classroom){
+        DefaultListModel<String> model = new DefaultListModel<>();
         for (int id : studentsperclassroom.get(classroom)) {
-            model.addElement(students.get(id)[0]);
+            model.addElement((String)students.get(id)[0]);
         }
         return model;
     }

@@ -27,11 +27,10 @@ public class MediaPicture {
     }
 
     private Date calculateDate(String _date) {
-        String year = _date.substring(0, 3);
-        String month = _date.substring(4, 5);
-        String day = _date.substring(6, 7);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Integer.parseInt(year), Integer.parseInt(month)-1, Integer.parseInt(day));
+        calendar.set(Calendar.YEAR, Integer.parseInt(_date.substring(0, 3)));
+        calendar.set(Calendar.MONTH, Integer.parseInt(_date.substring(4, 5))-1);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_date.substring(6, 7)));
         return new Date(calendar.getTimeInMillis());
     }
 

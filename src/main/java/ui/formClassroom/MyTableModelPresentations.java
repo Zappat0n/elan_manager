@@ -46,11 +46,11 @@ public class MyTableModelPresentations extends AbstractTableModel {
             for (int j = 0; j < formData.students.size(); j++) data[i][j]=0;
         }
 
-        String query = "SELECT * FROM zgbpq88q_montessano.Events " +
-                "INNER JOIN zgbpq88q_montessano.Students ON Events.student = Students.id " +
-                "WHERE zgbpq88q_montessano.Students.classroom="+formData.classroom+
+        String query = "SELECT * FROM Events " +
+                "INNER JOIN Students ON Events.student = Students.id " +
+                "WHERE Students.classroom="+formData.classroom+
                 " AND (event_type=1 OR event_type=6 OR event_type=7 OR event_type=13) "+
-                "ORDER BY zgbpq88q_montessano.Events.event_id, zgbpq88q_montessano.Events.event_sub ASC;";
+                "ORDER BY Events.event_id, Events.event_sub ASC;";
         Statement st = null;
         ResultSet rs = null;
         try {

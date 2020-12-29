@@ -29,11 +29,11 @@ public class MediaManager {
     private final Date initialDate;
     private final Date finalDate;
     private final String  fileName;
-    final DefaultListModel log;
+    final DefaultListModel<String> log;
 
     public MediaManager(CacheManager cacheManager , SettingsManager settingsManager, BDManager bdManager, Integer student,
                         Date initialDate, Date finalDate, PDDocument doc, PDFont font, float margin, String fileName,
-                        DefaultListModel log) {
+                        DefaultListModel<String> log) {
         this.cacheManager = cacheManager;
         this.settingsManager = settingsManager;
         this.bdManager = bdManager;

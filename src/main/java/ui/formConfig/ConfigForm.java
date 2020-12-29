@@ -24,7 +24,7 @@ public class ConfigForm {
     private JPanel mainPanel;
     private JRadioButton rBEnglish;
     private JRadioButton rBSpanish;
-    private JList listGoogleLog;
+    private JList<String> listGoogleLog;
     private JButton buttonFoldersCheck;
 
     public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
@@ -54,11 +54,11 @@ public class ConfigForm {
             SWcheckFolders worker = new SWcheckFolders();
             worker.execute();
         });
-        listGoogleLog = new JList(new DefaultListModel());
+        listGoogleLog = new JList<>(new DefaultListModel<>());
     }
 
     public void insertLog(String text) {
-        ((DefaultListModel)listGoogleLog.getModel()).insertElementAt(text, 0);
+        ((DefaultListModel<String>) listGoogleLog.getModel()).insertElementAt(text, 0);
     }
 
 

@@ -21,7 +21,7 @@ public class EoYManager {
     private final BDManager bdManager;
     private final SettingsManager settingsManager;
     final ArrayList<JTextArea> textAreas;
-    private Date date;
+    private final Date date;
     private final Integer classroom;
     private final Integer student;
     private final ReportManager reportManager;
@@ -77,10 +77,6 @@ public class EoYManager {
         } finally {
             BDManager.closeQuietly(co, st);
         }
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
 

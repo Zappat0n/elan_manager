@@ -12,7 +12,7 @@ public class CurriculumSubareaYear extends Curriculum {
 
     public CurriculumSubareaYear(CacheManager cacheManager, SettingsManager settingsManager, int stage, int area) {
         super(cacheManager, settingsManager, stage, area);
-        presentations = new TreeMap();
+        presentations = new TreeMap<>();
         load();
     }
 

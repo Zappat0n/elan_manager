@@ -18,7 +18,7 @@ public class DBContactsForm {
     private JPanel mainPanel;
     private JList listClassrooms;
     private JTable tableContacts;
-    private JList listStudents;
+    private JList<String> listStudents;
     private JButton buttonSave;
     private JButton buttonUpload;
     private JButton buttonAddContact;
@@ -42,8 +42,8 @@ public class DBContactsForm {
         tableModel.setColumnIdentifiers(new String[]{"name", "email", "mobile_phone", "job"});
         tableContacts = new JTable(tableModel);
 
-        listStudents = new JList();
-        listClassrooms = new JList(cacheManager.getClassroomsListModel());
+        listStudents = new JList<>();
+        listClassrooms = new JList<>(cacheManager.getClassroomsListModel());
 
         listClassrooms.addListSelectionListener(listSelectionEvent ->
             SwingUtilities.invokeLater(() -> {

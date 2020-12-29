@@ -48,7 +48,7 @@ public class MyTableModelTargets extends AbstractTableModel {
             for (Integer subarea: subareas) {
                 if (outcomesperyear != null && outcomesperyear.containsKey(subarea))
                     outcomes.addAll(outcomesperyear.get(subarea));
-                ArrayList list = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                ArrayList<Integer> list = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
                 if (list != null) targets.addAll(list);
             }
         } else return;
@@ -85,11 +85,11 @@ public class MyTableModelTargets extends AbstractTableModel {
     }
 
     private ResultSet loadOutcomes(Statement st, Integer classroom) throws SQLException {
-        String query = "SELECT * FROM zgbpq88q_montessano.Events " +
-                "INNER JOIN zgbpq88q_montessano.Students ON Events.student = Students.id " +
-                "WHERE zgbpq88q_montessano.Students.classroom=" + classroom +
+        String query = "SELECT * FROM Events " +
+                "INNER JOIN Students ON Events.student = Students.id " +
+                "WHERE Students.classroom=" + classroom +
                 " AND (event_type = 9 OR event_type = 10 OR event_type = 11) "+
-                "ORDER BY zgbpq88q_montessano.Events.event_id ASC;";
+                "ORDER BY Events.event_id ASC;";
         ResultSet rs = st.executeQuery(query);
         while (rs.next()) {
             Integer student = rs.getInt(TableEvents.student);
@@ -106,11 +106,10 @@ public class MyTableModelTargets extends AbstractTableModel {
 
 
     private ResultSet loadTargets(Statement st, Integer classroom) throws SQLException {
-        String query = "SELECT * FROM zgbpq88q_montessano.Events " +
-                "INNER JOIN zgbpq88q_montessano.Students ON Events.student = Students.id " +
-                "WHERE zgbpq88q_montessano.Students.classroom=" + classroom +
+        String query = "SELECT * FROM Events INNER JOIN Students ON Events.student = Students.id " +
+                "WHERE Students.classroom=" + classroom +
                 " AND (event_type = 2 OR event_type = 4 OR event_type = 5) "+
-                "ORDER BY zgbpq88q_montessano.Events.event_id ASC;";
+                "ORDER BY Events.event_id ASC;";
         ResultSet rs = st.executeQuery(query);
         while (rs.next()) {
             Integer student = rs.getInt(TableEvents.student);

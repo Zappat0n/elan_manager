@@ -44,8 +44,6 @@ public class LoaderForm {
                     ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager,
                             ApplicationLoader.settingsManager, lAction);
                     MainForm.main(null);
-                } catch (SQLException e) {
-                    MyLogger.e(TAG, e);
                 } finally {
                     frame.dispose();
                 }

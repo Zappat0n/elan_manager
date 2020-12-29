@@ -86,7 +86,7 @@ public class PDFForm_Reports {
         this.reportDate = reportDate;
         this.changeDate = changeDate;
         doc = new PDDocument();
-        notes = new TreeMap();
+        notes = new TreeMap<>();
         try {
             font = //PDType1Font.HELVETICA;
                     PDType0Font.load(doc, getClass().getResourceAsStream("Verdana.ttf"));
@@ -249,7 +249,7 @@ public class PDFForm_Reports {
                         charSpacing = free / (line.length() - 1);
                     }
                 }
-                if (!bt.shortlines.contains(bt.lines.indexOf(line))) contents.setCharacterSpacing(charSpacing);
+                if (!bt.shortLines.contains(bt.lines.indexOf(line))) contents.setCharacterSpacing(charSpacing);
                 else contents.setCharacterSpacing(0);
                 contents.showText(line);
                 contents.newLineAtOffset(0, -bt.leading);
@@ -302,8 +302,8 @@ public class PDFForm_Reports {
         return drawTable(columns, title, data, 12, fontSize, color);
     }
 
-    private Table drawTable(int[] columns, String[] title, String[][] data, int fontTitleSize, int fontSize,
-                            Boolean[] color) {
+    private Table drawTable(int[] columns, String[] title, String[][] data,
+                            @SuppressWarnings("SameParameterValue") int fontTitleSize, int fontSize, Boolean[] color) {
         Table.TableBuilder tableBuilder = new Table.TableBuilder();
         for (int width : columns) tableBuilder.addColumnOfWidth(width);
         tableBuilder.setFontSize(fontTitleSize, fontSize);
@@ -371,10 +371,11 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsperyearandsubarea.get(year);
-            for (Integer areaId : RawData.areasTargetperStage.get(year)) {
-                ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(areaId);
+            for (Object areaId : RawData.areasTargetperStage.get(year)) {
+                Integer _areaId = (Integer) areaId;
+                ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(_areaId);
                 if (subareas != null) {
-                    subarea = area.get(areaId);
+                    subarea = area.get(_areaId);
                     if (subarea == null) subarea = new LinkedHashMap<>();
                     for (Integer subareaId : subareas) {
                         ArrayList<Integer> targets = targetsperSubarea.get(subareaId);
@@ -387,7 +388,7 @@ public class PDFForm_Reports {
                             subarea.put(subareaId, items);
                         } else if (items == null) subarea.put(subareaId, new LinkedHashMap<>());
                     }
-                    area.put(areaId, subarea);
+                    area.put(_areaId, subarea);
                 }
             }
         }

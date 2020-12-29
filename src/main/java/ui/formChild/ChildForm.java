@@ -1,6 +1,7 @@
 package ui.formChild;
 
 import bd.BDManager;
+import ui.formChildData.ChildDataFormListItem;
 import ui.formChildData.ChildDataFormListModel;
 import ui.formChildData.ChildDataFormRenderer;
 import utils.CacheManager;
@@ -16,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ChildForm {
-    private static final String TAG = ChildForm.class.getSimpleName();
-    private final int[] language = {0,1};
-    private final int lang = 0;
     public static BDManager bdManager;
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
@@ -27,7 +25,7 @@ public class ChildForm {
     private JPanel mainPanel;
     private JList listMenu;
     private JTree tree;
-    private JList listItems;
+    private JList<ChildDataFormListItem> listItems;
     private String studentName;
     private Integer studentId;
     private HashMap<String, ChildDataFormListModel> models;
@@ -48,7 +46,7 @@ public class ChildForm {
 
     private void createUIComponents() {
         createTree();
-        listItems = new JList();
+        listItems = new JList<>();
         listItems.setCellRenderer(new ChildDataFormRenderer());
         listItems.addMouseListener(new ChildFormListMouseAdapter(this));
 
@@ -85,7 +83,6 @@ public class ChildForm {
             };
             areas = RawData.areasTargetperStage.get(year);
             for (Integer area : areas) {
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(cacheManager.areasTarget.get(area));
                 createTargetsList(year, area);
             }
         }

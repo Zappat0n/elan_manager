@@ -47,12 +47,12 @@ public class UploadForm {
     protected static SettingsManager settingsManager;
     private JButton buttonLoad;
     private JButton buttonUpload;
-    private JComboBox cBClassroom;
-    private JComboBox cBArea;
-    private JComboBox cBSubarea;
-    private JList listPresentations;
-    private JList listPresentationsSub;
-    private JList listStudents;
+    private JComboBox<String> cBClassroom;
+    private JComboBox<String> cBArea;
+    private JComboBox<String> cBSubarea;
+    private JList<String> listPresentations;
+    private JList<String> listPresentationsSub;
+    private JList<String> listStudents;
     private JLabel labelDate;
     private ArrayList<BufferedImage> imgs;
     private ArrayList<Integer> areas;
@@ -69,10 +69,10 @@ public class UploadForm {
     private JDatePickerImpl datePicker;
     private JSplitPane rightSplitPane;
     private JTextArea tAComments;
-    private JList listLog;
+    private JList<String> listLog;
     private JSplitPane spBottom;
     private JComboBox cbStage;
-    private JList listSearchedPresentations;
+    private JList<String> listSearchedPresentations;
     private JTextField tFSearch;
     private JTabbedPane tabPresentations;
     private JButton buttonTurnLeft;
@@ -108,14 +108,14 @@ public class UploadForm {
         JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         dateModel.setValue(new Date());
-        cBClassroom = new JComboBox();
+        cBClassroom = new JComboBox<>();
         labelDate = new JLabel();
-        cBArea = new JComboBox();
-        cBSubarea = new JComboBox(new DefaultComboBoxModel());
-        listStudents = new JList(new DefaultListModel());
-        listPresentations = new JList(new DefaultListModel());
-        listPresentationsSub = new JList(new DefaultListModel());
-        listSearchedPresentations = new JList(new DefaultListModel());
+        cBArea = new JComboBox<>();
+        cBSubarea = new JComboBox<>(new DefaultComboBoxModel<>());
+        listStudents = new JList<>(new DefaultListModel<>());
+        listPresentations = new JList<>(new DefaultListModel<>());
+        listPresentationsSub = new JList<>(new DefaultListModel<>());
+        listSearchedPresentations = new JList<>(new DefaultListModel<>());
         panelLabel = new JPanel();
         students = new ArrayList<>();
         subareas = new ArrayList<>();
@@ -123,7 +123,7 @@ public class UploadForm {
         presentationssearched = new LinkedHashMap<>();
         presentationssub = new ArrayList<>();
         imgs = new ArrayList<>();
-        listLog = new JList(new DefaultListModel());
+        listLog = new JList<>(new DefaultListModel<>());
         buttonUpload = new JButton();
         buttonLoad = new JButton();
         labelMainImg = new JLabel();
@@ -145,13 +145,13 @@ public class UploadForm {
             }
 
             cBClassroom.addItemListener(e -> {
-                DefaultListModel model = (DefaultListModel) listStudents.getModel();
+                DefaultListModel<String> model = (DefaultListModel<String>) listStudents.getModel();
                 model.clear();
                 students.clear();
                 int classroom = cBClassroom.getSelectedIndex();
                 if (classroom == 0) return;
                 for (int id : cacheManager.studentsperclassroom.get(classroom)) {
-                    model.addElement(cacheManager.students.get(id)[0]);
+                    model.addElement((String)cacheManager.students.get(id)[0]);
                     students.add(id);
                 }
                 cBArea.removeAllItems();
@@ -196,17 +196,17 @@ public class UploadForm {
                 if (cBSubarea.getSelectedIndex() == 0) return;
                 Integer stage = cacheManager.getStage(cBClassroom.getSelectedIndex()+1);
                 if (stage == null) return;
-                DefaultListModel modelPresentations = (DefaultListModel) listPresentations.getModel();
-                DefaultListModel modelPresentationsSub = (DefaultListModel) listPresentationsSub.getModel();
+                DefaultListModel<String> modelPresentations = (DefaultListModel<String>) listPresentations.getModel();
+                //DefaultListModel modelPresentationsSub = (DefaultListModel) listPresentationsSub.getModel();
                 modelPresentations.clear();
-                modelPresentationsSub.clear();
+                //modelPresentationsSub.clear();
                 presentationssub.clear();
                 Integer subarea = subareas.get(cBSubarea.getSelectedIndex()-1);
                 double min = RawData.yearsmontessori[stage][0];
                 double max = RawData.yearsmontessori[stage][1];
                 presentations = cacheManager.getPresentations(subarea, min, max);
                 for (Integer id : presentations) {
-                    modelPresentations.addElement(cacheManager.presentations.get(id)[settingsManager.language]);
+                    modelPresentations.addElement((String)cacheManager.presentations.get(id)[settingsManager.language]);
                 }
             });
 
@@ -217,7 +217,7 @@ public class UploadForm {
 
             listSearchedPresentations.addListSelectionListener(e -> {
                 if (listSearchedPresentations.getSelectedIndex() == -1) return;
-                String searched = (String) listSearchedPresentations.getSelectedValue();
+                String searched = listSearchedPresentations.getSelectedValue();
                 updatePresentationsSub(presentationssearched.get(searched)[0]);
             });
 
@@ -267,7 +267,7 @@ public class UploadForm {
                         presentation = listPresentations.getSelectedIndex();
                         if (presentation != -1) presentation = presentations.get(presentation);
                         else if (listSearchedPresentations.getSelectedIndex() != -1) {
-                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            String searched = listSearchedPresentations.getSelectedValue();
                             presentation = presentationssearched.get(searched)[0];
                         } else {
                             UploadForm.showMessage("Please select a presentation");
@@ -276,7 +276,7 @@ public class UploadForm {
                     } else {
                         presentation = listSearchedPresentations.getSelectedIndex();
                         if (presentation != -1) {
-                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            String searched = listSearchedPresentations.getSelectedValue();
                             presentation = presentationssearched.get(searched)[0];
                         } else if (listPresentations.getSelectedIndex() != -1)
                             presentation = presentations.get(listPresentations.getSelectedIndex());
@@ -342,7 +342,7 @@ public class UploadForm {
                     subareas.get(cBSubarea.getSelectedIndex() - 1) : null;
             Integer presentation = (listPresentations.getSelectedIndex() != 0 && listPresentations.getSelectedIndex() != -1) ?
                     presentations.get(listPresentations.getSelectedIndex() - 1) : null;
-            CreatePresentation.main(cacheManager, bdmanager, settingsManager, stage, area, subarea, presentation);
+            CreatePresentation.main(cacheManager, settingsManager, stage, area, subarea, presentation);
         });
     }
 
@@ -364,14 +364,13 @@ public class UploadForm {
 
     private void updatePresentationsSub(Integer presentation) {
         SwingUtilities.invokeLater(() -> {
-            DefaultListModel modelPresentationsSub = (DefaultListModel) listPresentationsSub.getModel();
+            DefaultListModel<String> modelPresentationsSub = (DefaultListModel<String>) listPresentationsSub.getModel();
             modelPresentationsSub.clear();
             presentationssub.clear();
             ArrayList<Integer> list = cacheManager.presentationssubperpresentation.get(presentation);
             if (list != null && list.size() > 0)
                 for (Integer id : list) {
-                    String name = (String)cacheManager.presentationsSub.get(id)[settingsManager.language];
-                    modelPresentationsSub.addElement(name);
+                    modelPresentationsSub.addElement((String)cacheManager.presentationsSub.get(id)[settingsManager.language]);
                     presentationssub.add(id);
                 }
         });
@@ -379,7 +378,7 @@ public class UploadForm {
 
     private void updateSearch() {
         SwingUtilities.invokeLater(() -> {
-            DefaultListModel model = (DefaultListModel) listSearchedPresentations.getModel();
+            DefaultListModel<String> model = (DefaultListModel<String>) listSearchedPresentations.getModel();
             String text = tFSearch.getText();
             model.clear();
             if (text.length() < 3 || cBClassroom.getSelectedIndex() == 0) return;
@@ -396,10 +395,10 @@ public class UploadForm {
     }
 
     public static class Logger {
-        private final DefaultListModel model;
+        private final DefaultListModel<String> model;
 
-        public Logger(JList list) {
-            this.model = (DefaultListModel) list.getModel();
+        public Logger(JList<String> list) {
+            this.model = (DefaultListModel<String>) list.getModel();
         }
 
         public void d(String text){

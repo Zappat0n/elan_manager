@@ -43,8 +43,8 @@ public class MyDbTable extends JTable {
         private final ArrayList<Object> object;
 
         MyModel() {
-            data = new ArrayList();
-            columns = new Vector();
+            data = new ArrayList<>();
+            columns = new Vector<>();
             object = new ArrayList<>();
         }
 
@@ -87,7 +87,7 @@ public class MyDbTable extends JTable {
             return data.get(rowIndex).get(columnIndex);
         }
 
-        public void addRow(Vector line, Object object) {
+        public void addRow(Vector<String> line, Object object) {
             data.add(line);
             this.object.add(object);
         }
