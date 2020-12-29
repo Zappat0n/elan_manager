@@ -68,7 +68,7 @@ public class SWDBUpdater extends SwingWorker {
                     int row = formData.students.indexOf(student);
                     removePlanning(st, student, ev[0], ev[1], text);
                     MyTableModelPlanning modelPlanning = (MyTableModelPlanning) tablePlanning.getModel();
-                    ((ArrayList) modelPlanning.getValueAt(row, col)).remove(modelPlanning.getValue(ev[0], ev[1]));
+                    modelPlanning.getValueAt(row, col).remove(modelPlanning.getValue(ev[0], ev[1]));
                     modelPlanning.fireTableCellUpdated(row, col);
                     checkDeletedPlanning.add(new Condition(ev[0], ev[1], student));
                 }

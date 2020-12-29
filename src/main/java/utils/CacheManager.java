@@ -62,7 +62,7 @@ public class CacheManager {
 
     private final JLabel labelAction;
 
-    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) throws SQLException {
+    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) {
         this.bdManager = bdManager;
         this.settingsManager = settingsManager;
         this.labelAction = labelAction;
@@ -94,7 +94,7 @@ public class CacheManager {
         loadData();
     }
 
-    private void loadData() throws SQLException {
+    private void loadData() {
         Connection co = null;
         Statement st = null;
         try {

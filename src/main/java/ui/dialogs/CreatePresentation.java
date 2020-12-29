@@ -1,6 +1,5 @@
 package ui.dialogs;
 
-import bd.BDManager;
 import utils.CacheManager;
 import utils.SettingsManager;
 import utils.data.RawData;
@@ -76,7 +75,7 @@ public class CreatePresentation extends JDialog {
         dispose();
     }
 
-    public static void main(CacheManager cacheManager, BDManager bdManager, SettingsManager settingsManager,
+    public static void main(CacheManager cacheManager, SettingsManager settingsManager,
                             Integer stage, Integer area, Integer subarea, Integer presentation) {
         if (stage == null) return;
         CreatePresentation dialog = new CreatePresentation(cacheManager, settingsManager, stage, area,

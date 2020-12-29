@@ -217,7 +217,7 @@ public class UploadForm {
 
             listSearchedPresentations.addListSelectionListener(e -> {
                 if (listSearchedPresentations.getSelectedIndex() == -1) return;
-                String searched = (String) listSearchedPresentations.getSelectedValue();
+                String searched = listSearchedPresentations.getSelectedValue();
                 updatePresentationsSub(presentationssearched.get(searched)[0]);
             });
 
@@ -267,7 +267,7 @@ public class UploadForm {
                         presentation = listPresentations.getSelectedIndex();
                         if (presentation != -1) presentation = presentations.get(presentation);
                         else if (listSearchedPresentations.getSelectedIndex() != -1) {
-                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            String searched = listSearchedPresentations.getSelectedValue();
                             presentation = presentationssearched.get(searched)[0];
                         } else {
                             UploadForm.showMessage("Please select a presentation");
@@ -276,7 +276,7 @@ public class UploadForm {
                     } else {
                         presentation = listSearchedPresentations.getSelectedIndex();
                         if (presentation != -1) {
-                            String searched = (String) listSearchedPresentations.getSelectedValue();
+                            String searched = listSearchedPresentations.getSelectedValue();
                             presentation = presentationssearched.get(searched)[0];
                         } else if (listPresentations.getSelectedIndex() != -1)
                             presentation = presentations.get(listPresentations.getSelectedIndex());
@@ -342,7 +342,7 @@ public class UploadForm {
                     subareas.get(cBSubarea.getSelectedIndex() - 1) : null;
             Integer presentation = (listPresentations.getSelectedIndex() != 0 && listPresentations.getSelectedIndex() != -1) ?
                     presentations.get(listPresentations.getSelectedIndex() - 1) : null;
-            CreatePresentation.main(cacheManager, bdmanager, settingsManager, stage, area, subarea, presentation);
+            CreatePresentation.main(cacheManager, settingsManager, stage, area, subarea, presentation);
         });
     }
 

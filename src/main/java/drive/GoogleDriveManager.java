@@ -14,7 +14,6 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.DriveList;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.File;
 import utils.MyLogger;
@@ -81,17 +80,6 @@ public class GoogleDriveManager {
                 .execute();
         System.out.println("Folder ID: " + file.getId());
         return file.getId();
-    }
-
-    public FileList getFiles() throws IOException {
-        return service.files().list() //name contains '"+contains+"' and
-                .setQ("mimeType = 'application/vnd.google-apps.file'")
-                .execute();
-    }
-
-    public DriveList getDrives() throws IOException {
-        return service.drives().list() //name contains '"+contains+"' and .setQ("mimeType = 'application/vnd.google-apps.folder'")
-                .execute();
     }
 
     public FileList getDriveContent(String driveId) throws IOException {
@@ -187,6 +175,7 @@ public class GoogleDriveManager {
         return  file.getId();
     }
 
+    @SuppressWarnings("unused")
     public String uploadMediaFile(String folderId, Date date, String fileId, MediaPicture picture) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(picture.image, "image/jpeg", os);

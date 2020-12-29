@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ChildForm {
-    private static final String TAG = ChildForm.class.getSimpleName();
-    private final int[] language = {0,1};
-    private final int lang = 0;
     public static BDManager bdManager;
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
@@ -86,7 +83,6 @@ public class ChildForm {
             };
             areas = RawData.areasTargetperStage.get(year);
             for (Integer area : areas) {
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(cacheManager.areasTarget.get(area));
                 createTargetsList(year, area);
             }
         }

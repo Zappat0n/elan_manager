@@ -71,7 +71,8 @@ public class ClassroomFormTargets {
                     DefaultListModel<String> model = (DefaultListModel<String>) listAreas.getModel();
                     model.clear();
                     for (Object item : RawData.areasTargetPerStageData[index]) {
-                        model.addElement(cacheManager.areasTarget.get((Integer)item)[settingsManager.language]);
+                        Integer _item = (Integer) item;
+                        model.addElement(cacheManager.areasTarget.get(_item)[settingsManager.language]);
                     }
                 }
             }

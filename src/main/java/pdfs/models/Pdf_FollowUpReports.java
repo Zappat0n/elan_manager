@@ -42,7 +42,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
     int available_rows;
     int current_rows;
     int lang;
-    DefaultListModel<String> log;
+    final DefaultListModel<String> log;
 
     public Pdf_FollowUpReports(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
                                Connection connection, Integer studentId, Integer classroom, Date reportDate,

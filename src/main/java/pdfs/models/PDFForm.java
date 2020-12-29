@@ -47,6 +47,7 @@ public class PDFForm {
         return page;
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected Integer addLine(String message, int x, int y) throws IOException {
         if (position - 14 - line_space < 30) {
             nextPage();

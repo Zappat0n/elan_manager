@@ -54,7 +54,7 @@ public class ConfigForm {
             SWcheckFolders worker = new SWcheckFolders();
             worker.execute();
         });
-        listGoogleLog = new JList<>(new DefaultListModel<String>());
+        listGoogleLog = new JList<>(new DefaultListModel<>());
     }
 
     public void insertLog(String text) {

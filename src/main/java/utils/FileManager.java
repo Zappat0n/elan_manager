@@ -2,8 +2,6 @@ package utils;
 
 import javax.swing.*;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -13,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 public class FileManager {
     private static final String TAG = FileManager.class.getSimpleName();
     private final JFrame frame;
-    final static Charset ENCODING = StandardCharsets.UTF_8;
 
     public FileManager(JFrame frame) {
         this.frame = frame;

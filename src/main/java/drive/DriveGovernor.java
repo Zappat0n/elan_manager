@@ -20,10 +20,6 @@ public class DriveGovernor {
     public static final String STUDENTS_FOLDER_PHOTOS       = "Photos";
     public static final String STUDENTS_FOLDER_REPORTS      = "Reports";
     public static final String STUDENTS_SHARED_FOLDER= "0AMt46GfJ6PSTUk9PVA";
-    private static final String SNAILS_FOLDER_ID     = "0AL9BmckdklKAUk9PVA";
-    private static final String ROOTS_FOLDER_ID      = "0AFY8Tf_T1bcWUk9PVA";
-    private static final String SEEDS_FOLDER_ID      = "0AFZmquVv7ReUUk9PVA";
-    private static final String VOLCANOES_FOLDER_ID  = "0AC3PKp7z-C4cUk9PVA";
     private static final String BUTTON_RED = "Button-Blank-Red-icon.png";
     private static final String BUTTON_YELLOW = "Button-Blank-Yellow-icon.png";
     private static final String BUTTON_GREEN = "Signal-Receiver-icon.png";//"Button-Next-icon.png";
