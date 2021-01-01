@@ -8,7 +8,6 @@ import utils.data.RawData;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.time.LocalDate;

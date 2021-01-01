@@ -5,7 +5,6 @@ import bd.BDManager;
 import utils.*;
 
 import javax.swing.*;
-import java.sql.SQLException;
 
 /**
  * Created by angel on 7/05/17.
