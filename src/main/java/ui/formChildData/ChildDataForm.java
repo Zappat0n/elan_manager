@@ -400,7 +400,7 @@ public class ChildDataForm {
                 loadDataforStudent(studentName);
             }
         });
-        comboBoxClassrooms = new JComboBox<>(cacheManager.getClasroomsName());
+        comboBoxClassrooms = new JComboBox<>(cacheManager.getClassroomsNames());
         comboBoxClassrooms.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) loadStudentsForClassroom(
                     ((JComboBox)e.getSource()).getSelectedIndex()+1);

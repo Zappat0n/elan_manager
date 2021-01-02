@@ -37,7 +37,7 @@ public class MyTableModelTargets extends AbstractTableModel {
     }
 
     public void loadData(Integer classroom, Integer stage, Integer area) {
-        students = cacheManager.loadStudensSortedByAge(classroom);//cacheManager.studentsperclassroom.get(classroom);
+        students = cacheManager.loadStudentsSortedByAge(classroom);//cacheManager.studentsperclassroom.get(classroom);
         year = RawData.yearsperstage[stage];
         ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(area);
         if (subareas != null) {

@@ -3,7 +3,6 @@ package links;
 import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
-import bd.model.TableLinks;
 import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.MyLogger;
@@ -11,38 +10,39 @@ import utils.MyLogger;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class LinkManager {
     private static final String TAG = LinkManager.class.getSimpleName();
+    private Connection co;
+    private Statement statement;
+    private int student;
+    private int eventType;
 
-    public void recordLinksForPresentation(Connection co, int presentation, int presentation_sub, Date date, Integer student, Integer eventId) {
-        BDManager bdManager = ApplicationLoader.bdManager;
-        PreparedStatement ps = null;
+    public void recordLinksForPresentation(Connection co, int presentation, int presentation_sub, int eventType,
+                                           Date date, Integer student, Integer eventId) {
+        this.co = co;
+        this.student = student;
+        this.eventType = eventType;
         try {
-            if (co == null || co.isClosed()) co = bdManager.connect();
+            if (co == null || co.isClosed()) co = ApplicationLoader.bdManager.connect();
+            statement = ApplicationLoader.bdManager.prepareBatch();
 
-            MySet set = bdManager.getValues(co, BDManager.tableLinks,
-                    TableLinks.presentation + "=" + presentation +
-                            ((presentation_sub != 0)?" AND "+TableLinks.presentation_sub+"="+presentation_sub : ""));
             int[] values = {presentation, presentation_sub};
             CacheManager.PresentationLinks links = ApplicationLoader.cacheManager.links.get(values);
-            while (set.next()) {
-               Integer outcome = set.getInt(TableLinks.outcomes);
-               Integer target = set.getInt(TableLinks.targets);
 
-               if (outcome != null && outcome != 0) {
-                   if (!checkExistence(bdManager, co, student, outcome, true)) {
-                       bdManager.addEvent(co,date, student, 10, outcome, null, eventId.toString());
-                   }
-
-               }
-               if (target != null && target != 0) {
-                   if (!checkExistence(bdManager, co, student, target, false)) {
-                       bdManager.addEvent(co,date, student, 2, outcome, null, eventId.toString());
-                   }
-               }
+            for (int outcome : links.outcomes) {
+                int newType = getType(true);
+                if (newType != 0 && !checkExistence(outcome, newType)) {
+                    addBatch(date, eventId, newType, eventId);
+                }
+            }
+            for (int target : links.targets) {
+                int newType = getType(false);
+                if (newType != 0 && !checkExistence(target, newType)) {
+                    addBatch(date, eventId, newType, eventId);
+                }
             }
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
@@ -51,14 +51,21 @@ public class LinkManager {
         }
     }
 
+    private void addBatch(Date date, int eventId, int newType, int id) throws SQLException {
+        String sql = "INSERT INTO `Events` (`date`,`student`,`event_type`,`event_id`, `notes`, `teacher`) VALUES('"
+                + date + "'," + student + "," + newType + "," + eventId + ",'" + id + "'," +
+                ApplicationLoader.settingsManager.teacher + ")";
+        statement.addBatch(sql);
+    }
+
     public static void recordLinksForPresentation(JProgressBar pBar, BDManager bdManager, Connection connection,
-                                                     java.sql.Date startdate, java.sql.Date enddate) {
+                                                     java.sql.Date startDate, java.sql.Date endDate) {
         if (pBar != null) {
             int result = JOptionPane.showConfirmDialog(pBar.getParent(), "Record targets linked with presentations?");
             if (result == JOptionPane.CANCEL_OPTION) return;
         }
 
-        LinksRecorder recorder = new LinksRecorder(bdManager, connection, startdate, enddate, pBar);
+        LinksRecorder recorder = new LinksRecorder(bdManager, connection, startDate, endDate, pBar);
         try {
             recorder.start();
         } catch (Exception e) {
@@ -66,12 +73,19 @@ public class LinkManager {
         }
     }
 
-    private static Boolean checkExistence(BDManager bdManager, Connection co, Integer student, Integer event_id, Boolean isOutcome) {
-        String[] even_type = (isOutcome) ? new String[]{"10","11"} : new String[]{"2","5"};
-        String condition = TableEvents.student + " = " + student + " AND " + TableEvents.event_id + " = " + event_id +
-                " AND (event_type = " + even_type[0] + " OR event_type = " + even_type[1] + ")";
-        MySet set = bdManager.getValues(co, BDManager.tableEvents, condition);
+    private Boolean checkExistence(Integer eventId, int newType) {
+        String condition = TableEvents.student + " = " + student + " AND " + TableEvents.event_id + " = " + eventId +
+                " AND (event_type = " + newType + ")";
+        MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableEvents, condition);
         return set.size() > 0;
     }
 
+    private int getType(Boolean isOutcome) {
+        return switch (eventType) {
+            case 1 -> isOutcome ? 9 : 4;
+            case 6 -> isOutcome ? 10 : 2;
+            case 7 -> isOutcome ? 11 : 5;
+            default -> 0;
+        };
+    }
 }

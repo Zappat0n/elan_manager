@@ -133,7 +133,7 @@ public class Pdf_EoY_Reports extends PDFForm_Reports {
         contents.newLineAtOffset(x, y);
         contents.showText(settingsManager.language == 0 ? "Final interview" : "Entrevista Final");
         contents.newLineAtOffset(0, -leading * 1.5f);
-        contents.showText(cacheManager.getNameStageofClassroom(classroom));
+        contents.showText(cacheManager.getNameStageOfClassroom(classroom));
         contents.endText();
         contents.close();
     }

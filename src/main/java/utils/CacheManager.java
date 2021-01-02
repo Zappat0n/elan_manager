@@ -159,8 +159,8 @@ public class CacheManager {
                 String nombre = set.getString(TableTargets.nombre);
                 Integer nc = set.getInt(TableTargets.NC);
                 if (nc == 1) ncTargets.add(nc);
-                LinkedHashMap<Integer, ArrayList<Integer>> tpersubarea = targetsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
-                ArrayList<Integer> list = tpersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
+                LinkedHashMap<Integer, ArrayList<Integer>> tPerSubarea = targetsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
+                ArrayList<Integer> list = tPerSubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 targets.put(id, new Object[]{name, nombre,subarea,year});
             }
@@ -190,8 +190,8 @@ public class CacheManager {
                 String name = set.getString(TablePresentations.name);
                 String nombre = set.getString(TablePresentations.nombre);
                 Integer priority = set.getInt(TablePresentations.priority);
-                LinkedHashMap<Integer, ArrayList<Integer>> ppersubarea = presentationsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
-                ArrayList<Integer> list = ppersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
+                LinkedHashMap<Integer, ArrayList<Integer>> pPerSubarea = presentationsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
+                ArrayList<Integer> list = pPerSubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 Integer area = (Integer) subareasMontessori.get(subarea)[2];
                 Integer stage = getStage(year);
@@ -204,7 +204,7 @@ public class CacheManager {
                 stageAreaSubareaMontessori.put(stage, areas);
                 presentations.put(id, new Object[]{name,nombre, subarea,year, priority});
             }
-            labelAction.setText("Loading subpresentations...");
+            labelAction.setText("Loading exercises...");
             set = new MySet(st.executeQuery(query + TablePresentations_sub.table_name), BDManager.tablePresentations_sub, null);
             while (set.next()){
                 Integer id = set.getInt(TablePresentations_sub.id);
@@ -222,9 +222,9 @@ public class CacheManager {
                 Integer start_month = set.getInt(TableOutcomes.start_month);
                 Integer end_month = set.getInt(TableOutcomes.end_month);
                 Integer subarea = set.getInt(TableOutcomes.subarea);
-                LinkedHashMap<Integer, ArrayList<Integer>> opersubarea =
+                LinkedHashMap<Integer, ArrayList<Integer>> oPerSubarea =
                         outcomesPerMonthAndSubarea.computeIfAbsent(end_month, k -> new LinkedHashMap<>());
-                ArrayList<Integer> list = opersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
+                ArrayList<Integer> list = oPerSubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 outcomes.put(id, new Object[]{name,nombre,subarea,start_month,end_month});
             }
@@ -283,7 +283,7 @@ public class CacheManager {
         return null;
     }
 
-    public Vector<String> getClasroomsName(){
+    public Vector<String> getClassroomsNames(){
         Vector<String> result = new Vector<>();
         boolean first=true;
         for (String classroom: classrooms.values()) {
@@ -320,8 +320,8 @@ public class CacheManager {
         if (months == null) return null;
         else {
             LinkedHashMap<Integer, ArrayList<Integer>> result = new LinkedHashMap<>();
-            for (Integer endmonth : months) {
-                LinkedHashMap<Integer, ArrayList<Integer>> map = outcomesPerMonthAndSubarea.get(endmonth);
+            for (Integer endMonth : months) {
+                LinkedHashMap<Integer, ArrayList<Integer>> map = outcomesPerMonthAndSubarea.get(endMonth);
                 for (Integer key : map.keySet()) {
                     ArrayList<Integer> al = result.get(key);
                     if (al == null) al = new ArrayList<>();
@@ -349,7 +349,7 @@ public class CacheManager {
         return i;
     }
 
-    public Integer getStageofClassroom(Integer classroom) {
+    public Integer getStageOfClassroom(Integer classroom) {
         return switch (classroom) {
             case 1 -> 0;
             case 2, 3 -> 1;
@@ -358,7 +358,7 @@ public class CacheManager {
         };
     }
 
-    public String getNameStageofClassroom(Integer classroom) {
+    public String getNameStageOfClassroom(Integer classroom) {
         return switch (classroom) {
             case 1 -> LanguageManager.INFANT_COMMUNITY[ApplicationLoader.settingsManager.language];
             case 2, 3 -> LanguageManager.CHILDRENS_HOUSE[ApplicationLoader.settingsManager.language];
@@ -380,7 +380,7 @@ public class CacheManager {
         return list;
     }
 
-    public ArrayList<Integer> loadStudensSortedByAge(int classroom) {
+    public ArrayList<Integer> loadStudentsSortedByAge(int classroom) {
         HashMap<Integer, java.sql.Date> map = new HashMap<>();
         for (int id : studentsPerClassroom.get(classroom)) {
             map.put(id, (Date) students.get(id)[1]);

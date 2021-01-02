@@ -1,4 +1,4 @@
-package ui.formCurriculum;
+package links;
 
 import bd.BDManager;
 import main.ApplicationLoader;
@@ -92,7 +92,4 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
             if (sub >= start && sub <= end) addBatch(presentation, sub.toString(), nc);
         }
     }
-
-
-
 }

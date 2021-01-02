@@ -50,28 +50,28 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Integer newvalue = null;
+        Integer newValue = null;
         JMenuItem item = (JMenuItem)e.getSource();
         int[] rows = tablePresentations.getSelectedRows();
         int[] columns = tablePresentations.getSelectedColumns();
 
         switch (item.getText()) {
-            case " " -> newvalue = 0;
-            case "/" -> newvalue = 1;
-            case "Λ" -> newvalue = 2;
-            case "Δ" -> newvalue = 3;
-            case "M" -> newvalue = 4;
-            case "T" -> newvalue = 5;
-            case "W" -> newvalue = 6;
-            case "Th" -> newvalue = 7;
-            case "F" -> newvalue = 8;
+            case " " -> newValue = 0;
+            case "/" -> newValue = 1;
+            case "Λ" -> newValue = 2;
+            case "Δ" -> newValue = 3;
+            case "M" -> newValue = 4;
+            case "T" -> newValue = 5;
+            case "W" -> newValue = 6;
+            case "Th" -> newValue = 7;
+            case "F" -> newValue = 8;
             case "Clear" -> {
             }
         }
 
         try {
             SWDBUpdater updater = new SWDBUpdater(bdManager, settingsManager, cacheManager, tablePresentations,
-                    tablePlanning, rows, columns, newvalue, date, formData);
+                    tablePlanning, rows, columns, newValue, date, formData);
             updater.doInBackground();
         } catch (Exception ex) {
             MyLogger.e(TAG, ex);

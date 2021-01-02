@@ -24,7 +24,7 @@ public class SWDBUpdater extends SwingWorker {
     final CacheManager cacheManager;
     final int[] rows;
     final int[] columns;
-    final Integer newvalue;
+    final Integer newValue;
     final Date date;
     final ArrayList <Condition> check; // To see if we need to add a value after deleting an upper value
     final ArrayList <Condition> checkIfRemovedLinks; //To see if we need to remove a link automatically generated
@@ -44,7 +44,7 @@ public class SWDBUpdater extends SwingWorker {
         this.rows = rows;
         this.columns = columns;
         this.date = date;
-        this.newvalue = newvalue;
+        this.newValue = newvalue;
         check = new ArrayList<>();
         links = new ArrayList<>();
         checkIfRemovedLinks = new ArrayList<>();
@@ -57,9 +57,9 @@ public class SWDBUpdater extends SwingWorker {
         for (int value : rows) {
             for (int column : columns) {
                 if (column == 0) continue;
-                Integer[] ev = getEvent(value);
-                Integer student = getStudent(column - 1);
-                if (newvalue != null) addToBatch(st, student, ev[0], ev[1], getOldValue(value, column - 1),
+                Integer[] ev = formData.getEvent(value);
+                Integer student = formData.getStudent(column - 1);
+                if (newValue != null) addToBatch(st, student, ev[0], ev[1], getOldValue(value, column - 1),
                         (String) tablePresentations.getValueAt(value, column));
                 else {
                     String text = (String) tablePresentations.getValueAt(value, column);
@@ -104,21 +104,21 @@ public class SWDBUpdater extends SwingWorker {
     }
 
     protected void addToBatch(Statement st, Integer student, Integer event_id, Integer event_sub,
-                              Integer oldvalue, String text) throws SQLException {
-        if (newvalue < 4) {
-            if (newvalue > oldvalue) {
-                addBatchEvent(st, student, event_id, event_sub, RawData.montessoriEvent_Types[newvalue-1], null);
+                              Integer oldValue, String text) throws SQLException {
+        if (newValue < 4) {
+            if (newValue > oldValue) {
+                addBatchEvent(st, student, event_id, event_sub, RawData.montessoriEvent_Types[newValue -1], null);
             } else {
-                if (oldvalue < 4) {
-                    removeUpperValues(st, newvalue+1, student, event_id, event_sub, oldvalue);
-                    if (newvalue != 0) check.add(new Condition(event_id, event_sub, student));
+                if (oldValue < 4) {
+                    removeUpperValues(st, newValue +1, student, event_id, event_sub, oldValue);
+                    if (newValue != 0) check.add(new Condition(event_id, event_sub, student));
                     else paintValue(event_id, event_sub, student);
                 }
             }
         } else {
-            if (!newvalue.equals(oldvalue)) {
-                if (oldvalue > 3) removePlanning(st, student, event_id, event_sub, text);
-                addBatchEvent(st, student, event_id, event_sub, 13, MyPopUpMenuPresentations.planning_values[newvalue-4]);
+            if (!newValue.equals(oldValue)) {
+                if (oldValue > 3) removePlanning(st, student, event_id, event_sub, text);
+                addBatchEvent(st, student, event_id, event_sub, 13, MyPopUpMenuPresentations.planning_values[newValue -4]);
             }
         }
     }
@@ -217,7 +217,7 @@ public class SWDBUpdater extends SwingWorker {
             Integer event_type = set.getInt(TableEvents.event_type);
             if (event_type != 2 && event_type != 5 && event_type != 10 && event_type != 11) {
                 paintValue(event_id, event_sub, student);
-                if ((newvalue == 2 || newvalue == 3) && checkLink(st, student, event_id, event_sub, id)) result = true;
+                if ((newValue == 2 || newValue == 3) && checkLink(st, student, event_id, event_sub, id)) result = true;
             }
         }
         st.execute("DELETE FROM tempIds WHERE teacher = " + settingsManager.teacher + ";");
@@ -228,11 +228,11 @@ public class SWDBUpdater extends SwingWorker {
         boolean result = false;
         for (Condition condition : check) {
             MySet set = new MySet(st.executeQuery(BDManager.tableEvents.getValues(getCondition(condition.student,
-                    RawData.montessoriEvent_Types[newvalue-1], condition.event_id, condition.event_sub))),
+                    RawData.montessoriEvent_Types[newValue -1], condition.event_id, condition.event_sub))),
                     BDManager.tableEvents, null);
             if (set.data.size() == 0) {
                 addBatchEvent(st, condition.student, condition.event_id, condition.event_sub,
-                        RawData.montessoriEvent_Types[newvalue-1], null);
+                        RawData.montessoriEvent_Types[newValue -1], null);
                 result = true;
             } else paintValue(condition.event_id, condition.event_sub, condition.student);
         }
@@ -247,7 +247,7 @@ public class SWDBUpdater extends SwingWorker {
                 String sql = bdManager.getTable(TableEvents.table_name).removeValue(
                         getCondition(student, RawData.montessoriEvent_Types[i-1], event_id, event_sub));
                 st.addBatch(sql);
-                if (newvalue < 2 && oldvalue > 1) checkIfRemovedLinks.add(new Condition(event_id, event_sub, student));
+                if (newValue < 2 && oldvalue > 1) checkIfRemovedLinks.add(new Condition(event_id, event_sub, student));
             } catch (SQLException e) {
                 MyLogger.e(TAG, e);
                 return;
@@ -285,11 +285,11 @@ public class SWDBUpdater extends SwingWorker {
         String id = event_id + "." + (event_sub != null ? event_sub : "0");
         int row = formData.presentations.indexOf(id);
         int col = formData.students.indexOf(student)+1;
-        if (row != -1) tablePresentations.setValueAt(newvalue, row, col);
+        if (row != -1) tablePresentations.setValueAt(newValue, row, col);
         else MyLogger.d(TAG, "Data point lost");
-        if (newvalue > 3) {
+        if (newValue > 3) {
             MyTableModelPlanning model = (MyTableModelPlanning) tablePlanning.getModel();
-            model.setValue(event_id, event_sub, col-1, newvalue - 3);
+            model.setValue(event_id, event_sub, col-1, newValue - 3);
         }
     }
 
@@ -304,21 +304,10 @@ public class SWDBUpdater extends SwingWorker {
                 (event_sub!=null?TableEvents.event_sub + "=" + event_sub:TableEvents.event_sub + " IS NULL");
     }
 
-    private Integer getStudent(int column) {
-        return formData.students.get(column);
-    }
-
-    private Integer[] getEvent(int row) {
-        String event = formData.presentations.get(row);
-        String[] ev = event.split("[.]");
-        return new Integer[] {Integer.valueOf(ev[0]), (ev[1].equals("0")) ? null : Integer.valueOf(ev[1])};
-    }
-
     private Integer getOldValue(int row, int column) {
         MyTableModelPresentations model = (MyTableModelPresentations) tablePresentations.getModel();
         return model.data[row][column];
     }
-
 
     private static class Condition {
         final Integer event_id;

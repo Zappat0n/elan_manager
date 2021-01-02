@@ -119,4 +119,14 @@ public class ClassroomFormData {
             }
         }
     }
+
+    public Integer[] getEvent(int row) {
+        String event = presentations.get(row);
+        String[] ev = event.split("[.]");
+        return new Integer[] {Integer.valueOf(ev[0]), (ev[1].equals("0")) ? null : Integer.valueOf(ev[1])};
+    }
+
+    public int getStudent(int column) {
+        return students.get(column);
+    }
 }

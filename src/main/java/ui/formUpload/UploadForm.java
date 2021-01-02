@@ -156,7 +156,7 @@ public class UploadForm {
                 }
                 cBArea.removeAllItems();
                 areas.clear();
-                stage = cacheManager.getStageofClassroom(cBClassroom.getSelectedIndex());
+                stage = cacheManager.getStageOfClassroom(cBClassroom.getSelectedIndex());
                 if (stage == null) return;
                 cBArea.insertItemAt("", 0);
                 LinkedHashMap<Integer, HashSet<Integer>> newareas = cacheManager.stageAreaSubareaMontessori.get(stage);
