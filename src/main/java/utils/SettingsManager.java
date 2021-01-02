@@ -1,5 +1,7 @@
 package utils;
 
+import main.ApplicationLoader;
+
 import javax.swing.*;
 import java.io.*;
 import java.sql.Date;
@@ -39,7 +41,6 @@ public class SettingsManager {
     private final String separator;
     private final String filename           = "Settings.ini";
     private final HashMap<String, String> settings;
-    private static FileManager fileManager;
     public Integer teacher;
     public String user;
     public Integer language;
@@ -49,8 +50,7 @@ public class SettingsManager {
     public Date date_TT = Date.valueOf("2021-07-01");
 
 
-    public SettingsManager(JFrame frame, FileManager fileManager) {
-        SettingsManager.fileManager = fileManager;
+    public SettingsManager(JFrame frame) {
         this.frame = frame;
         dir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         separator = File.separator;
@@ -67,7 +67,7 @@ public class SettingsManager {
     private void readFile(){
         FileReader reader = null;
         try {
-            reader = fileManager.getReader(dir + filename, true);
+            reader = ApplicationLoader.fileManager.getReader(dir + filename, true);
             if (reader == null) return;
             BufferedReader bufferedReader = new BufferedReader(reader);
 

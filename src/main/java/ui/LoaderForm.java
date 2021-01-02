@@ -1,5 +1,6 @@
 package ui;
 
+import links.LinkManager;
 import main.*;
 import bd.BDManager;
 import utils.*;
@@ -64,8 +65,9 @@ public class LoaderForm {
 
     private static void initApplication() {
         ApplicationLoader.fileManager = new FileManager(frame);
-        ApplicationLoader.settingsManager = new SettingsManager(frame, ApplicationLoader.fileManager);
-        ApplicationLoader.bdManager = new BDManager(ApplicationLoader.settingsManager);
+        ApplicationLoader.settingsManager = new SettingsManager(frame);
+        ApplicationLoader.bdManager = new BDManager();
+        ApplicationLoader.linkManager = new LinkManager();
     }
 
     private static void checkVersion() {

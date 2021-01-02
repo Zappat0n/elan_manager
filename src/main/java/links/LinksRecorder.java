@@ -3,6 +3,7 @@ package links;
 import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
+import main.ApplicationLoader;
 import utils.MyLogger;
 
 import javax.swing.*;
@@ -46,7 +47,7 @@ class LinksRecorder extends Thread {
                 Date date = set.getDate(TableEvents.date);
                 Integer student = set.getInt(TableEvents.student);
                 Integer eventId = set.getInt(TableEvents.id);
-                LinkManager.recordLinksForPresentation(null, bdManager, co, presentation, presentation_sub, date, student, eventId);
+                ApplicationLoader.linkManager.recordLinksForPresentation(co, presentation, presentation_sub, date, student, eventId);
                 pBar.setValue(i++);
             }
         } catch (SQLException e) {

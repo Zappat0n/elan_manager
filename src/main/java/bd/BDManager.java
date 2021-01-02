@@ -1,6 +1,7 @@
 package bd;
 
 import bd.model.*;
+import main.ApplicationLoader;
 import utils.MyLogger;
 import utils.SettingsManager;
 
@@ -46,16 +47,14 @@ public class BDManager {
 
     private Connection co = null;
     private Statement st = null;
-    private final SettingsManager settingsManager;
     private JFrame frame;
     private final String user;
     private final String password;
     public Boolean noData = false;
 
-    public BDManager(SettingsManager settingsManager) {
-        this.settingsManager = settingsManager;
-        user = settingsManager.user;
-        password = settingsManager.getValue(SettingsManager.PWD);
+    public BDManager() {
+        user = ApplicationLoader.settingsManager.user;
+        password = ApplicationLoader.settingsManager.getValue(SettingsManager.PWD);
         if (user == null || password == null) {
             noData = true;
             showError("Unable to connect to database.\nUser data is missing.");
@@ -67,7 +66,7 @@ public class BDManager {
         Properties connectionProps = new Properties();
         connectionProps.put("user", user);
         connectionProps.put("password", password);
-        String link = settingsManager.getValue(SettingsManager.LINK)+TimeZone.getDefault().getID() ;
+        String link = ApplicationLoader.settingsManager.getValue(SettingsManager.LINK)+TimeZone.getDefault().getID() ;
         try {
             co = DriverManager.getConnection(link, connectionProps);
         } catch (SQLException e) {
@@ -226,7 +225,8 @@ public class BDManager {
             else ps.setNull(5, Types.INTEGER);
             if (notes != null) ps.setString(6, notes);
             else ps.setNull(6, Types.LONGVARCHAR);
-            if (settingsManager.teacher != null) ps.setInt(7,  settingsManager.teacher);
+            if (ApplicationLoader.settingsManager.teacher != null)
+                ps.setInt(7,  ApplicationLoader.settingsManager.teacher);
             else ps.setNull(7, Types.INTEGER);
         } catch (SQLException e) {
             MyLogger.e(TAG, e);

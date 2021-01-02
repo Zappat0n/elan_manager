@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableLinks;
+import main.ApplicationLoader;
 import utils.MyLogger;
 
 import javax.swing.*;
@@ -15,13 +16,8 @@ import java.sql.SQLException;
 public class LinkManager {
     private static final String TAG = LinkManager.class.getSimpleName();
 
-    public static void recordLinksForPresentation(JComponent component, BDManager bdManager, Connection co,
-                                                  int presentation, Integer presentation_sub, Date date,
-                                                  Integer student, Integer eventId) {
-        if (component != null) {
-            int result = JOptionPane.showConfirmDialog(component, "Record targets linked with presentations?");
-            if (result == JOptionPane.CANCEL_OPTION) return;
-        }
+    public void recordLinksForPresentation(Connection co, int presentation, Integer presentation_sub, Date date, Integer student, Integer eventId) {
+        BDManager bdManager = ApplicationLoader.bdManager;
         PreparedStatement ps = null;
         try {
             if (co == null || co.isClosed()) co = bdManager.connect();
