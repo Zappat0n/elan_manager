@@ -228,6 +228,12 @@
                                       <text value="Load links"/>
                                     </properties>
                                   </component>
+                                  <component id="45167" class="javax.swing.JButton" binding="button1" default-binding="true">
+                                    <constraints/>
+                                    <properties>
+                                      <text value="Button"/>
+                                    </properties>
+                                  </component>
                                 </children>
                               </toolbar>
                               <scrollpane id="7235d">

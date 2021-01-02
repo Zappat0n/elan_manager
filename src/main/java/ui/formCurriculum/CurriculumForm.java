@@ -1,6 +1,7 @@
 package ui.formCurriculum;
 
 import com.google.common.io.Files;
+import ui.ProgressDialog;
 import ui.formCurriculum.curriculumTypes.CurriculumSubareaYear;
 import utils.CacheManager;
 import utils.MyLogger;
@@ -11,6 +12,8 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,6 +37,7 @@ public class CurriculumForm {
     private JTable tableImportLinks;
     private JList<String> listSubareas;
     private JTable tableLinks;
+    private JButton button1;
     private ArrayList<Integer> areasList;
     private ArrayList<Integer> subareasList;
     private Curriculum curriculum;
@@ -101,18 +105,9 @@ public class CurriculumForm {
             int returnVal = fc.showOpenDialog(mainPanel);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                BufferedReader reader;
-                try {
-                    reader = new BufferedReader(new FileReader(file));
-                    String line = reader.readLine();
-                    while (line != null) {
-                        String[] items = line.split("\t");
-                        line = reader.readLine();
-                    }
-                    reader.close();
-                } catch (IOException ex) {
-                    MyLogger.e(TAG, ex);
-                }
+
+                SWImportLinks sw = new SWImportLinks(file, true);
+                sw.execute();
             }
         });
 

@@ -113,6 +113,29 @@ public class BDManager {
         return null;
     }
 
+    public Statement prepareBatch() {
+        Statement st = null;
+        try {
+            if (co == null || co.isClosed()) co = connect();
+            co.setAutoCommit(false);
+            st = co.createStatement();
+        } catch (Exception e) {
+            MyLogger.e(TAG, e);
+        }
+        return st;
+    }
+
+    public ResultSet executeBatch(Statement st) {
+        try {
+            st.executeBatch();
+            co.commit();
+            return st.getGeneratedKeys();
+        } catch (SQLException e) {
+            MyLogger.e(TAG, e);
+            return null;
+        }
+    }
+
     public LinkedHashMap<String, Integer> getAllNameAndIdForTable(Connection co, MyTable table) {
         try {
             MySet set = getValues(co, table, null);
@@ -368,6 +391,10 @@ public class BDManager {
         try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
         try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
         try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+    }
+
+    public void closeQuietlyConnection(){
+        try { co.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private void closeQuietlyStatement(){
