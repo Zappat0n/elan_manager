@@ -147,7 +147,7 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             if (event_points == null) continue;
 
             Integer subareaId = cacheManager.getTargetSubarea(targetId);
-            Integer areaId = cacheManager.targetsubareaarea.get(subareaId);
+            Integer areaId = cacheManager.targetSubareaArea.get(subareaId);
             LinkedHashMap<Integer, LinkedHashMap<Integer, Point>> subarea;
             if (!events_targets.containsKey(areaId)) {
                 subarea = new LinkedHashMap<>();

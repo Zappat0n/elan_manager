@@ -39,7 +39,7 @@ public class Pdf_Curriculum extends PDFForm_Curriculum {
                     for (int presentation: subareas.get(subarea)) {
                         position = addLine((String)cacheManager.presentations.get(presentation)[0],
                                 Math.round(margin) + col_size, position, SIZE_PRESENTATION, false);
-                        ArrayList<Integer> presentations_sub = cacheManager.presentationssubperpresentation.get(presentation);
+                        ArrayList<Integer> presentations_sub = cacheManager.presentationsSubPerPresentation.get(presentation);
                         if (presentations_sub!= null){
                             for (int presentation_sub: presentations_sub) {
                                 position = addLine((String)cacheManager.presentationsSub.get(presentation_sub)[settingsManager.language],

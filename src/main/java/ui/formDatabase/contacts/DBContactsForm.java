@@ -53,7 +53,7 @@ public class DBContactsForm {
 
         listStudents.addListSelectionListener(listSelectionEvent -> {
             if (listSelectionEvent.getValueIsAdjusting() || listStudents.getSelectedIndex() == -1) return;
-            student = cacheManager.studentsperclassroom.get(
+            student = cacheManager.studentsPerClassroom.get(
                     listClassrooms.getSelectedIndex()+1).get(listStudents.getSelectedIndex());
 
             SwingUpdater updater = new SwingUpdater(bdManager, cacheManager, tabbedPane, tableContacts,

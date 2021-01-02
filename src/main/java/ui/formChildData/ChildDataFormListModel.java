@@ -44,11 +44,11 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
     }
 
     private void loadNCData(double year, int area) {
-        HashMap<Integer, ArrayList<Integer>> tpersubarea = cacheManager.targetsperyearandsubarea.get(year);
+        HashMap<Integer, ArrayList<Integer>> tpersubarea = cacheManager.targetsPerYearAndSubarea.get(year);
         LinkedHashMap<Integer, ArrayList<Integer>> opersubarea = cacheManager.getOutcomesPerYear(year);
 
         if (tpersubarea != null || opersubarea != null) {
-            ArrayList<Integer> subareasperarea = cacheManager.subareasTargetperarea.get(area);
+            ArrayList<Integer> subareasperarea = cacheManager.subareasTargetPerArea.get(area);
             if (subareasperarea != null) {
                 for (Integer subareaId : subareasperarea) {
                     boolean titleAdded = false;
@@ -97,15 +97,15 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
     }
 
     private void loadMontessoriData(double startYear, double endYear, int area) {
-        for (Double year : cacheManager.presentationsperyearandsubarea.keySet()) {
+        for (Double year : cacheManager.presentationsPerYearAndSubarea.keySet()) {
             if (year >= startYear && year < endYear) {
-                HashMap<Integer, ArrayList<Integer>> pperyear= cacheManager.presentationsperyearandsubarea.get(year);
+                HashMap<Integer, ArrayList<Integer>> pperyear= cacheManager.presentationsPerYearAndSubarea.get(year);
                 ArrayList<Integer> list = pperyear.get(area);
                 if (list != null) for (Integer id : list) {
                     data.put("2/"+id, new ChildDataFormListItem(settingsManager,
                             (String)cacheManager.presentations.get(id)[0], id, null, type, null, false,
                             false, false));
-                    ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(id);
+                    ArrayList<Integer> subs = cacheManager.presentationsSubPerPresentation.get(id);
                     if (subs!=null) for (Integer sub:subs) {
                         data.put("2/"+id+"."+sub, new ChildDataFormListItem(settingsManager,
                                 " -> " + cacheManager.presentationsSub.get(sub)[settingsManager.language], id, sub, type, null,

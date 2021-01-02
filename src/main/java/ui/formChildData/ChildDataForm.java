@@ -389,7 +389,7 @@ public class ChildDataForm {
         comboBoxStudents = new JComboBox<>();
         comboBoxStudents.addItem(null);
         students.put("", null);
-        for (Integer id : cacheManager.studentsperclassroom.get(1)) {
+        for (Integer id : cacheManager.studentsPerClassroom.get(1)) {
             String student = (String)cacheManager.students.get(id)[0];
             comboBoxStudents.addItem(student);
             students.put(student, id);
@@ -579,7 +579,7 @@ public class ChildDataForm {
             }
             int n = 0;
             for (int area : areas) {
-                ArrayList<Integer> subareas = cacheManager.subareasMontessoriperarea.get(area);
+                ArrayList<Integer> subareas = cacheManager.subareasMontessoriPerArea.get(area);
                 if (subareas != null) {
                     tabbedPane = montessoriPanes[i][n++];
                         for (Integer subarea : subareas) {
@@ -902,7 +902,7 @@ public class ChildDataForm {
     private void loadStudentsForClassroom(int classroom) {
         students.clear();
         comboBoxStudents.removeAllItems();
-        for (Integer id: cacheManager.studentsperclassroom.get(classroom)) {
+        for (Integer id: cacheManager.studentsPerClassroom.get(classroom)) {
             String student = (String)cacheManager.students.get(id)[0];
             students.put(student, id);
             comboBoxStudents.addItem(student);
@@ -1013,13 +1013,13 @@ public class ChildDataForm {
                     type = 1;//{name,subarea,start_month,end_month,nombre}
                     Object[] outcome = cacheManager.outcomes.get(event_id);
                     subarea = (Integer) outcome[1];
-                    area = cacheManager.targetsubareaarea.get(subarea);
+                    area = cacheManager.targetSubareaArea.get(subarea);
                     result = type + "/" + outcome[3] + "/" + area;
                 }
                 case 1 -> {
                     Object[] target = cacheManager.targets.get(event_id);
                     subarea = (Integer) target[1];
-                    area = cacheManager.targetsubareaarea.get(subarea);
+                    area = cacheManager.targetSubareaArea.get(subarea);
                     year = (Double) target[2];
                     result = type + "/" + year + "/" + area;
                 }

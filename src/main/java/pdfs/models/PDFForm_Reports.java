@@ -370,10 +370,10 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> subarea;
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
-            LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsperyearandsubarea.get(year);
+            LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsPerYearAndSubarea.get(year);
             for (Object areaId : RawData.areasTargetperStage.get(year)) {
                 Integer _areaId = (Integer) areaId;
-                ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(_areaId);
+                ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {
                     subarea = area.get(_areaId);
                     if (subarea == null) subarea = new LinkedHashMap<>();
@@ -444,7 +444,7 @@ public class PDFForm_Reports {
                     (isTarget) ? events_targets : events_outcomes;
 
             Integer subareaId = (int)target[2];//name, nombre, subarea, year
-            Integer areaId = cacheManager.targetsubareaarea.get(subareaId);
+            Integer areaId = cacheManager.targetSubareaArea.get(subareaId);
             LinkedHashMap<Integer, LinkedHashMap<Integer, Point>> subarea;
             if (!events.containsKey(areaId)) {
                 subarea = new LinkedHashMap<>();

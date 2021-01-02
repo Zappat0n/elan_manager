@@ -124,7 +124,7 @@ public class MyTableModelPresentations extends AbstractTableModel {
     public int getColumnCount() {
         if (formData == null) return 0;
         if (formData.classroom == null) return 0;
-        else return cacheManager.studentsperclassroom.get(formData.classroom).size()+1;
+        else return cacheManager.studentsPerClassroom.get(formData.classroom).size()+1;
     }
 
     public String getColumnName(int col) {

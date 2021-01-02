@@ -177,9 +177,9 @@ public class CurriculumForm {
         }
 
         public void loadSubarea(int stage, int subarea) {
-            for (Integer[] link : cacheManager.links.keySet()) {
+            for (int[] link : cacheManager.links.keySet()) {
                 Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != null ? cacheManager.presentationsSub.get(link[1]) : null;
+                Object[] presentation_sub = link[1] != 0 ? cacheManager.presentationsSub.get(link[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||
@@ -215,9 +215,9 @@ public class CurriculumForm {
         }
 
         public void loadSubarea(int stage, int subarea) {
-            for (Integer[] link : cacheManager.links.keySet()) {
+            for (int[] link : cacheManager.links.keySet()) {
                 Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != null ? cacheManager.presentationsSub.get(link[1]) : null;
+                Object[] presentation_sub = link[1] != 0 ? cacheManager.presentationsSub.get(link[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||

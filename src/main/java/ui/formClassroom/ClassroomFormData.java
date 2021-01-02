@@ -62,16 +62,16 @@ public class ClassroomFormData {
             double min = RawData.yearsmontessori[stage][0];
             double max = RawData.yearsmontessori[stage][1];
 
-            for (double year : cacheManager.presentationsperyearandsubarea.keySet()) {
+            for (double year : cacheManager.presentationsPerYearAndSubarea.keySet()) {
                 if (year >= min && year < max) {
                     LinkedHashMap<Integer, ArrayList<Integer>> presentationspersubarea =
-                            cacheManager.presentationsperyearandsubarea.get(year);
+                            cacheManager.presentationsPerYearAndSubarea.get(year);
                     for (int subarea : presentationspersubarea.keySet()) {
-                        ArrayList<Integer> list = cacheManager.subareasMontessoriperarea.get(area);
+                        ArrayList<Integer> list = cacheManager.subareasMontessoriPerArea.get(area);
                         if (list != null && list.contains(subarea))
                             for (int presentation : presentationspersubarea.get(subarea)) {
                                 presentations.add(presentation + ".0");
-                                ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(presentation);
+                                ArrayList<Integer> subs = cacheManager.presentationsSubPerPresentation.get(presentation);
                                 if (subs != null) for (Integer sub : subs)
                                     presentations.add(presentation + "." + sub);
                             }
@@ -91,7 +91,7 @@ public class ClassroomFormData {
         classroom = _classroom;
         students.clear();
         dates.clear();
-        ArrayList<Integer> _students = cacheManager.studentsperclassroom.get(classroom);
+        ArrayList<Integer> _students = cacheManager.studentsPerClassroom.get(classroom);
         if (_students == null) {
             JOptionPane.showMessageDialog(frame, "There are not students for this classroom", "Error",
                     JOptionPane.ERROR_MESSAGE);

@@ -60,7 +60,7 @@ public class MyListStudentsModel extends DefaultListModel<String> {
         } else {
             Integer classroomId = cacheManager.getClassroomId(classroom);
             if (classroomId==null) return;
-            ArrayList<Integer> list = cacheManager.studentsperclassroom.get(classroomId);
+            ArrayList<Integer> list = cacheManager.studentsPerClassroom.get(classroomId);
             for (Integer id: list) data.put((String)cacheManager.students.get(id)[0], id);
         }
         fireIntervalAdded(this, 0, data.size());

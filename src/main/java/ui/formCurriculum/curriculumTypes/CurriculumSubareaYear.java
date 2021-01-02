@@ -37,7 +37,7 @@ public class CurriculumSubareaYear extends Curriculum {
                 addLine(0, subarea, (String)cacheManager.subareasMontessori.get(subarea)[settingsManager.language]);
                 for (int id : ids) {
                     addLine(1, id, (String)cacheManager.presentations.get(id)[settingsManager.language]);
-                    ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(id);
+                    ArrayList<Integer> subs = cacheManager.presentationsSubPerPresentation.get(id);
                     if (subs != null) for (int sub : subs) {
                         addLine(2, sub, (String)cacheManager.presentationsSub.get(sub)[settingsManager.language]);
                     }

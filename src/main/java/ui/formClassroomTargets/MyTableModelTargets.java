@@ -39,7 +39,7 @@ public class MyTableModelTargets extends AbstractTableModel {
     public void loadData(Integer classroom, Integer stage, Integer area) {
         students = cacheManager.loadStudensSortedByAge(classroom);//cacheManager.studentsperclassroom.get(classroom);
         year = RawData.yearsperstage[stage];
-        ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(area);
+        ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(area);
         if (subareas != null) {
             targets.clear();
             outcomes.clear();
@@ -48,7 +48,7 @@ public class MyTableModelTargets extends AbstractTableModel {
             for (Integer subarea: subareas) {
                 if (outcomesperyear != null && outcomesperyear.containsKey(subarea))
                     outcomes.addAll(outcomesperyear.get(subarea));
-                ArrayList<Integer> list = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                ArrayList<Integer> list = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                 if (list != null) targets.addAll(list);
             }
         } else return;

@@ -57,10 +57,10 @@ public class MyListItemsModel extends DefaultListModel<String> {
         if (indexType == 0) {
             Double[] limits = RawData.yearsmontessori[indexYear];
             if (limits==null) return;
-            for (double year : AddDataForm.cacheManager.presentationsperyearandsubarea.keySet()) {
+            for (double year : AddDataForm.cacheManager.presentationsPerYearAndSubarea.keySet()) {
                 if (year >= limits[0] && year < limits[1]) {
-                    LinkedHashMap<Integer, ArrayList<Integer>> pperarea = AddDataForm.cacheManager.presentationsperyearandsubarea.get(year);
-                    if (pperarea!=null) for (Integer subarea : AddDataForm.cacheManager.subareasMontessoriperarea.get(area)) {
+                    LinkedHashMap<Integer, ArrayList<Integer>> pperarea = AddDataForm.cacheManager.presentationsPerYearAndSubarea.get(year);
+                    if (pperarea!=null) for (Integer subarea : AddDataForm.cacheManager.subareasMontessoriPerArea.get(area)) {
                         ArrayList<Integer> list = pperarea.get(subarea);
                         if (list != null) for (Integer id : list) {
                             data.put((String)AddDataForm.cacheManager.presentations.get(id)[0], id);
@@ -72,7 +72,7 @@ public class MyListItemsModel extends DefaultListModel<String> {
         } else if (indexType == 1) {
             double year = RawData.yearsperstage[indexYear];
             LinkedHashMap<Integer, ArrayList<Integer>> tperarea = AddDataForm.cacheManager.getOutcomesPerYear(year);
-            for (Integer subarea : AddDataForm.cacheManager.subareasTargetperarea.get(area)) {
+            for (Integer subarea : AddDataForm.cacheManager.subareasTargetPerArea.get(area)) {
                 ArrayList<Integer> list = tperarea.get(subarea);
                 if (list!= null) for (Integer id : list) {
                     data.put(AddDataForm.cacheManager.getOutcomeName(id), id);
@@ -81,8 +81,8 @@ public class MyListItemsModel extends DefaultListModel<String> {
             fireIntervalAdded(this, 0, data.size());
         } else if (indexType == 2) {
             double year = RawData.yearsperstage[indexYear];
-            LinkedHashMap<Integer, ArrayList<Integer>> tperarea = AddDataForm.cacheManager.targetsperyearandsubarea.get(year);
-            for (Integer subarea : AddDataForm.cacheManager.subareasTargetperarea.get(area)) {
+            LinkedHashMap<Integer, ArrayList<Integer>> tperarea = AddDataForm.cacheManager.targetsPerYearAndSubarea.get(year);
+            for (Integer subarea : AddDataForm.cacheManager.subareasTargetPerArea.get(area)) {
                 ArrayList<Integer> list = tperarea.get(subarea);
                 if (list!= null) for (Integer id : list) {
                     data.put(AddDataForm.cacheManager.getTargetName(id), id);

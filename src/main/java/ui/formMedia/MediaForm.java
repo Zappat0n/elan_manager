@@ -101,7 +101,7 @@ public class MediaForm {
         listStudents.addListSelectionListener(e -> {
             if (listStudents.getValueIsAdjusting() || listStudents.getSelectedIndex() == -1 ||
                     listClassrooms.getSelectedIndex() == -1) return;
-            Integer student = cacheManager.studentsperclassroom.get(listClassrooms.getSelectedIndex()+1).get(listStudents.getSelectedIndex());
+            Integer student = cacheManager.studentsPerClassroom.get(listClassrooms.getSelectedIndex()+1).get(listStudents.getSelectedIndex());
             mediaFiles.clear();
             panelImgs.removeAll();
             SWLoadImages load = new SWLoadImages(student);
@@ -155,11 +155,11 @@ public class MediaForm {
             Integer area = RawData.cdbAreasTarget.get(listNCAreas.getSelectedIndex());
             DefaultListModel<String> model = (DefaultListModel<String>)listNCSubareas.getModel();
             model.clear();
-            cacheManager.subareasTargetperarea.get(area).forEach(subarea -> {
+            cacheManager.subareasTargetPerArea.get(area).forEach(subarea -> {
                 if (!cBTargetOrOutcome.isSelected()) {
                     Integer[] months = getMonths();
                     for (Integer month : months) {
-                        ArrayList<Integer> outcomes = cacheManager.outcomespermonthandsubarea.get(month).get(subarea);
+                        ArrayList<Integer> outcomes = cacheManager.outcomesPerMonthAndSubarea.get(month).get(subarea);
                         if (outcomes != null && !subareas.contains(subarea)) {
                             subareas.add(subarea);
                             String[] data = cacheManager.subareasTarget.get(subarea);
@@ -170,7 +170,7 @@ public class MediaForm {
                     Double[] years = getYears();
                     if (years != null)
                         for (Double year : years) {
-                            ArrayList<Integer> targets = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                            ArrayList<Integer> targets = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                             if (targets != null && !subareas.contains(subarea)) {
                                 subareas.add(subarea);
                                 String[] data = cacheManager.subareasTarget.get(subarea);
@@ -188,12 +188,12 @@ public class MediaForm {
             DefaultListModel<String> model = (DefaultListModel<String>)listNCTargets.getModel();
             model.clear();
             Integer area = RawData.cdbAreasTarget.get(selArea);
-            Integer subarea = cacheManager.subareasTargetperarea.get(area).get(selSubArea);
+            Integer subarea = cacheManager.subareasTargetPerArea.get(area).get(selSubArea);
             if (!cBTargetOrOutcome.isSelected()) {
                 Integer[] months = getMonths();
                 if (months != null)
                     for (Integer month : months) {
-                        ArrayList<Integer> outcomes = cacheManager.outcomespermonthandsubarea.get(month).get(subarea);
+                        ArrayList<Integer> outcomes = cacheManager.outcomesPerMonthAndSubarea.get(month).get(subarea);
                         if (outcomes != null) {
                             outcomes.forEach(o -> model.addElement((String)cacheManager.outcomes.get(o)[settingsManager.language]));
                         }
@@ -202,7 +202,7 @@ public class MediaForm {
                 Double[] years = getYears();
                 if (years != null)
                     for (Double year : years) {
-                        ArrayList<Integer> targets = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                        ArrayList<Integer> targets = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                         if (targets != null) {
                             targets.forEach(t -> model.addElement((String)cacheManager.targets.get(t)[settingsManager.language]));
                         }

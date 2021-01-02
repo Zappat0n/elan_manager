@@ -59,7 +59,7 @@ public class MyListSubModel extends DefaultListModel<String> {
         clear();
         Integer elementId = (Integer) listItemsModel.getElementAndIdAt(itemIndex)[1];
         if (elementId != null) {
-            ArrayList<Integer> list = AddDataForm.cacheManager.presentationssubperpresentation.get(elementId);
+            ArrayList<Integer> list = AddDataForm.cacheManager.presentationsSubPerPresentation.get(elementId);
             if (list!=null) {
                 for (Integer id : list) data.put(
                         (String)AddDataForm.cacheManager.presentationsSub.get(id)[settingsManager.language], id);

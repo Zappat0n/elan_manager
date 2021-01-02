@@ -3,6 +3,7 @@ package utils;
 import bd.BDManager;
 import bd.MySet;
 import bd.model.*;
+import main.ApplicationLoader;
 import utils.data.RawData;
 
 import javax.swing.*;
@@ -22,8 +23,6 @@ import static java.time.temporal.ChronoUnit.MONTHS;
  */
 public class CacheManager {
     private static final String TAG = CacheManager.class.getSimpleName();
-    private final BDManager bdManager;
-    private final SettingsManager settingsManager;
     public final LinkedHashMap<Integer, Object[]> students; //name, birthday, drive_main, drive_documents, drive_photos, drive_reports
     public final LinkedHashMap<Integer, Object[]> teachers; //name, classroom
     public final LinkedHashMap<Integer, String> classrooms;
@@ -37,18 +36,16 @@ public class CacheManager {
     public final HashMap<Integer, Object[]> presentations; //name, nombre, subarea,year,priority
     public final HashMap<Integer, Object[]> presentationsSub;//name, nombre
     public final HashMap<Integer, LinkedHashMap<Integer, HashSet<Integer>>> stageAreaSubareaMontessori;
-    public final LinkedHashMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> targetsperyearandsubarea;
-    public final LinkedHashMap<Integer, LinkedHashMap<Integer, ArrayList<Integer>>> outcomespermonthandsubarea;
-    public final SortedMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> presentationsperyearandsubarea;
-    public final HashMap<Integer, ArrayList<Integer>> studentsperclassroom;
-    public final HashMap<Integer, ArrayList<Integer>> subareasTargetperarea;
-    public final HashMap<Integer, ArrayList<Integer>> subareasMontessoriperarea;
-    public final HashMap<Integer, ArrayList<Integer>> presentationssubperpresentation;
-    public final HashMap<Integer, Integer> targetsubareaarea;
+    public final LinkedHashMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> targetsPerYearAndSubarea;
+    public final LinkedHashMap<Integer, LinkedHashMap<Integer, ArrayList<Integer>>> outcomesPerMonthAndSubarea;
+    public final SortedMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> presentationsPerYearAndSubarea;
+    public final HashMap<Integer, ArrayList<Integer>> studentsPerClassroom;
+    public final HashMap<Integer, ArrayList<Integer>> subareasTargetPerArea;
+    public final HashMap<Integer, ArrayList<Integer>> subareasMontessoriPerArea;
+    public final HashMap<Integer, ArrayList<Integer>> presentationsSubPerPresentation;
+    public final HashMap<Integer, Integer> targetSubareaArea;
     public final ArrayList<Integer> ncTargets;
-    public final HashMap<Integer[], PresentationLinks> links;
-    public final HashMap<Integer, HashSet<Integer[]>> linksNCOutcomes;
-    public final HashMap<Integer, HashSet<Integer[]>> linksNCTargets;
+    public final HashMap<int[], PresentationLinks> links;
 
     public static class PresentationLinks {
         public final ArrayList<Integer> outcomes;
@@ -61,9 +58,7 @@ public class CacheManager {
 
     private final JLabel labelAction;
 
-    public CacheManager(BDManager bdManager, SettingsManager settingsManager, JLabel labelAction) {
-        this.bdManager = bdManager;
-        this.settingsManager = settingsManager;
+    public CacheManager(JLabel labelAction) {
         this.labelAction = labelAction;
         students = new LinkedHashMap<>();
         teachers = new LinkedHashMap<>();
@@ -73,22 +68,20 @@ public class CacheManager {
         subareasTarget = new LinkedHashMap<>();
         subareasMontessori = new LinkedHashMap<>();
         observations = new LinkedHashMap<>();
-        targetsperyearandsubarea = new LinkedHashMap<>();
-        outcomespermonthandsubarea = new LinkedHashMap<>();
-        presentationsperyearandsubarea = new TreeMap<>();
-        studentsperclassroom = new HashMap<>();
-        subareasTargetperarea = new HashMap<>();
-        subareasMontessoriperarea = new HashMap<>();
-        presentationssubperpresentation = new HashMap<>();
+        targetsPerYearAndSubarea = new LinkedHashMap<>();
+        outcomesPerMonthAndSubarea = new LinkedHashMap<>();
+        presentationsPerYearAndSubarea = new TreeMap<>();
+        studentsPerClassroom = new HashMap<>();
+        subareasTargetPerArea = new HashMap<>();
+        subareasMontessoriPerArea = new HashMap<>();
+        presentationsSubPerPresentation = new HashMap<>();
         outcomes  = new HashMap<>();
         targets = new HashMap<>();
         presentations = new HashMap<>();
         presentationsSub = new HashMap<>();
-        targetsubareaarea = new HashMap<>();
+        targetSubareaArea = new HashMap<>();
         ncTargets = new ArrayList<>();
         links = new HashMap<>();
-        linksNCOutcomes = new HashMap<>();
-        linksNCTargets = new HashMap<>();
         stageAreaSubareaMontessori = new HashMap<>();
         loadData();
     }
@@ -97,7 +90,7 @@ public class CacheManager {
         Connection co = null;
         Statement st = null;
         try {
-            co = bdManager.connect();
+            co = ApplicationLoader.bdManager.connect();
             st = co.createStatement();
             st.execute("START TRANSACTION READ ONLY");
             labelAction.setText("Loading classrooms...");
@@ -106,7 +99,7 @@ public class CacheManager {
             while (set.next()) {
                 Integer id = set.getInt(TableClassrooms.id);
                 classrooms.put(id, set.getString(TableClassrooms.name));
-                if (!studentsperclassroom.containsKey(id)) studentsperclassroom.put(id, new ArrayList<>());
+                if (!studentsPerClassroom.containsKey(id)) studentsPerClassroom.put(id, new ArrayList<>());
             }
             labelAction.setText("Loading observations...");
             set = new MySet(st.executeQuery(query + TableObservations.table_name), BDManager.tableObservations, null);
@@ -125,11 +118,11 @@ public class CacheManager {
                 String folder_reports = set.getString(TableStudents.drive_reports);
                 students.put(id, new Object[]{set.getString(TableStudents.name), set.getDate(TableStudents.birth_date),
                         folder_main, folder_documents, folder_photos, folder_reports});
-                if (studentsperclassroom.containsKey(classroom)) studentsperclassroom.get(classroom).add(id);
+                if (studentsPerClassroom.containsKey(classroom)) studentsPerClassroom.get(classroom).add(id);
                 else {
                     ArrayList<Integer> list = new ArrayList<>();
                     list.add(id);
-                    studentsperclassroom.put(classroom, list);
+                    studentsPerClassroom.put(classroom, list);
                 }
             }
             labelAction.setText("Loading teachers...");
@@ -152,8 +145,8 @@ public class CacheManager {
                 Integer area = set.getInt(TableNC_subareas.area);
                 subareasTarget.put(id, new String[]{set.getString(TableNC_subareas.name),
                         set.getString(TableNC_subareas.nombre)});
-                targetsubareaarea.put(id,area);
-                ArrayList<Integer> t = subareasTargetperarea.computeIfAbsent(area, k -> new ArrayList<>());
+                targetSubareaArea.put(id,area);
+                ArrayList<Integer> t = subareasTargetPerArea.computeIfAbsent(area, k -> new ArrayList<>());
                 t.add(id);
             }
             labelAction.setText("Loading targets...");
@@ -166,7 +159,7 @@ public class CacheManager {
                 String nombre = set.getString(TableTargets.nombre);
                 Integer nc = set.getInt(TableTargets.NC);
                 if (nc == 1) ncTargets.add(nc);
-                LinkedHashMap<Integer, ArrayList<Integer>> tpersubarea = targetsperyearandsubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
+                LinkedHashMap<Integer, ArrayList<Integer>> tpersubarea = targetsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
                 ArrayList<Integer> list = tpersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 targets.put(id, new Object[]{name, nombre,subarea,year});
@@ -179,13 +172,13 @@ public class CacheManager {
             }
             labelAction.setText("Loading Montessori subareas...");
             set = new MySet(st.executeQuery(query + TablePresentations_subareas.table_name), BDManager.tablePresentations_subareas, null);
-            bdManager.getValues(co, BDManager.tablePresentations_subareas, null);
+            ApplicationLoader.bdManager.getValues(co, BDManager.tablePresentations_subareas, null);
             while (set.next()) {
                 Integer id = set.getInt(TablePresentations_subareas.id);
                 Integer area = set.getInt(TablePresentations_subareas.area);
                 subareasMontessori.put(id, new Object[]{set.getString(TablePresentations_subareas.name),
                         set.getString(TablePresentations_subareas.nombre), area});
-                ArrayList<Integer> t = subareasMontessoriperarea.computeIfAbsent(area, k -> new ArrayList<>());
+                ArrayList<Integer> t = subareasMontessoriPerArea.computeIfAbsent(area, k -> new ArrayList<>());
                 t.add(id);
             }
             labelAction.setText("Loading presentations...");
@@ -197,7 +190,7 @@ public class CacheManager {
                 String name = set.getString(TablePresentations.name);
                 String nombre = set.getString(TablePresentations.nombre);
                 Integer priority = set.getInt(TablePresentations.priority);
-                LinkedHashMap<Integer, ArrayList<Integer>> ppersubarea = presentationsperyearandsubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
+                LinkedHashMap<Integer, ArrayList<Integer>> ppersubarea = presentationsPerYearAndSubarea.computeIfAbsent(year, k -> new LinkedHashMap<>());
                 ArrayList<Integer> list = ppersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 Integer area = (Integer) subareasMontessori.get(subarea)[2];
@@ -216,7 +209,7 @@ public class CacheManager {
             while (set.next()){
                 Integer id = set.getInt(TablePresentations_sub.id);
                 Integer presentation = set.getInt(TablePresentations_sub.presentation);
-                ArrayList<Integer> list = presentationssubperpresentation.computeIfAbsent(presentation, k -> new ArrayList<>());
+                ArrayList<Integer> list = presentationsSubPerPresentation.computeIfAbsent(presentation, k -> new ArrayList<>());
                 list.add(id);
                 presentationsSub.put(id, new String[]{set.getString(TablePresentations_areas.name), set.getString(TablePresentations_areas.nombre)});
             }
@@ -230,7 +223,7 @@ public class CacheManager {
                 Integer end_month = set.getInt(TableOutcomes.end_month);
                 Integer subarea = set.getInt(TableOutcomes.subarea);
                 LinkedHashMap<Integer, ArrayList<Integer>> opersubarea =
-                        outcomespermonthandsubarea.computeIfAbsent(end_month, k -> new LinkedHashMap<>());
+                        outcomesPerMonthAndSubarea.computeIfAbsent(end_month, k -> new LinkedHashMap<>());
                 ArrayList<Integer> list = opersubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 outcomes.put(id, new Object[]{name,nombre,subarea,start_month,end_month});
@@ -238,22 +231,18 @@ public class CacheManager {
             labelAction.setText("Loading links...");
             set = new MySet(st.executeQuery(query + TableLinks.table_name), BDManager.tableLinks, null);
             while (set.next()){
-                Integer presentation = set.getInt(TableLinks.presentation);
-                Integer presentation_sub = set.getInt(TableLinks.presentation_sub);
+                int presentation = set.getInt(TableLinks.presentation);
+                int presentation_sub = set.getInt(TableLinks.presentation_sub);
                 Integer outcome = set.getInt(TableLinks.outcomes);
                 Integer target = set.getInt(TableLinks.targets);
-                Integer[] id = {presentation, presentation_sub};
+                int[] id = {presentation, presentation_sub};
                 if (outcome != null && outcome != 0) {
                     PresentationLinks link = links.computeIfAbsent(id, k -> new PresentationLinks());
                     link.outcomes.add(outcome);
-                    HashSet<Integer[]> linkNC = linksNCOutcomes.computeIfAbsent(outcome, k -> new HashSet<>());
-                    linkNC.add(id);
                 }
                 if (target != null && target != 0) {
                     PresentationLinks link = links.computeIfAbsent(id, k -> new PresentationLinks());
                     link.targets.add(target);
-                    HashSet<Integer[]> linkNC = linksNCTargets.computeIfAbsent(outcome, k -> new HashSet<>());
-                    linkNC.add(id);
                 }
             }
             labelAction.setText("Loading variables...");
@@ -266,10 +255,10 @@ public class CacheManager {
                 String name = set.getString(TableGlobal_vars.name);
                 String value = set.getString(TableGlobal_vars.value);
                 switch (name) {
-                    case SettingsManager.START_OF_YEAR -> settingsManager.setDate_SY(value);
-                    case SettingsManager.FIRST_TERM -> settingsManager.setDate_FT(value);
-                    case SettingsManager.SECOND_TERM -> settingsManager.setDate_ST(value);
-                    case SettingsManager.THIRD_TERM -> settingsManager.setDate_TT(value);
+                    case SettingsManager.START_OF_YEAR -> ApplicationLoader.settingsManager.setDate_SY(value);
+                    case SettingsManager.FIRST_TERM -> ApplicationLoader.settingsManager.setDate_FT(value);
+                    case SettingsManager.SECOND_TERM -> ApplicationLoader.settingsManager.setDate_ST(value);
+                    case SettingsManager.THIRD_TERM -> ApplicationLoader.settingsManager.setDate_TT(value);
                 }
             }
         } catch (Exception ex) {
@@ -288,7 +277,7 @@ public class CacheManager {
 
     public Integer getClassroomId(Integer studentId) {
         for (Integer id: classrooms.keySet()) {
-            ArrayList<Integer> list = studentsperclassroom.get(id);
+            ArrayList<Integer> list = studentsPerClassroom.get(id);
             if (list.contains(studentId)) return id;
         }
         return null;
@@ -307,12 +296,12 @@ public class CacheManager {
 
     public String getTargetName(int targetId) {
         Object[] result = targets.get(targetId);
-        return result != null ? (String) result[settingsManager.language] : null;
+        return result != null ? (String) result[ApplicationLoader.settingsManager.language] : null;
     }
 
     public String getOutcomeName(int targetId) {
         Object[] result = outcomes.get(targetId);
-        return result != null ? (String) result[settingsManager.language] : null;
+        return result != null ? (String) result[ApplicationLoader.settingsManager.language] : null;
     }
 
     public Integer getTargetSubarea(int targetId) {
@@ -322,7 +311,7 @@ public class CacheManager {
 
     public String getTargetSubareaName(int id) {
         Object[] result = subareasTarget.get(id);
-        int pos = (settingsManager.language == 0) ? 0 : 1;
+        int pos = (ApplicationLoader.settingsManager.language == 0) ? 0 : 1;
         return result != null ? (String) result[pos] : null;
     }
 
@@ -332,7 +321,7 @@ public class CacheManager {
         else {
             LinkedHashMap<Integer, ArrayList<Integer>> result = new LinkedHashMap<>();
             for (Integer endmonth : months) {
-                LinkedHashMap<Integer, ArrayList<Integer>> map = outcomespermonthandsubarea.get(endmonth);
+                LinkedHashMap<Integer, ArrayList<Integer>> map = outcomesPerMonthAndSubarea.get(endmonth);
                 for (Integer key : map.keySet()) {
                     ArrayList<Integer> al = result.get(key);
                     if (al == null) al = new ArrayList<>();
@@ -371,9 +360,9 @@ public class CacheManager {
 
     public String getNameStageofClassroom(Integer classroom) {
         return switch (classroom) {
-            case 1 -> LanguageManager.INFANT_COMMUNITY[settingsManager.language];
-            case 2, 3 -> LanguageManager.CHILDRENS_HOUSE[settingsManager.language];
-            case 4, 5 -> LanguageManager.PRIMARY[settingsManager.language];
+            case 1 -> LanguageManager.INFANT_COMMUNITY[ApplicationLoader.settingsManager.language];
+            case 2, 3 -> LanguageManager.CHILDRENS_HOUSE[ApplicationLoader.settingsManager.language];
+            case 4, 5 -> LanguageManager.PRIMARY[ApplicationLoader.settingsManager.language];
             case 6 -> "Children's House";
             default -> null;
         };
@@ -393,7 +382,7 @@ public class CacheManager {
 
     public ArrayList<Integer> loadStudensSortedByAge(int classroom) {
         HashMap<Integer, java.sql.Date> map = new HashMap<>();
-        for (int id : studentsperclassroom.get(classroom)) {
+        for (int id : studentsPerClassroom.get(classroom)) {
             map.put(id, (Date) students.get(id)[1]);
         }
 
@@ -418,7 +407,7 @@ public class CacheManager {
             Object[] data = presentations.get(id);
             Double year = (Double) data[3];
             if (year < min || year >= max) continue;
-            String name = (String) data[settingsManager.language];
+            String name = (String) data[ApplicationLoader.settingsManager.language];
             if (name.toLowerCase().contains(text)) {
                 result.put(name, new Integer[]{id, (Integer) data[2]});
             }
@@ -436,7 +425,7 @@ public class CacheManager {
 
     public DefaultListModel<String> getStudentsListModel(int classroom){
         DefaultListModel<String> model = new DefaultListModel<>();
-        for (int id : studentsperclassroom.get(classroom)) {
+        for (int id : studentsPerClassroom.get(classroom)) {
             model.addElement((String)students.get(id)[0]);
         }
         return model;
@@ -448,7 +437,7 @@ public class CacheManager {
         LocalDate dateAfter = Instant.ofEpochMilli(new java.util.Date().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         long months = MONTHS.between(dateBefore, dateAfter);
 
-        return months / 12 + (settingsManager.language == 0 ? " years and " : " años y ") + months%12 +
-                (settingsManager.language == 0 ? " months" : " meses");
+        return months / 12 + (ApplicationLoader.settingsManager.language == 0 ? " years and " : " años y ") + months%12 +
+                (ApplicationLoader.settingsManager.language == 0 ? " months" : " meses");
     }
 }

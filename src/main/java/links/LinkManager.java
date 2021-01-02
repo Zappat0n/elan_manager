@@ -5,6 +5,7 @@ import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableLinks;
 import main.ApplicationLoader;
+import utils.CacheManager;
 import utils.MyLogger;
 
 import javax.swing.*;
@@ -16,15 +17,17 @@ import java.sql.SQLException;
 public class LinkManager {
     private static final String TAG = LinkManager.class.getSimpleName();
 
-    public void recordLinksForPresentation(Connection co, int presentation, Integer presentation_sub, Date date, Integer student, Integer eventId) {
+    public void recordLinksForPresentation(Connection co, int presentation, int presentation_sub, Date date, Integer student, Integer eventId) {
         BDManager bdManager = ApplicationLoader.bdManager;
         PreparedStatement ps = null;
         try {
             if (co == null || co.isClosed()) co = bdManager.connect();
+
             MySet set = bdManager.getValues(co, BDManager.tableLinks,
                     TableLinks.presentation + "=" + presentation +
-                            ((presentation_sub != null)?" AND "+TableLinks.presentation_sub+"="+presentation_sub : ""));
-
+                            ((presentation_sub != 0)?" AND "+TableLinks.presentation_sub+"="+presentation_sub : ""));
+            int[] values = {presentation, presentation_sub};
+            CacheManager.PresentationLinks links = ApplicationLoader.cacheManager.links.get(values);
             while (set.next()) {
                Integer outcome = set.getInt(TableLinks.outcomes);
                Integer target = set.getInt(TableLinks.targets);

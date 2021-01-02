@@ -80,7 +80,7 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
     }
 
     private void addAsterisk(String presentation, String nc) throws SQLException {
-        for (Integer sub : ApplicationLoader.cacheManager.presentationssubperpresentation.get(Integer.parseInt(presentation))) {
+        for (Integer sub : ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(Integer.parseInt(presentation))) {
             addBatch(presentation, sub.toString(), nc);
         }
     }
@@ -88,7 +88,7 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
     private void addMultiple(String presentation, String _start, String _end, String nc) throws SQLException {
         final int start = Integer.parseInt(_start);
         final int end = Integer.parseInt(_end);
-        for (Integer sub : ApplicationLoader.cacheManager.presentationssubperpresentation.get(Integer.parseInt(presentation))) {
+        for (Integer sub : ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(Integer.parseInt(presentation))) {
             if (sub >= start && sub <= end) addBatch(presentation, sub.toString(), nc);
         }
     }

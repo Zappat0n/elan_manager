@@ -41,8 +41,7 @@ public class LoaderForm {
                     return null;
                 }
                 try {
-                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager,
-                            ApplicationLoader.settingsManager, lAction);
+                    ApplicationLoader.cacheManager = new CacheManager(lAction);
                     MainForm.main(null);
                 } finally {
                     frame.dispose();

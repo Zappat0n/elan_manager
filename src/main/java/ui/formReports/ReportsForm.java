@@ -142,7 +142,7 @@ public class ReportsForm {
                 currentClassroom = listClassrooms.getSelectedIndex() + 1;
 
                 students.clear();
-                ArrayList<Integer> listStudents = cacheManager.studentsperclassroom.get(currentClassroom);
+                ArrayList<Integer> listStudents = cacheManager.studentsPerClassroom.get(currentClassroom);
                 if (listStudents != null)
                     for (Integer id : listStudents) {
                         students.add(id);

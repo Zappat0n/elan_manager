@@ -73,7 +73,7 @@ public class ClipboardKeyAdapter extends KeyAdapter {
         Integer classroom = formData.classroom;
         if (classroom == null) return;
         for (int i=0; i<numCols-1; i++) {
-            excelStr.append(escape(cacheManager.students.get(cacheManager.studentsperclassroom.get(classroom).get(i))[0]));
+            excelStr.append(escape(cacheManager.students.get(cacheManager.studentsPerClassroom.get(classroom).get(i))[0]));
             excelStr.append(CELL_BREAK);
 
         }

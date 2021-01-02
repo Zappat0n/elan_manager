@@ -78,7 +78,7 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
         this.body = body;
         this.log = log;
         this.uploadToDrive = uploadToDrive;
-        if (student == null) students = cacheManager.studentsperclassroom.get(classroom);
+        if (student == null) students = cacheManager.studentsPerClassroom.get(classroom);
         else {
             students = new ArrayList<>();
             students.add(student);

@@ -168,10 +168,10 @@ public class SWDBUpdater extends SwingWorker {
 
     private void checkIfRemovedLinks(Statement st) throws SQLException {
         for (Condition condition : checkIfRemovedLinks) {
-            for (Map.Entry<Integer[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
-                Integer sub = (condition.event_sub != null) ? condition.event_sub : 0;
-                Integer[] data = entry.getKey();
-                if (data[0].equals(condition.event_id) && data[1].equals(sub)) {
+            for (Map.Entry<int[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
+                int sub = (condition.event_sub != null) ? condition.event_sub : 0;
+                int[] data = entry.getKey();
+                if (data[0] == condition.event_id && data[1] == sub) {
                     for (Integer outcome : entry.getValue().outcomes) {
                         deleteBrokenLink(condition, st, 10, outcome);
                     }
@@ -257,9 +257,9 @@ public class SWDBUpdater extends SwingWorker {
 
     private Boolean checkLink(Statement st, Integer student, Integer event_id, Integer event_sub, Integer id) throws SQLException {
         boolean result = false;
-        for (Map.Entry<Integer[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
-            Integer[] data = entry.getKey();
-            if (data[0].equals(event_id) && data[1].equals(event_sub)) {
+        for (Map.Entry<int[], CacheManager.PresentationLinks> entry : cacheManager.links.entrySet()) {
+            int[] data = entry.getKey();
+            if (data[0] == event_id && data[1] == event_sub) {
                 for (Integer outcome : entry.getValue().outcomes) {
                     addBatchEvent(st, student, outcome, null, 10, String.valueOf(id));
                 }
