@@ -67,11 +67,10 @@ public class SWDBUpdater extends SwingWorker<Boolean, Integer> {
     }
 
     protected void sendToBatch(Statement st){
-        Boolean addedLinks = false;
         try {
             ResultSet rs = ApplicationLoader.bdManager.executeBatch(st);
-            if (rs.next()) addedLinks = multipleLinkManager.checkForLinksInInsertedIds(st, rs);
-            if (checkTempEvents(st) || addedLinks) sendToBatch(st);
+            if (rs.next()) multipleLinkManager.checkForLinksInInsertedIds(st, rs);
+            if (checkTempEvents(st)) sendToBatch(st);
             if (checkIfRemovedLinks.size() > 0) {
                 multipleLinkManager.checkIfRemovedLinks(st, checkIfRemovedLinks);
                 //co.commit();

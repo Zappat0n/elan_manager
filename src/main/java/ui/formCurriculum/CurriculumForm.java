@@ -173,15 +173,16 @@ public class CurriculumForm {
         }
 
         public void loadSubarea(int stage, int subarea) {
-            for (int[] link : cacheManager.links.keySet()) {
-                Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != 0 ? cacheManager.presentationsSub.get(link[1]) : null;
+            for (String code : cacheManager.links.keySet()) {
+                String[] values = code.split("\\.");
+                Object[] presentation = cacheManager.presentations.get(values[0]);    //name, nombre, subarea,year,priority
+                Object[] presentation_sub = !values[1].equals("0") ? cacheManager.presentationsSub.get(values[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||
                         (Double)presentation[3] > RawData.yearsmontessori[stage][1] ) continue;
 
-                CacheManager.PresentationLinks links = cacheManager.links.get(link);
+                CacheManager.PresentationLinks links = cacheManager.links.get(code);
                 for (int target : links.targets)
                     addRow((String)presentation[settingsManager.language],
                             presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,
@@ -211,15 +212,16 @@ public class CurriculumForm {
         }
 
         public void loadSubarea(int stage, int subarea) {
-            for (int[] link : cacheManager.links.keySet()) {
-                Object[] presentation = cacheManager.presentations.get(link[0]);    //name, nombre, subarea,year,priority
-                Object[] presentation_sub = link[1] != 0 ? cacheManager.presentationsSub.get(link[1]) : null;
+            for (String code : cacheManager.links.keySet()) {
+                String[] values = code.split("\\.");
+                Object[] presentation = cacheManager.presentations.get(values[0]);    //name, nombre, subarea,year,priority
+                Object[] presentation_sub = !values[1].equals("0") ? cacheManager.presentationsSub.get(values[1]) : null;
 
                 if (presentation == null) continue;
                 if ((Integer)presentation[2] != subarea ||(Double)presentation[3] < RawData.yearsmontessori[stage][0] ||
                         (Double)presentation[3] > RawData.yearsmontessori[stage][1] ) continue;
 
-                CacheManager.PresentationLinks links = cacheManager.links.get(link);
+                CacheManager.PresentationLinks links = cacheManager.links.get(code);
                 for (int target : links.targets)
                     addRow((String)presentation[settingsManager.language],
                             presentation_sub != null ? (String)presentation_sub[settingsManager.language] : null,

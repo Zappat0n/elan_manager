@@ -29,8 +29,7 @@ public class MultipleLinkManager {
         linkManager = new LinkManager();
     }
 
-    public Boolean checkForLinksInInsertedIds(Statement st, ResultSet rs) throws SQLException {
-        boolean result = false;
+    public void checkForLinksInInsertedIds(Statement st, ResultSet rs) throws SQLException {
         StringBuilder sql = new StringBuilder("INSERT INTO tempIds VALUES ");
         do {
             sql.append("(").append(rs.getInt(1)).append(",").append(ApplicationLoader.settingsManager.teacher).append("),");
@@ -50,21 +49,20 @@ public class MultipleLinkManager {
             if (event_type != 2 && event_type != 4 && event_type != 5
                     && event_type != 9 && event_type != 10 && event_type != 11) {
                 form.paintValue(event_id, event_sub, student, newValue);
-                if ((newValue == 1 || newValue == 2 || newValue == 3) && linkManager.recordLinksForPresentation(
-                        st, event_id, event_sub, event_type, date, student, id))
-                    result = true;
+                if ((newValue == 1 || newValue == 2 || newValue == 3))
+                    linkManager.recordLinksForPresentation(st, event_id, event_sub, event_type, date, student, id);
             }
         }
-        st.execute("DELETE FROM tempIds WHERE teacher = " + ApplicationLoader.settingsManager.teacher + ";");
-        return result;
+        st.addBatch("DELETE FROM tempIds WHERE teacher = " + ApplicationLoader.settingsManager.teacher + ";");
+        ApplicationLoader.bdManager.executeBatch(st);
     }
 
     public void checkIfRemovedLinks(Statement st, ArrayList<EventCondition> events) throws SQLException {
         for (EventCondition condition : events) {
-            for (Map.Entry<int[], CacheManager.PresentationLinks> entry : ApplicationLoader.cacheManager.links.entrySet()) {
+            for (Map.Entry<String, CacheManager.PresentationLinks> entry : ApplicationLoader.cacheManager.links.entrySet()) {
                 int sub = (condition.event_sub != null) ? condition.event_sub : 0;
-                int[] data = entry.getKey();
-                if (data[0] == condition.event_id && data[1] == sub) {
+                String[] data = entry.getKey().split("\\.");
+                if (Integer.parseInt(data[0]) == condition.event_id && Integer.parseInt(data[1]) == sub) {
                     for (Integer outcome : entry.getValue().outcomes) {
                         linkManager.deleteBrokenLink(condition, st, 10, outcome);
                     }

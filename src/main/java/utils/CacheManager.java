@@ -45,7 +45,7 @@ public class CacheManager {
     public final HashMap<Integer, ArrayList<Integer>> presentationsSubPerPresentation;
     public final HashMap<Integer, Integer> targetSubareaArea;
     public final ArrayList<Integer> ncTargets;
-    public final HashMap<int[], PresentationLinks> links;
+    public final HashMap<String, PresentationLinks> links;
 
     public static class PresentationLinks {
         public final ArrayList<Integer> outcomes;
@@ -235,7 +235,7 @@ public class CacheManager {
                 int presentation_sub = set.getInt(TableLinks.presentation_sub);
                 Integer outcome = set.getInt(TableLinks.outcomes);
                 Integer target = set.getInt(TableLinks.targets);
-                int[] id = {presentation, presentation_sub};
+                String id = presentation + "." + presentation_sub;
                 if (outcome != null && outcome != 0) {
                     PresentationLinks link = links.computeIfAbsent(id, k -> new PresentationLinks());
                     link.outcomes.add(outcome);

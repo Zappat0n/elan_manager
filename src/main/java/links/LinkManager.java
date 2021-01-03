@@ -27,12 +27,11 @@ public class LinkManager {
         recordLinks(presentation, presentation_sub, date, eventId);
     }
 
-    public Boolean recordLinksForPresentation(Statement st, int presentation, int presentation_sub, int eventType,
+    public void recordLinksForPresentation(Statement st, int presentation, int presentation_sub, int eventType,
                                            Date date, int student, int eventId) {
         initialize(student, eventType);
         this.statement = st;
         recordLinks(presentation, presentation_sub, date, eventId);
-        return true;
     }
 
     private void initialize (int student, int eventType ) {
@@ -42,19 +41,19 @@ public class LinkManager {
 
     private void recordLinks(int presentation, int presentation_sub, Date date, int eventId) {
         try {
-            int[] values = {presentation, presentation_sub};
-            CacheManager.PresentationLinks links = ApplicationLoader.cacheManager.links.get(values);
-
+            String code = presentation + "." + presentation_sub;
+            CacheManager.PresentationLinks links = ApplicationLoader.cacheManager.links.get(code);
+            if (links == null) return;
             for (int outcome : links.outcomes) {
                 int newType = getType(true);
                 if (newType != 0 && !checkExistence(outcome, newType)) {
-                    addBatch(date, eventId, newType, eventId);
+                    addBatch(date, outcome, newType, eventId);
                 }
             }
             for (int target : links.targets) {
                 int newType = getType(false);
                 if (newType != 0 && !checkExistence(target, newType)) {
-                    addBatch(date, eventId, newType, eventId);
+                    addBatch(date, target, newType, eventId);
                 }
             }
         } catch (SQLException e) {
