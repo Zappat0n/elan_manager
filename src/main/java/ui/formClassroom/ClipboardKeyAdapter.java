@@ -1,5 +1,6 @@
 package ui.formClassroom;
 
+import main.ApplicationLoader;
 import utils.CacheManager;
 
 import javax.swing.*;
@@ -18,13 +19,11 @@ public class ClipboardKeyAdapter extends KeyAdapter {
 
     private final ClassroomFormData formData;
     private final JTable table;
-    private final CacheManager cacheManager;
     private final JTextField textField;
 
 
-    public ClipboardKeyAdapter(JTable table, JTextField textField, CacheManager cacheManager, ClassroomFormData formData) {
+    public ClipboardKeyAdapter(JTable table, JTextField textField, ClassroomFormData formData) {
         this.table = table;
-        this.cacheManager = cacheManager;
         this.textField = textField;
         this.formData = formData;
     }
@@ -73,7 +72,8 @@ public class ClipboardKeyAdapter extends KeyAdapter {
         Integer classroom = formData.classroom;
         if (classroom == null) return;
         for (int i=0; i<numCols-1; i++) {
-            excelStr.append(escape(cacheManager.students.get(cacheManager.studentsPerClassroom.get(classroom).get(i))[0]));
+            excelStr.append(escape(ApplicationLoader.cacheManager.students.get(
+                    ApplicationLoader.cacheManager.studentsPerClassroom.get(classroom).get(i))[0]));
             excelStr.append(CELL_BREAK);
 
         }

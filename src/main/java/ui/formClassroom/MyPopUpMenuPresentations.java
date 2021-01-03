@@ -11,21 +11,14 @@ import java.sql.*;
 
 public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListener {
     private final static String TAG = MyPopUpMenuPresentations.class.getSimpleName();
-    private final BDManager bdManager;
     public static final String[] planning_values = {"M", "T", "W", "Th", "F"};
     final ClassroomFormData formData;
     final JTable tablePresentations;
     final JTable tablePlanning;
     final Date date;
-    final SettingsManager settingsManager;
-    final CacheManager cacheManager;
 
-    public MyPopUpMenuPresentations(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager,
-                                    JTable tablePresentations, JTable tablePlanning, Date date, ClassroomFormData formData) {
+    public MyPopUpMenuPresentations(JTable tablePresentations, JTable tablePlanning, Date date, ClassroomFormData formData) {
         this.formData = formData;
-        this.bdManager = bdManager;
-        this.settingsManager = settingsManager;
-        this.cacheManager = cacheManager;
         this.tablePresentations = tablePresentations;
         this.tablePlanning = tablePlanning;
         this.date = date;
@@ -70,8 +63,7 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
         }
 
         try {
-            SWDBUpdater updater = new SWDBUpdater(bdManager, settingsManager, cacheManager, tablePresentations,
-                    tablePlanning, rows, columns, newValue, date, formData);
+            SWDBUpdater updater = new SWDBUpdater(tablePresentations, tablePlanning, rows, columns, newValue, date, formData);
             updater.doInBackground();
         } catch (Exception ex) {
             MyLogger.e(TAG, ex);

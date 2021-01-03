@@ -79,7 +79,7 @@ class MainForm {
         buttonClassroom = new JButton();
         buttonClassroom.addActionListener(e -> SwingUtilities.invokeLater(() -> {
             if (!ReportsForm.yetChanged) {
-                addPanelToContainer(ClassroomForm.main(ApplicationLoader.bdManager, ApplicationLoader.settingsManager, ApplicationLoader.cacheManager));
+                addPanelToContainer(ClassroomForm.main());
             } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
         }));
         buttonConfig = new JButton();

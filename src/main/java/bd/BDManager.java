@@ -328,6 +328,11 @@ public class BDManager {
         return executeQuery(connection, table.getValues(condition), table, null);
     }
 
+    public MySet getValues(MyTable table, String condition) {
+        if (table == null) return null;
+        return executeQuery(table.getValues(condition), table, null);
+    }
+
     public MySet getValues(Connection connection, MyTable table, String[] keys, String condition) {
         if (table == null) return null;
         return executeQuery(connection, table.getValues(keysToString(keys), condition), table, keys);
@@ -353,6 +358,19 @@ public class BDManager {
     }
 
     private synchronized MySet executeQuery(Connection co, String query, MyTable table, String[] keys) {
+        try {
+            if (co == null) co = connect();
+            st = co.createStatement();
+            return new MySet(st.executeQuery(query), table, keys);
+        } catch (SQLException e) {
+            MyLogger.e(TAG, e);
+        } finally {
+            closeQuietlyStatement();
+        }
+        return null;
+    }
+
+    private synchronized MySet executeQuery(String query, MyTable table, String[] keys) {
         try {
             if (co == null) co = connect();
             st = co.createStatement();

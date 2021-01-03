@@ -1,8 +1,7 @@
 package pdfs.models;
 
-import bd.BDManager;
+import main.ApplicationLoader;
 import ui.formClassroom.MyTableModelPlanning;
-import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
 
@@ -14,18 +13,13 @@ import java.util.Date;
 
 public class Pdf_Planning extends PDFForm{
     private static final String TAG = Pdf_Planning.class.getSimpleName();
-    private final CacheManager cacheManager;
-    private final SettingsManager settingsManager;
     private final JTable tablePlanning;
     private final Date date;
     private final Integer classroom;
 
 
-    public Pdf_Planning(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
-                        JTable tablePlanning, Integer classroom, Date date) {
+    public Pdf_Planning(JTable tablePlanning, Integer classroom, Date date) {
         super();
-        this.cacheManager = cacheManager;
-        this.settingsManager = settingsManager;
         this.tablePlanning = tablePlanning;
         this.date = date;
         this.classroom = classroom;
@@ -43,7 +37,7 @@ public class Pdf_Planning extends PDFForm{
         String end = sdf.format(cal.getTime());
         try {
             nextPage();
-            String text = "WEEKLY PLANNER FOR: " + cacheManager.classrooms.get(classroom) +
+            String text = "WEEKLY PLANNER FOR: " + ApplicationLoader.cacheManager.classrooms.get(classroom) +
                     String.join("", Collections.nCopies(90, " ")) + "WEEK: " + ini + " - " + end;
             int margin = 30;
             position = addLine(text, margin, 560);
@@ -67,7 +61,7 @@ public class Pdf_Planning extends PDFForm{
                     new String[]{"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}, data, position+20,
                     8);
             nextPage();
-            text = "OBSERVATIONS FOR: " + cacheManager.classrooms.get(classroom) +
+            text = "OBSERVATIONS FOR: " + ApplicationLoader.cacheManager.classrooms.get(classroom) +
                     String.join("", Collections.nCopies(95, " ")) + "WEEK: " + ini + " - " + end;
             position = addLine(text, margin, 560);
 
@@ -77,7 +71,7 @@ public class Pdf_Planning extends PDFForm{
         } catch (Exception e) {
             MyLogger.e(TAG, e);
         } finally {
-            saveFile(settingsManager.getValue(SettingsManager.REPORTS_DIR)+"prueba.pdf");
+            saveFile(ApplicationLoader.settingsManager.getValue(SettingsManager.REPORTS_DIR)+"prueba.pdf");
         }
     }
 

@@ -2,6 +2,7 @@ package ui.formClassroom;
 
 import bd.BDManager;
 import bd.model.TableEvents;
+import main.ApplicationLoader;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,11 @@ import java.util.Calendar;
 
 public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
     private final static String TAG = MyPopUpMenuPlanning.class.getSimpleName();
-    private static BDManager bdManager;
     final int student;
     final String event;
     final Integer event_id;
     final Integer event_sub;
-    int oldvalue;
+    int oldValue;
     final JTable tablePresentations;
     final JTable tablePlanning;
     final int row;
@@ -24,10 +24,9 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
     final Date date;
     private final ClassroomFormData formData;
 
-    public MyPopUpMenuPlanning(BDManager bdManager, int student, String event, JTable tablePresentations,
-                               JTable tablePlanning, int row, int column, Date date, ClassroomFormData formData) {
+    public MyPopUpMenuPlanning(int student, String event, JTable tablePresentations, JTable tablePlanning, int row,
+                               int column, Date date, ClassroomFormData formData) {
         this.formData = formData;
-        MyPopUpMenuPlanning.bdManager = bdManager;
         this.student = student;
         this.event = event;
         this.tablePresentations = tablePresentations;
@@ -43,7 +42,7 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
             JMenuItem item = new JMenuItem(values[i]);
             item.addActionListener(this);
             add(item);
-            if (oldvalue == i) item.setSelected(true);
+            if (oldValue == i) item.setSelected(true);
         }
     }
 
@@ -66,8 +65,8 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
         java.sql.Date monday = new java.sql.Date(cal.getTime().getTime());
         Connection connection = null;
         try {
-            connection = bdManager.connect();
-            bdManager.removeValue(connection, BDManager.tableEvents,
+            connection = ApplicationLoader.bdManager.connect();
+            ApplicationLoader.bdManager.removeValue(connection, BDManager.tableEvents,
                     TableEvents.student + "=" + student + " AND " +
                             TableEvents.event_id + "=" + event_id + " AND " +
                             (event_sub!=null?TableEvents.event_sub + "=" + event_sub:TableEvents.event_sub + "IS NULL") + " AND " +

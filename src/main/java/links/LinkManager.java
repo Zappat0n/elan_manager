@@ -7,28 +7,40 @@ import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.MyLogger;
 
-import javax.swing.*;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class LinkManager {
     private static final String TAG = LinkManager.class.getSimpleName();
-    private Connection co;
     private Statement statement;
     private int student;
     private int eventType;
+    private Boolean statementCreated = false;
 
-    public void recordLinksForPresentation(Connection co, int presentation, int presentation_sub, int eventType,
-                                           Date date, Integer student, Integer eventId) {
-        this.co = co;
+    public void recordLinksForPresentation(int presentation, int presentation_sub, int eventType,
+                                           Date date, int student, int eventId) {
+        initialize(student, eventType);
+        statement = ApplicationLoader.bdManager.prepareBatch();
+        statementCreated = true;
+        recordLinks(presentation, presentation_sub, date, eventId);
+    }
+
+    public Boolean recordLinksForPresentation(Statement st, int presentation, int presentation_sub, int eventType,
+                                           Date date, int student, int eventId) {
+        initialize(student, eventType);
+        this.statement = st;
+        recordLinks(presentation, presentation_sub, date, eventId);
+        return true;
+    }
+
+    private void initialize (int student, int eventType ) {
         this.student = student;
         this.eventType = eventType;
-        try {
-            if (co == null || co.isClosed()) co = ApplicationLoader.bdManager.connect();
-            statement = ApplicationLoader.bdManager.prepareBatch();
+    }
 
+    private void recordLinks(int presentation, int presentation_sub, Date date, int eventId) {
+        try {
             int[] values = {presentation, presentation_sub};
             CacheManager.PresentationLinks links = ApplicationLoader.cacheManager.links.get(values);
 
@@ -47,7 +59,7 @@ public class LinkManager {
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
         } finally {
-            BDManager.closeQuietly(co, null);
+            if (statementCreated) BDManager.closeQuietly(statement);
         }
     }
 
@@ -58,25 +70,10 @@ public class LinkManager {
         statement.addBatch(sql);
     }
 
-    public static void recordLinksForPresentation(JProgressBar pBar, BDManager bdManager, Connection connection,
-                                                     java.sql.Date startDate, java.sql.Date endDate) {
-        if (pBar != null) {
-            int result = JOptionPane.showConfirmDialog(pBar.getParent(), "Record targets linked with presentations?");
-            if (result == JOptionPane.CANCEL_OPTION) return;
-        }
-
-        LinksRecorder recorder = new LinksRecorder(bdManager, connection, startDate, endDate, pBar);
-        try {
-            recorder.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private Boolean checkExistence(Integer eventId, int newType) {
         String condition = TableEvents.student + " = " + student + " AND " + TableEvents.event_id + " = " + eventId +
                 " AND (event_type = " + newType + ")";
-        MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableEvents, condition);
+        MySet set = ApplicationLoader.bdManager.getValues(BDManager.tableEvents, condition);
         return set.size() > 0;
     }
 

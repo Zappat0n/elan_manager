@@ -9,20 +9,19 @@ import utils.MyLogger;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.Statement;
 
 class LinksRecorder extends Thread {
     private static final String TAG = LinksRecorder.class.getSimpleName();
     private final BDManager bdManager;
-    private Connection co;
     private final java.sql.Date startDate;
     private final java.sql.Date endDate;
     private final JProgressBar pBar;
+    private Statement st;
 
     public LinksRecorder(BDManager bdManager, Connection co, java.sql.Date startDate, java.sql.Date endDate,
                          JProgressBar pBar) {
         this.bdManager = bdManager;
-        this.co = co;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pBar = pBar;
@@ -33,8 +32,8 @@ class LinksRecorder extends Thread {
         try {
             String condition = TableEvents.date + " >= '" + startDate.toString() + "' AND " + TableEvents.date + " <= '"
                     + endDate.toString() + "' AND (event_type = 6 OR event_type = 7)";
-            if (co == null || co.isClosed()) co = bdManager.connect();
-            MySet set = bdManager.getValues(co, BDManager.tableEvents, condition);
+            st = ApplicationLoader.bdManager.prepareBatch();
+            MySet set = bdManager.getValues(BDManager.tableEvents, condition);
             pBar.setMinimum(1);
             pBar.setMaximum(set.size());
             int i = 0;
@@ -43,16 +42,17 @@ class LinksRecorder extends Thread {
                 Integer presentation = set.getInt(TableEvents.event_id);
                 Integer presentationSub = set.getInt(TableEvents.event_sub);
                 Date date = set.getDate(TableEvents.date);
-                Integer student = set.getInt(TableEvents.student);
-                Integer eventId = set.getInt(TableEvents.id);
-                Integer eventType = set.getInt(TableEvents.event_type);
-                ApplicationLoader.linkManager.recordLinksForPresentation(co, presentation, presentationSub, eventType, date, student, eventId);
+                int student = set.getInt(TableEvents.student);
+                int eventId = set.getInt(TableEvents.id);
+                int eventType = set.getInt(TableEvents.event_type);
+                ApplicationLoader.linkManager.recordLinksForPresentation(presentation, presentationSub, eventType, date, student, eventId);
                 pBar.setValue(i++);
             }
-        } catch (SQLException e) {
+            ApplicationLoader.bdManager.executeBatch(st);
+        } catch (Exception e) {
             MyLogger.e(TAG, e);
         } finally {
-            BDManager.closeQuietly(co, null);
+            BDManager.closeQuietly(st);
         }
     }
 }

@@ -1,5 +1,6 @@
 package ui.formClassroom;
 
+import main.ApplicationLoader;
 import utils.CacheManager;
 
 import javax.swing.*;
@@ -31,11 +32,9 @@ public class MyTablePresentationsRenderer extends JLabel implements TableCellRen
             new Color(0,70,185),
             new Color(0,0,255)};
 
-    final CacheManager cacheManager;
     final ClassroomFormData formData;
 
-    public MyTablePresentationsRenderer(CacheManager cacheManager, ClassroomFormData formData) {
-        this.cacheManager = cacheManager;
+    public MyTablePresentationsRenderer(ClassroomFormData formData) {
         this.formData = formData;
     }
 
@@ -49,7 +48,7 @@ public class MyTablePresentationsRenderer extends JLabel implements TableCellRen
         if (column >0) age = formData.dates.get(column-1);
 
         Integer presentation = Integer.valueOf(formData.presentations.get(row).split("[.]")[0]);
-        Double year = (Double)cacheManager.presentations.get(presentation)[3];
+        Double year = (Double) ApplicationLoader.cacheManager.presentations.get(presentation)[3];
         if (age > year || age == 0d) bg = getColor(year);
         else bg = Color.white;
 

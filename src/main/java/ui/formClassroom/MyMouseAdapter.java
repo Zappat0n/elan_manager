@@ -14,18 +14,11 @@ public class MyMouseAdapter extends MouseAdapter {
     private final JTable tablePlanning;
     private final JTable tablePresentations;
     final ClassroomFormData formData;
-    final BDManager bdManager;
-    final SettingsManager settingsManager;
-    final CacheManager cacheManager;
     final Connection co;
     final Date date;
 
-    public MyMouseAdapter(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager,
-                          Connection co, Date date, JTable tablePresentations, JTable tablePlanning, ClassroomFormData formData) {
+    public MyMouseAdapter(Connection co, Date date, JTable tablePresentations, JTable tablePlanning, ClassroomFormData formData) {
         this.formData = formData;
-        this.settingsManager = settingsManager;
-        this.bdManager = bdManager;
-        this.cacheManager = cacheManager;
         this.tablePlanning = tablePlanning;
         this.tablePresentations = tablePresentations;
         this.co = co;
@@ -46,12 +39,11 @@ public class MyMouseAdapter extends MouseAdapter {
                     table.setColumnSelectionInterval(column, column);
                 }
 
-                JPopupMenu menu = new MyPopUpMenuPresentations(bdManager, settingsManager, cacheManager, table,
-                        tablePlanning, date, formData);
+                JPopupMenu menu = new MyPopUpMenuPresentations(table, tablePlanning, date, formData);
                 menu.show(e.getComponent(), e.getX(), e.getY());
             } else {
                 String event = ((MyTableModelPlanning)table.getModel()).events[row][column-1];
-                JPopupMenu menu = new MyPopUpMenuPlanning(bdManager, formData.students.get(row),
+                JPopupMenu menu = new MyPopUpMenuPlanning(formData.students.get(row),
                         event, tablePresentations, tablePlanning, row, column, date, formData);
                 menu.show(e.getComponent(), e.getX(), e.getY());
             }
