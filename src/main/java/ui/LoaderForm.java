@@ -66,7 +66,6 @@ public class LoaderForm {
         ApplicationLoader.fileManager = new FileManager(frame);
         ApplicationLoader.settingsManager = new SettingsManager(frame);
         ApplicationLoader.bdManager = new BDManager();
-        ApplicationLoader.linkManager = new LinkManager();
     }
 
     private static void checkVersion() {

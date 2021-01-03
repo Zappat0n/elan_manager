@@ -1,6 +1,5 @@
 package main;
 
-import links.LinkManager;
 import ui.LoaderForm;
 
 import utils.CacheManager;
@@ -20,13 +19,8 @@ public class ApplicationLoader {
     public static SettingsManager settingsManager;
     public static BDManager bdManager;
     public static CacheManager cacheManager;
-    public static LinkManager linkManager;
 
     public static void main(String[] args) {
-        launchUI();
-    }
-
-    private static void launchUI(){
         SwingUtilities.invokeLater(() -> {
             try {
                 LoaderForm.main(null);
@@ -36,5 +30,4 @@ public class ApplicationLoader {
             }
         });
     }
-
 }

@@ -12,15 +12,11 @@ import java.sql.*;
 public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListener {
     private final static String TAG = MyPopUpMenuPresentations.class.getSimpleName();
     public static final String[] planning_values = {"M", "T", "W", "Th", "F"};
-    final ClassroomFormData formData;
-    final JTable tablePresentations;
-    final JTable tablePlanning;
+    final ClassroomForm form;
     final Date date;
 
-    public MyPopUpMenuPresentations(JTable tablePresentations, JTable tablePlanning, Date date, ClassroomFormData formData) {
-        this.formData = formData;
-        this.tablePresentations = tablePresentations;
-        this.tablePlanning = tablePlanning;
+    public MyPopUpMenuPresentations(ClassroomForm form, Date date) {
+        this.form = form;
         this.date = date;
         String[] presentations_values = {" ", "/", "Λ", "Δ"};
         for (String presentations_value : presentations_values) {
@@ -45,8 +41,8 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
     public void actionPerformed(ActionEvent e) {
         Integer newValue = null;
         JMenuItem item = (JMenuItem)e.getSource();
-        int[] rows = tablePresentations.getSelectedRows();
-        int[] columns = tablePresentations.getSelectedColumns();
+        int[] rows = form.tablePresentations.getSelectedRows();
+        int[] columns = form.tablePresentations.getSelectedColumns();
 
         switch (item.getText()) {
             case " " -> newValue = 0;
@@ -63,7 +59,7 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
         }
 
         try {
-            SWDBUpdater updater = new SWDBUpdater(tablePresentations, tablePlanning, rows, columns, newValue, date, formData);
+            SWDBUpdater updater = new SWDBUpdater(form, rows, columns, newValue, date);
             updater.doInBackground();
         } catch (Exception ex) {
             MyLogger.e(TAG, ex);

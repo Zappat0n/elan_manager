@@ -17,20 +17,16 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
     final Integer event_id;
     final Integer event_sub;
     int oldValue;
-    final JTable tablePresentations;
-    final JTable tablePlanning;
     final int row;
     final int column;
     final Date date;
-    private final ClassroomFormData formData;
+    private final ClassroomForm form;
 
-    public MyPopUpMenuPlanning(int student, String event, JTable tablePresentations, JTable tablePlanning, int row,
-                               int column, Date date, ClassroomFormData formData) {
-        this.formData = formData;
+    public MyPopUpMenuPlanning(ClassroomForm form, int student, String event, int row,
+                               int column, Date date) {
+        this.form = form;
         this.student = student;
         this.event = event;
-        this.tablePresentations = tablePresentations;
-        this.tablePlanning = tablePlanning;
         this.row = row;
         this.column = column;
         this.date = date;
@@ -49,12 +45,12 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         removeValue(student, event_id, event_sub, date, MyPopUpMenuPresentations.planning_values[column-1]);
-        tablePlanning.getModel().setValueAt(null, row, column);
+        form.tablePlanning.getModel().setValueAt(null, row, column);
         String id = event_id + "." + ((event_sub != null) ? event_sub : 0);
-        int row = formData.presentations.indexOf(id);
+        int row = form.formData.presentations.indexOf(id);
         if (row != -1) {
-            int col = formData.students.indexOf(student)+1;
-            tablePresentations.setValueAt(0, row, col);
+            int col = form.formData.students.indexOf(student)+1;
+            form.tablePresentations.setValueAt(0, row, col);
         }
     }
 

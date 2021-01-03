@@ -27,14 +27,14 @@ public class ClassroomForm {
 
     public JPanel mainPanel;
     private JList<String> listClassrooms;
-    private JTable tablePresentations;
+    public JTable tablePresentations;
     private JList<String> listStage;
     private JList<String> listArea;
     private JButton buttonCopy;
     private JTextField tFSearch;
     private UtilDateModel dateModel;
     public JDatePickerImpl datePicker;
-    private JTable tablePlanning;
+    public JTable tablePlanning;
     private JButton buttonPrint;
     private JSplitPane mainSP;
     private JList<String> listSearch;
@@ -100,10 +100,8 @@ public class ClassroomForm {
                 public void columnSelectionChanged(ListSelectionEvent listSelectionEvent) { }
             });
 
-            tablePresentations.addMouseListener(new MyMouseAdapter(co, new java.sql.Date(dateModel.getValue().getTime()),
-                    tablePresentations, tablePlanning, formData));
-            tablePlanning.addMouseListener(new MyMouseAdapter(co, new java.sql.Date(dateModel.getValue().getTime()),
-                    tablePresentations, tablePlanning, formData));
+            tablePresentations.addMouseListener(new MyMouseAdapter(this, co, new java.sql.Date(dateModel.getValue().getTime())));
+            tablePlanning.addMouseListener(new MyMouseAdapter(this, co, new java.sql.Date(dateModel.getValue().getTime())));
             formData.setTables(tablePresentations);
 
             listClassrooms = new JList<>();
@@ -296,4 +294,18 @@ public class ClassroomForm {
             }
         });
     }
+
+    public void paintValue(Integer event_id, Integer event_sub, Integer student, int newValue) {
+        String id = event_id + "." + (event_sub != null ? event_sub : "0");
+        int row = formData.presentations.indexOf(id);
+        int col = formData.students.indexOf(student)+1;
+        if (row != -1) tablePresentations.setValueAt(newValue, row, col);
+        else MyLogger.d(TAG, "Data point lost");
+        if (newValue > 3) {
+            MyTableModelPlanning model = (MyTableModelPlanning) tablePlanning.getModel();
+            model.setValue(event_id, event_sub, col-1, newValue - 3);
+        }
+    }
+
+
 }

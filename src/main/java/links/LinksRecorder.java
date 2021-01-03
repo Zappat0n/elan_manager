@@ -18,6 +18,7 @@ class LinksRecorder extends Thread {
     private final java.sql.Date endDate;
     private final JProgressBar pBar;
     private Statement st;
+    private final LinkManager linkManager;
 
     public LinksRecorder(BDManager bdManager, Connection co, java.sql.Date startDate, java.sql.Date endDate,
                          JProgressBar pBar) {
@@ -25,6 +26,7 @@ class LinksRecorder extends Thread {
         this.startDate = startDate;
         this.endDate = endDate;
         this.pBar = pBar;
+        linkManager = new LinkManager();
     }
 
     @Override
@@ -45,7 +47,7 @@ class LinksRecorder extends Thread {
                 int student = set.getInt(TableEvents.student);
                 int eventId = set.getInt(TableEvents.id);
                 int eventType = set.getInt(TableEvents.event_type);
-                ApplicationLoader.linkManager.recordLinksForPresentation(presentation, presentationSub, eventType, date, student, eventId);
+                linkManager.recordLinksForPresentation(presentation, presentationSub, eventType, date, student, eventId);
                 pBar.setValue(i++);
             }
             ApplicationLoader.bdManager.executeBatch(st);

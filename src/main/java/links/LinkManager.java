@@ -1,6 +1,7 @@
 package links;
 
 import bd.BDManager;
+import bd.EventCondition;
 import bd.MySet;
 import bd.model.TableEvents;
 import main.ApplicationLoader;
@@ -60,6 +61,19 @@ public class LinkManager {
             MyLogger.e(TAG, e);
         } finally {
             if (statementCreated) BDManager.closeQuietly(statement);
+        }
+    }
+
+    public void deleteBrokenLink(EventCondition condition, Statement st, Integer event_type, int nc) throws SQLException {
+        String sql = EventCondition.getCondition(condition.student, event_type, nc, null) +
+                " AND notes IS NOT NULL";
+        MySet set = new MySet(st.executeQuery(BDManager.tableEvents.getValues(sql)), BDManager.tableEvents, null);
+        while (set.next()) {
+            Integer id = set.getInt(TableEvents.id);
+            String notes = set.getString(TableEvents.notes);
+            MySet set2 = new MySet(st.executeQuery(BDManager.tableEvents.getValues("id = " + notes)),
+                    BDManager.tableEvents, null);
+            if (!set2.next()) st.executeUpdate("DELETE FROM Events WHERE id = " + id);
         }
     }
 
