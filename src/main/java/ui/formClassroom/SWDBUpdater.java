@@ -7,15 +7,12 @@ import bd.model.TableEvents;
 import links.MultipleLinkManager;
 import main.ApplicationLoader;
 import planning.PlanningManager;
-import utils.CacheManager;
 import utils.MyLogger;
-import utils.SettingsManager;
 import utils.data.RawData;
 
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class SWDBUpdater extends SwingWorker<Boolean, Integer> {
     private static final String TAG = SWDBUpdater.class.getSimpleName();

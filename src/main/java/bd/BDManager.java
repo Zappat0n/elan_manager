@@ -2,6 +2,7 @@ package bd;
 
 import bd.model.*;
 import main.ApplicationLoader;
+import ui.MainForm;
 import utils.MyLogger;
 import utils.SettingsManager;
 
@@ -47,7 +48,6 @@ public class BDManager {
 
     private Connection co = null;
     private Statement st = null;
-    private JFrame frame;
     private final String user;
     private final String password;
     public Boolean noData = false;
@@ -172,7 +172,7 @@ public class BDManager {
     }
 
     private void showError(String error) {
-        JOptionPane.showMessageDialog(frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(MainForm.frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
     public void addValue(MyTable table, String[] key, String[] value) {
@@ -339,7 +339,7 @@ public class BDManager {
     }
 
     public void removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
-        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
+        if (confirm && JOptionPane.showConfirmDialog(MainForm.frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
         if (table == null) return;
         executeQueryUpdate(co, table.removeValue(condition));
     }

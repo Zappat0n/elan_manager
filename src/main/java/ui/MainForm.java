@@ -21,7 +21,7 @@ import java.awt.event.WindowEvent;
 /**
  * Created by angel on 5/02/17.
  */
-class MainForm {
+public class MainForm {
     private static final String TAG = MainForm.class.getSimpleName();
     public static JFrame frame;
     private JPanel mainPanel;
