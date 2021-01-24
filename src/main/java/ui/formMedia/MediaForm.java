@@ -38,7 +38,7 @@ public class MediaForm {
     private JTextArea textAreaComments;
     private JLabel labelPresentation;
     private JLabel labelPresentationSub;
-    private UtilDateModel dateModel;
+    private UtilDateModel dateModelImplPictureDate;
     private JDatePickerImpl datePickerImplPictureDate;
     private JButton buttonUpdate;
     private JButton buttonDelete;
@@ -51,6 +51,10 @@ public class MediaForm {
     private JButton buttonTurnRight;
     private JButton buttonUpload;
     private JButton buttonTurnLeft;
+    private UtilDateModel dateModelIni;
+    private JDatePickerImpl datePickerIni;
+    private UtilDateModel dateModelEnd;
+    private JDatePickerImpl datePickerEnd;
     public DriveGovernor driveGovernor;
     private HashMap<JRadioButton, MediaPicture> mediaFiles;
     private ArrayList<Integer> subareas;
@@ -82,14 +86,22 @@ public class MediaForm {
         BoxLayout layout = new BoxLayout(panelImgs, BoxLayout.PAGE_AXIS);
         panelImgs.setLayout(layout);
 
-        dateModel = new UtilDateModel();
+        dateModelImplPictureDate = new UtilDateModel();
+        dateModelIni = new UtilDateModel();
+        dateModelEnd = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
-        datePickerImplPictureDate = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        dateModel.setValue(new Date());
+        datePickerIni = new JDatePickerImpl(new JDatePanelImpl(dateModelIni, p), new DateLabelFormatter());
+        datePickerEnd = new JDatePickerImpl(new JDatePanelImpl(dateModelEnd, p), new DateLabelFormatter());
+        Calendar cal = Calendar.getInstance();
+        dateModelEnd.setValue(cal.getTime());
+        cal.add(Calendar.MONTH, -3);
+        dateModelIni.setValue(cal.getTime());
+
+        datePickerImplPictureDate = new JDatePickerImpl(new JDatePanelImpl(dateModelImplPictureDate, p), new DateLabelFormatter());
+        dateModelImplPictureDate.setValue(new Date());
 
         listClassrooms = new JList<>(cacheManager.getClassroomsListModel());
         listStudents = new JList<>();
@@ -134,7 +146,7 @@ public class MediaForm {
                 co = bdManager.connect();
                 //id, date, student, presentation, presentation_sub, comment, fileId;
                 String[] keys = {TableMedia.date, TableMedia.comment};
-                java.sql.Date newDate = new java.sql.Date(dateModel.getValue().getTime());
+                java.sql.Date newDate = new java.sql.Date(dateModelImplPictureDate.getValue().getTime());
                 String newComment = textAreaComments.getText();
                 String[] values = {newDate.toString(), newComment};
                 bdManager.updateValues(co, BDManager.tableMedia, keys, values, TableMedia.id + "=" + currentPicture.id);
@@ -232,7 +244,7 @@ public class MediaForm {
         buttonUpload.addActionListener(actionEvent -> {
             MediaPicture picture = mediaFiles.get(currentItem);
             picture.image = currentPicture.image;
-            driveGovernor.manager.updateFile(picture.fileId, dateModel.getValue(), picture);
+            driveGovernor.manager.updateFile(picture.fileId, dateModelImplPictureDate.getValue(), picture);
         });
     }
 
@@ -283,7 +295,7 @@ public class MediaForm {
 
                     currentPicture = mediaFiles.get(currentItem);
                     if (currentPicture.image != null) labelMainImg.setIcon(new ImageIcon(currentPicture.image));
-                    dateModel.setValue(new Date(currentPicture.date.getTime()));
+                    dateModelImplPictureDate.setValue(new Date(currentPicture.date.getTime()));
                     labelPresentation.setText(
                             (String)cacheManager.presentations.get(currentPicture.presentation)[settingsManager.language]);
                     if (currentPicture.presentationSub != null && currentPicture.presentationSub != -1)
@@ -323,7 +335,10 @@ public class MediaForm {
             Connection co = null;
             try {
                 co = bdManager.connect();
-                MySet set = bdManager.getValues(co, BDManager.tableMedia, TableMedia.student + "=" + student);
+                MySet set = bdManager.getValues(co, BDManager.tableMedia,
+                        TableMedia.student + "=" + student + " AND date >= '" +
+                                new java.sql.Date(dateModelIni.getValue().getTime()) + " AND date <= " +
+                                new java.sql.Date(dateModelEnd.getValue().getTime()) + "'");
                 int counter = 1;
                 if (set.size() > 0)
                     while (set.next()) {

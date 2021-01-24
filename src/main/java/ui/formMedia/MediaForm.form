@@ -132,6 +132,37 @@
                                   <text value="DELETE"/>
                                 </properties>
                               </component>
+                              <component id="d5392" class="javax.swing.JLabel">
+                                <constraints/>
+                                <properties>
+                                  <text value="    Date range:  "/>
+                                </properties>
+                              </component>
+                              <component id="7e835" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerIni" custom-create="true">
+                                <constraints/>
+                                <properties>
+                                  <buttonFocusable value="false"/>
+                                  <maximumSize width="1000" height="32767"/>
+                                  <preferredSize width="120" height="10"/>
+                                </properties>
+                              </component>
+                              <component id="77b46" class="javax.swing.JLabel">
+                                <constraints/>
+                                <properties>
+                                  <text value=" : "/>
+                                </properties>
+                              </component>
+                              <component id="b9484" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerEnd" custom-create="true">
+                                <constraints/>
+                                <properties>
+                                  <buttonFocusable value="false"/>
+                                  <maximumSize width="1000" height="32767"/>
+                                  <preferredSize width="120" height="10"/>
+                                </properties>
+                              </component>
+                              <hspacer id="97588">
+                                <constraints/>
+                              </hspacer>
                             </children>
                           </toolbar>
                           <tabbedpane id="beadc">
