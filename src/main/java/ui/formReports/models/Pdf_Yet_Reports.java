@@ -1,14 +1,12 @@
 package ui.formReports.models;
 
-import bd.BDManager;
+import main.ApplicationLoader;
 import pdfs.tables.Cell;
 import pdfs.tables.Row;
 import pdfs.tables.Table;
 import ui.formReports.managers.ReportManager;
 import ui.formReports.managers.YetManager;
-import utils.CacheManager;
 import utils.MyLogger;
-import utils.SettingsManager;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -37,15 +35,14 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
     YetManager yetManager;
     ReportManager reportManager;
 
-    public Pdf_Yet_Reports(BDManager bdManager, Connection co, CacheManager cacheManager, SettingsManager settingsManager,
-                           Integer studentId, Integer classroom, Date reportDate, BufferedImage logo,
+    public Pdf_Yet_Reports(Connection co, Integer studentId, Integer classroom, Date reportDate, BufferedImage logo,
                            ReportManager reportManager, DefaultListModel<String> log) {
-        super(bdManager, cacheManager, settingsManager, co, studentId, classroom, reportDate, "Yet", logo);
+        super(co, studentId, classroom, reportDate, "Yet", logo);
         try {
             this.reportManager = reportManager;
             this.log = log;
-            yetManager = new YetManager(bdManager, settingsManager, reportManager, null, null,
-                    null, null, new java.sql.Date(reportDate.getTime()), classroom, studentId);
+            yetManager = new YetManager(reportManager, null, null, null, null,
+                    new java.sql.Date(reportDate.getTime()), classroom, studentId);
             data = yetManager.load();
             if (data[1] == null && data[2] == null && data[3] == null) {
                 isEmpty = true; return;
@@ -128,7 +125,7 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
         tableBuilder.setFont(font);
 
         Row.RowBuilder rowBuilder = new Row.RowBuilder();
-        String[] titles = new String[] {"Name: " + cacheManager.students.get(studentId)[0],
+        String[] titles = new String[] {"Name: " + ApplicationLoader.cacheManager.students.get(studentId)[0],
                 "Term " + reportManager.getTerm() + ". " + reportManager.getAcademicYears() + ". " +
                         PDFForm_Reports.stages[stageId]+ "."};
         for (String titleCell : titles) {
@@ -176,7 +173,7 @@ public class Pdf_Yet_Reports extends PDFForm_Reports {
     private String getTeachers() {
         StringBuilder teachers = null;
         boolean first = true;
-        for (Object[] data : cacheManager.teachers.values()) {
+        for (Object[] data : ApplicationLoader.cacheManager.teachers.values()) {
             if (data[1] == classroom) {
                 if (first) {
                     teachers = new StringBuilder((String) data[0]);

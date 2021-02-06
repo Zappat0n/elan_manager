@@ -107,11 +107,11 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
             max = students.size();
             progressBar.setMaximum(max);
             for (Integer studentId : students) {
-                ReportManager reportManager = new ReportManager(cacheManager, new java.sql.Date(reportDate.getTime()), student);
+                ReportManager reportManager = new ReportManager(new java.sql.Date(reportDate.getTime()), student);
                 setProgress(i++);
                 if (doYetReport) {
-                    Pdf_Yet_Reports pdf1 = new Pdf_Yet_Reports(bdManager, co, cacheManager, settingsManager, studentId, classroom,
-                            reportDate, logo, reportManager, log);
+                    Pdf_Yet_Reports pdf1 = new Pdf_Yet_Reports(co, studentId, classroom, reportDate, logo,
+                            reportManager, log);
                     teacher = pdf1.teacher;
                     f1 = (!pdf1.isEmpty ? new File(pdf1.createDocument()) : null);
                 }
@@ -121,8 +121,8 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
                     f2 = new File(pdf2.createDocument());
                 }
                 if (doEoYReport) {
-                    Pdf_EoY_Reports pdf3 = new Pdf_EoY_Reports(bdManager, co, cacheManager,  settingsManager, studentId,
-                            classroom, reportDate, logo, reportManager, doEoYComments, doEoYPhotos, log);
+                    Pdf_EoY_Reports pdf3 = new Pdf_EoY_Reports(co, studentId, classroom, reportDate, logo,
+                            reportManager, doEoYComments, doEoYPhotos, log);
                     f3 = new File(pdf3.createDocument());
                 }
                 if (f1!=null || f2!=null || f3!=null) {

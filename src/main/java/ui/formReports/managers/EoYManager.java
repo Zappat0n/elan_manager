@@ -3,8 +3,8 @@ package ui.formReports.managers;
 import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEventsEoY;
+import main.ApplicationLoader;
 import utils.MyLogger;
-import utils.SettingsManager;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -18,8 +18,6 @@ import static bd.BDManager.encodeString;
 
 public class EoYManager {
     private static final String TAG = EoYManager.class.getSimpleName();
-    private final BDManager bdManager;
-    private final SettingsManager settingsManager;
     final ArrayList<JTextArea> textAreas;
     private final Date date;
     private final Integer classroom;
@@ -27,10 +25,7 @@ public class EoYManager {
     private final ReportManager reportManager;
     public Integer teacher;
 
-    public EoYManager(BDManager bdManager, SettingsManager settingsManager, ReportManager reportManager,
-                      ArrayList<JTextArea> textAreas, Date date, Integer classroom, Integer student) {
-        this.bdManager = bdManager;
-        this.settingsManager = settingsManager;
+    public EoYManager(ReportManager reportManager, ArrayList<JTextArea> textAreas, Date date, Integer classroom, Integer student) {
         this.reportManager = reportManager;
         this.textAreas = textAreas;
         this.date = date;
@@ -43,8 +38,8 @@ public class EoYManager {
 
         Connection co = null;
         try {
-            co = bdManager.connect();
-            MySet set = bdManager.getValues(co, BDManager.tableEventsEoY, getCondition());
+            co = ApplicationLoader.bdManager.connect();
+            MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableEventsEoY, getCondition());
             while (set.next()) {
                 Integer event_id = set.getInt(TableEventsEoY.event_id);
                 String notes = set.getString(TableEventsEoY.notes);
@@ -64,7 +59,7 @@ public class EoYManager {
         Connection co = null;
         Statement st = null;
         try {
-            co = bdManager.connect();
+            co = ApplicationLoader.bdManager.connect();
             st = co.createStatement();
             st.executeUpdate("DELETE FROM " + BDManager.tableEventsEoY.getName() + " WHERE " + getCondition());
             for (int i = 0; i < textAreas.size(); i++) {
@@ -90,7 +85,7 @@ public class EoYManager {
     private String getInsertString(Integer student, Integer event_id, String text) {
         return "INSERT INTO `" + TableEventsEoY.table_name + "` (`date`, `student`, `event_id`, `notes`, " +
                 "`teacher`) VALUES('" + date + "'," + student + "," + event_id + "," + (text != null ? "'" +
-                text + "'" : "NULL")+ "," + settingsManager.teacher + ");";
+                text + "'" : "NULL")+ "," + ApplicationLoader.settingsManager.teacher + ");";
     }
 
 }
