@@ -125,21 +125,25 @@ public class MyTableModelTargets extends AbstractTableModel {
     }
 
     public static int getTarget_typeValue(Integer event_type) {
-        return switch (event_type) {
-            case 2 -> 1;
-            case 4 -> 2;
-            case 5 -> 3;
-            default -> 0;
-        };
+        int result;
+        switch (event_type) {
+            case 2 : result = 1; break;
+            case 4 : result = 2; break;
+            case 5 : result = 3; break;
+            default : result = 0;
+        }
+        return result;
     }
 
     public static int getOutcome_typeValue(Integer event_type) {
-        return switch (event_type) {
-            case 9 -> 1;
-            case 10 -> 2;
-            case 11 -> 3;
-            default -> 0;
-        };
+        int result;
+        switch (event_type) {
+            case 9 : result = 1; break;
+            case 10 : result = 2; break;
+            case 11 : result = 3; break;
+            default : result = 0;
+        }
+        return result;
     }
 
     @Override
@@ -178,13 +182,15 @@ public class MyTableModelTargets extends AbstractTableModel {
                 return (String)cacheManager.targets.get(targets.get(rowIndex-outcomes.size()))[settingsManager.language];
         }
 
-        return switch (data[rowIndex][columnIndex - 1]) {
-            case 0 -> "";
-            case 1 -> "/";
-            case 2 -> "Λ";
-            case 3 -> "Δ";
-            default -> null;
-        };
+        String result;
+        switch (data[rowIndex][columnIndex - 1]) {
+            case 0 : result = ""; break;
+            case 1 : result = "/"; break;
+            case 2 : result = "Λ"; break;
+            case 3 : result = "Δ"; break;
+            default : result = null;
+        }
+        return result;
     }
 
     @Override

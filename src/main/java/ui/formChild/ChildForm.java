@@ -72,15 +72,15 @@ public class ChildForm {
         List<Integer> areas;
 
         for (int i = 0; i < 6; i++) {
-            year = switch (i) {
-                case 0 -> 2.5;
-                case 1 -> 5;
-                case 2 -> 6;
-                case 3 -> 7;
-                case 4 -> 8;
-                case 5 -> 9;
-                default -> 0;
-            };
+            switch (i) {
+                case 0 : year = 2.5; break;
+                case 1 : year = 5; break;
+                case 2 : year = 6; break;
+                case 3 : year = 7; break;
+                case 4 : year = 8; break;
+                case 5 : year = 9; break;
+                default : year = 0;
+            }
             areas = RawData.areasTargetperStage.get(year);
             for (Integer area : areas) {
                 createTargetsList(year, area);

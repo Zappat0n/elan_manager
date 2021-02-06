@@ -178,8 +178,8 @@ public class PresentationPage extends PDPage {
     private Table.TableBuilder createTableBuilder(int columns, int fontSize, float percentage) {
         Table.TableBuilder tableBuilder = new Table.TableBuilder();
         switch (columns) {
-            case 1 -> tableBuilder.addColumnOfWidth(Math.round(tableWidth));
-            case 2 -> {
+            case 1 : tableBuilder.addColumnOfWidth(Math.round(tableWidth)); break;
+            case 2 : {
                 tableBuilder.addColumnOfWidth(Math.round(tableWidth * percentage));
                 tableBuilder.addColumnOfWidth(Math.round(tableWidth * (1 - percentage)));
             }

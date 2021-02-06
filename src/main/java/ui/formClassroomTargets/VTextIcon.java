@@ -155,12 +155,13 @@ public class VTextIcon implements Icon, PropertyChangeListener {
 				int tweak;
                 // Roman fonts should be centered. Japanese fonts are always monospaced.
                 switch (fPosition[i]) {
-                    case POSITION_NORMAL -> g.drawString(fCharStrings[i], x + ((fWidth - fCharWidths[i]) / 2), yPos);
-                    case POSITION_TOP_RIGHT -> {
+					case POSITION_NORMAL : g.drawString(fCharStrings[i], x + ((fWidth - fCharWidths[i]) / 2), yPos); break;
+					case POSITION_TOP_RIGHT : {
                         tweak = fCharHeight / 3; // Should be 2, but they aren't actually half-height
                         g.drawString(fCharStrings[i], x + (tweak / 2), yPos - tweak);
+                        break;
                     }
-                    case POSITION_FAR_TOP_RIGHT -> {
+					case POSITION_FAR_TOP_RIGHT : {
                         tweak = fCharHeight - fCharHeight / 3;
                         g.drawString(fCharStrings[i], x + (tweak / 2), yPos - tweak);
                     }

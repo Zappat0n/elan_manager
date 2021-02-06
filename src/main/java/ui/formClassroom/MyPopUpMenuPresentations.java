@@ -45,16 +45,16 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
         int[] columns = form.tablePresentations.getSelectedColumns();
 
         switch (item.getText()) {
-            case " " -> newValue = 0;
-            case "/" -> newValue = 1;
-            case "Λ" -> newValue = 2;
-            case "Δ" -> newValue = 3;
-            case "M" -> newValue = 4;
-            case "T" -> newValue = 5;
-            case "W" -> newValue = 6;
-            case "Th" -> newValue = 7;
-            case "F" -> newValue = 8;
-            case "Clear" -> {
+            case " " : newValue = 0; break;
+            case "/" : newValue = 1; break;
+            case "Λ" : newValue = 2; break;
+            case "Δ" : newValue = 3; break;
+            case "M" : newValue = 4; break;
+            case "T" : newValue = 5; break;
+            case "W" : newValue = 6; break;
+            case "Th" : newValue = 7; break;
+            case "F" : newValue = 8; break;
+            case "Clear" : {
             }
         }
 

@@ -249,23 +249,27 @@ public class MediaForm {
     }
 
     private Integer[] getMonths(){
-        return switch (listClassrooms.getSelectedIndex()) {
-            case 0 -> RawData.monthsOutcomesForEY;
-            case 1, 2 -> RawData.monthsOutcomesForFS;
-            default -> null;
-        };
+        Integer[] result;
+        switch (listClassrooms.getSelectedIndex()) {
+            case 0 : result = RawData.monthsOutcomesForEY; break;
+            case 1 : case 2 : result = RawData.monthsOutcomesForFS; break;
+            default : result = null;
+        }
+        return result;
     }
 
     private Double[] getYears(){
-        return switch (listClassrooms.getSelectedIndex()) {
-            case 0 -> new Double[]{2.5};
-            case 1 -> new Double[]{5d, 6d};
-            default -> null;
-        };
+        Double[] result;
+        switch (listClassrooms.getSelectedIndex()) {
+            case 0 : result = new Double[]{2.5}; break;
+            case 1 : result = new Double[]{5d, 6d}; break;
+            default : result = null;
+        }
+        return result;
     }
 
 
-    private class SWLoadImages extends SwingWorker {
+    private class SWLoadImages extends SwingWorker<Object, Object> {
         ImageIcon blankImage;
         final Integer student;
 

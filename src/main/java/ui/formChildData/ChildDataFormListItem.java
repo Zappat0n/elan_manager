@@ -224,12 +224,12 @@ public class ChildDataFormListItem extends JPanel {
         else
         if (!isTitle)
             switch (getTerm(settingsManager, date)) {
-                case 0 -> label.setBackground(color0);
-                case 1 -> label.setBackground(color1);
-                case 2 -> label.setBackground(color2);
-                case 3 -> label.setBackground(color3);
-                case 4 -> label.setBackground(color4);
-                default -> label.setBackground(Color.WHITE);
+                case 0 : label.setBackground(color0); break;
+                case 1 : label.setBackground(color1); break;
+                case 2 : label.setBackground(color2); break;
+                case 3 : label.setBackground(color3); break;
+                case 4 : label.setBackground(color4); break;
+                default : label.setBackground(Color.WHITE);
             }
     }
 
@@ -244,13 +244,15 @@ public class ChildDataFormListItem extends JPanel {
     }
 
     public static Color getColor(SettingsManager settingsManager, Date date){
-        return switch (getTerm(settingsManager, date)) {
-            case 0 -> color0;
-            case 1 -> color1;
-            case 2 -> color2;
-            case 3 -> color3;
-            case 4 -> color4;
-            default -> Color.WHITE;
-        };
+        Color result;
+        switch (getTerm(settingsManager, date)) {
+            case 0 : result = color0; break;
+            case 1 : result = color1; break;
+            case 2 : result = color2; break;
+            case 3 : result = color3; break;
+            case 4 : result = color4; break;
+            default : result = Color.WHITE;
+        }
+        return result;
     }
 }

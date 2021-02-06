@@ -146,175 +146,209 @@ public class ChildDataForm {
         double year = -1d;
         int area = -1;
         switch (textArea.getName()) {
-            case "textArea1" -> {
+            case "textArea1" : {
                 event_id = 1;
                 year = 2.5;
                 area = 1;
+                break;
             }
-            case "textArea2" -> {
+            case "textArea2" : {
                 event_id = 2;
                 year = 2.5;
                 area = 2;
+                break;
             }
-            case "textArea3" -> {
+            case "textArea3" : {
                 event_id = 3;
                 year = 2.5;
                 area = 3;
+                break;
             }
-            case "textArea4" -> {
+            case "textArea4" : {
                 event_id = 10;
                 year = 2.5;
                 area = 10;
+                break;
             }
-            case "textArea5" -> {
+            case "textArea5" : {
                 event_id = 91;
                 year = 2.5;
                 area = 91;
+                break;
             }
-            case "textArea6" -> {
+            case "textArea6" : {
                 event_id = 92;
                 year = 2.5;
                 area = 92;
+                break;
             }
-            case "5.4" -> {
+            case "5.4" : {
                 event_id = 504;
                 year = 5d;
                 area = 4;
+                break;
             }
-            case "5.5" -> {
+            case "5.5" : {
                 event_id = 505;
                 year = 5d;
                 area = 5;
+                break;
             }
-            case "5.6" -> {
+            case "5.6" : {
                 event_id = 506;
                 year = 5d;
                 area = 6;
+                break;
             }
-            case "5.1" -> {
+            case "5.1" : {
                 event_id = 501;
                 year = 5d;
                 area = 1;
+                break;
             }
-            case "5.7" -> {
+            case "5.7" : {
                 event_id = 507;
                 year = 5d;
                 area = 7;
+                break;
             }
-            case "5.9" -> {
+            case "5.9" : {
                 event_id = 509;
                 year = 5d;
                 area = 9;
+                break;
             }
-            case "5.10" -> {
+            case "5.10" : {
                 event_id = 510;
                 year = 5d;
                 area = 10;
+                break;
             }
-            case "5.11" -> {
+            case "5.11" : {
                 event_id = 511;
                 year = 5d;
                 area = 11;
+                break;
             }
-            case "5.13" -> {
+            case "5.13" : {
                 event_id = 513;
                 year = 5d;
                 area = 13;
+                break;
             }
-            case "5.3" -> {
+            case "5.3" : {
                 event_id = 503;
                 year = 5d;
                 area = 3;
+                break;
             }
-            case "5.NS" -> {
+            case "5.NS" : {
                 event_id = 591;
                 year = 5d;
                 area = 91;
+                break;
             }
-            case "5.PT" -> {
+            case "5.PT" : {
                 event_id = 592;
                 year = 5d;
                 area = 92;
+                break;
             }
-            case "6.8" -> {
+            case "6.8" : {
                 event_id = 608;
                 year = 6d;
                 area = 8;
+                break;
             }
-            case "6.5" -> {
+            case "6.5" : {
                 event_id = 605;
                 year = 6d;
                 area = 5;
+                break;
             }
-            case "6.9" -> {
+            case "6.9" : {
                 event_id = 609;
                 year = 6d;
                 area = 9;
+                break;
             }
-            case "6.7" -> {
+            case "6.7" : {
                 event_id = 607;
                 year = 6d;
                 area = 7;
+                break;
             }
-            case "6.10" -> {
+            case "6.10" : {
                 event_id = 610;
                 year = 6d;
                 area = 10;
+                break;
             }
-            case "6.11" -> {
+            case "6.11" : {
                 event_id = 611;
                 year = 6d;
                 area = 11;
+                break;
             }
-            case "6.13" -> {
+            case "6.13" : {
                 event_id = 613;
                 year = 6d;
                 area = 13;
+                break;
             }
-            case "6.14" -> {
+            case "6.14" : {
                 event_id = 614;
                 year = 6d;
                 area = 14;
+                break;
             }
-            case "6.1" -> {
+            case "6.1" : {
                 event_id = 601;
                 year = 6d;
                 area = 1;
+                break;
             }
-            case "6.15" -> {
+            case "6.15" : {
                 event_id = 615;
                 year = 6d;
                 area = 15;
+                break;
             }
-            case "6.16" -> {
+            case "6.16" : {
                 event_id = 616;
                 year = 6d;
                 area = 16;
+                break;
             }
-            case "6.17" -> {
+            case "6.17" : {
                 event_id = 617;
                 year = 6d;
                 area = 17;
+                break;
             }
-            case "6.3" -> {
+            case "6.3" : {
                 event_id = 603;
                 year = 6d;
                 area = 3;
+                break;
             }
-            case "6.18" -> {
+            case "6.18" : {
                 event_id = 618;
                 year = 6d;
                 area = 18;
+                break;
             }
-            case "6.NS" -> {
+            case "6.NS" : {
                 event_id = 691;
                 year = 6d;
                 area = 91;
+                break;
             }
-            case "6.PT" -> {
+            case "6.PT" : {
                 event_id = 692;
                 year = 6d;
                 area = 92;
+                break;
             }
         }
         oldText = oldTexts.get(year).get(area);
@@ -562,17 +596,19 @@ public class ChildDataForm {
         Set<Integer> areas = null;
         for (int i = 0; i <= 1; i++) {
             switch (i) {
-                case 0 -> {
+                case 0 : {
                     startYear = 0;
                     endYear = 5.5;
                     areas = cacheManager.stageAreaSubareaMontessori.get(1).keySet();
+                    break;
                 }
-                case 1 -> {
+                case 1 : {
                     startYear = 6;
                     endYear = 7;
                     areas = cacheManager.stageAreaSubareaMontessori.get(2).keySet();
+                    break;
                 }
-                default -> {
+                default : {
                     startYear = 0;
                     endYear = 0;
                 }
@@ -600,39 +636,47 @@ public class ChildDataForm {
         List<Integer> areas;
         for (int i = 0; i < 8; i++) {
             switch (i) {
-                case 0 -> {
+                case 0 : {
                     year = 2.5;
                     pane = tPTargetsEYs;
+                    break;
                 }
-                case 1 -> {
+                case 1 : {
                     year = 5;
                     pane = tPTargetsFS;
+                    break;
                 }
-                case 2 -> {
+                case 2 : {
                     year = 6;
                     pane = tPTargetsY1;
+                    break;
                 }
-                case 3 -> {
+                case 3 : {
                     year = 7;
                     pane = tPTargetsY2;
+                    break;
                 }
-                case 4 -> {
+                case 4 : {
                     year = 8;
                     pane = tPTargetsY3;
+                    break;
                 }
-                case 5 -> {
+                case 5 : {
                     year = 9;
                     pane = tPTargetsY4;
+                    break;
                 }
-                case 6 -> {
+                case 6 : {
                     year = 10;
                     pane = tPTargetsY5;
+                    break;
                 }
-                case 7 -> {
+                case 7 : {
                     year = 11;
                     pane = tPTargetsY6;
+                    break;
                 }
-                default -> {
+                default : {
                     year = 0;
                     pane = null;
                 }
@@ -688,175 +732,209 @@ public class ChildDataForm {
                                 set.getDate(TableEvents.date)); break;
                     case 99:
                         switch (event_id) {
-                            case 1 -> {
+                            case 1 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(1, text);
                                 textArea1.setText(text);
+                                break;
                             }
-                            case 2 -> {
+                            case 2 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(2, text);
                                 textArea2.setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 3 -> {
+                            case 3 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(3, text);
                                 textArea3.setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 10 -> {
+                            case 10 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(10, text);
                                 textArea4.setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 91 -> {
+                            case 91 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(91, text);
                                 textArea5.setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 92 -> {
+                            case 92 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(2.5d).put(92, text);
                                 textArea6.setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 504 -> {
+                            case 504 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(4, text);
                                 textAreas.get(5d).get(4).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 505 -> {
+                            case 505 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(5, text);
                                 textAreas.get(5d).get(5).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 506 -> {
+                            case 506 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(6, text);
                                 textAreas.get(5d).get(6).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 501 -> {
+                            case 501 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(1, text);
                                 textAreas.get(5d).get(1).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 507 -> {
+                            case 507 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(7, text);
                                 textAreas.get(5d).get(7).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 509 -> {
+                            case 509 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(9, text);
                                 textAreas.get(5d).get(9).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 510 -> {
+                            case 510 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(10, text);
                                 textAreas.get(5d).get(10).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 511 -> {
+                            case 511 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(11, text);
                                 textAreas.get(5d).get(11).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 513 -> {
+                            case 513 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(13, text);
                                 textAreas.get(5d).get(13).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 503 -> {
+                            case 503 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(3, text);
                                 textAreas.get(5d).get(3).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 591 -> {
+                            case 591 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(91, text);
                                 textAreas.get(5d).get(91).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 592 -> {
+                            case 592 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(5d).put(92, text);
                                 textAreas.get(5d).get(92).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 608 -> {
+                            case 608 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(8, text);
                                 textAreas.get(6d).get(8).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 605 -> {
+                            case 605 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(5, text);
                                 textAreas.get(6d).get(5).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 609 -> {
+                            case 609 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(9, text);
                                 textAreas.get(6d).get(9).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 607 -> {
+                            case 607 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(7, text);
                                 textAreas.get(6d).get(7).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 610 -> {
+                            case 610 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(10, text);
                                 textAreas.get(6d).get(10).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 611 -> {
+                            case 611 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(11, text);
                                 textAreas.get(6d).get(11).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 613 -> {
+                            case 613 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(13, text);
                                 textAreas.get(6d).get(13).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 614 -> {
+                            case 614 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(14, text);
                                 textAreas.get(6d).get(14).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 601 -> {
+                            case 601 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(1, text);
                                 textAreas.get(6d).get(1).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 615 -> {
+                            case 615 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(15, text);
                                 textAreas.get(6d).get(15).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 616 -> {
+                            case 616 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(16, text);
                                 textAreas.get(6d).get(16).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 617 -> {
+                            case 617 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(17, text);
                                 textAreas.get(6d).get(17).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 603 -> {
+                            case 603 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(3, text);
                                 textAreas.get(6d).get(3).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 618 -> {
+                            case 618 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(18, text);
                                 textAreas.get(6d).get(18).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 691 -> {
+                            case 691 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(91, text);
                                 textAreas.get(6d).get(91).setText(set.getString(TableEvents.notes));
+                                break;
                             }
-                            case 692 -> {
+                            case 692 : {
                                 text = set.getString(TableEvents.notes);
                                 oldTexts.get(6d).put(92, text);
                                 textAreas.get(6d).get(92).setText(set.getString(TableEvents.notes));
+                                break;
                             }
                         }
                 }
@@ -920,28 +998,32 @@ public class ChildDataForm {
             for (int i = index; i > -1 ; i--) {
                 for (ChildDataFormListItem subitem: subitems) {
                     if (subitem.events[i] != null) continue;
-                    Integer type = switch (subitem.type) {
-                        case 0 -> ChildDataFormListModel.event_typeOutcome[i];
-                        case 1 -> ChildDataFormListModel.event_typeNC[i];
-                        case 2 -> ChildDataFormListModel.event_typeMontessori[i];
-                        default -> null;
-                    };
+                    Integer type;
+                    switch (subitem.type) {
+                        case 0 : type = ChildDataFormListModel.event_typeOutcome[i]; break;
+                        case 1 : type = ChildDataFormListModel.event_typeNC[i]; break;
+                        case 2 : type = ChildDataFormListModel.event_typeMontessori[i]; break;
+                        default : type = null;
+                    }
                     Integer id  = ChildDataForm.bdManager.addEvent(co, date, studentId, type, subitem.getId(),
                             subitem.getSubid(), null);
                     if (id != null) {
                         subitem.setDate(date);
                         switch (i) {
-                            case 0 -> {
+                            case 0 : {
                                 subitem.setBox1(id);
                                 subitem.repaint();
+                                break;
                             }
-                            case 1 -> {
+                            case 1 : {
                                 subitem.setBox2(id);
                                 subitem.repaint();
+                                break;
                             }
-                            case 2 -> {
+                            case 2 : {
                                 subitem.setBox3(id);
                                 subitem.repaint();
+                                break;
                             }
                         }
                     }
@@ -973,15 +1055,17 @@ public class ChildDataForm {
                     if (confirm) confirm = false;
                     subitem.setDate(null);
                     switch (i) {
-                        case 0 -> {
+                        case 0 : {
                             subitem.unsetBox1();
                             subitem.repaint();
+                            break;
                         }
-                        case 1 -> {
+                        case 1 : {
                             subitem.unsetBox2();
                             subitem.repaint();
+                            break;
                         }
-                        case 2 -> {
+                        case 2 : {
                             subitem.unsetBox3();
                             subitem.repaint();
                         }
@@ -1009,21 +1093,23 @@ public class ChildDataForm {
 
         try {
             switch (type) {
-                case 0 -> {
+                case 0 : {
                     type = 1;//{name,subarea,start_month,end_month,nombre}
                     Object[] outcome = cacheManager.outcomes.get(event_id);
                     subarea = (Integer) outcome[1];
                     area = cacheManager.targetSubareaArea.get(subarea);
                     result = type + "/" + outcome[3] + "/" + area;
+                    break;
                 }
-                case 1 -> {
+                case 1 : {
                     Object[] target = cacheManager.targets.get(event_id);
                     subarea = (Integer) target[1];
                     area = cacheManager.targetSubareaArea.get(subarea);
                     year = (Double) target[2];
                     result = type + "/" + year + "/" + area;
+                    break;
                 }
-                case 2 -> {
+                case 2 : {
                     Object[] presentation = cacheManager.presentations.get(event_id);
                     subarea = (Integer) presentation[1];
                     year = (Double) presentation[2];

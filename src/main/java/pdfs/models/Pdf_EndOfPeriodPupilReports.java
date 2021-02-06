@@ -139,10 +139,10 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             int type = rs.getInt(TableEvents.event_type);
             int targetId = rs.getInt(TableEvents.event_id);
             switch (type) {
-                case 2 -> event_points = 2;
-                case 4 -> event_points = 1;
-                case 5 -> event_points = 3;
-                case 99 -> notes.put(targetId, rs.getString(TableEvents.notes));
+                case 2 : event_points = 2; break;
+                case 4 : event_points = 1; break;
+                case 5 : event_points = 3; break;
+                case 99 : notes.put(targetId, rs.getString(TableEvents.notes));
             }
             if (event_points == null) continue;
 

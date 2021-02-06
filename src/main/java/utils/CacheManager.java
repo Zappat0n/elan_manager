@@ -255,10 +255,10 @@ public class CacheManager {
                 String name = set.getString(TableGlobal_vars.name);
                 String value = set.getString(TableGlobal_vars.value);
                 switch (name) {
-                    case SettingsManager.START_OF_YEAR -> ApplicationLoader.settingsManager.setDate_SY(value);
-                    case SettingsManager.FIRST_TERM -> ApplicationLoader.settingsManager.setDate_FT(value);
-                    case SettingsManager.SECOND_TERM -> ApplicationLoader.settingsManager.setDate_ST(value);
-                    case SettingsManager.THIRD_TERM -> ApplicationLoader.settingsManager.setDate_TT(value);
+                    case SettingsManager.START_OF_YEAR : ApplicationLoader.settingsManager.setDate_SY(value); break;
+                    case SettingsManager.FIRST_TERM : ApplicationLoader.settingsManager.setDate_FT(value); break;
+                    case SettingsManager.SECOND_TERM : ApplicationLoader.settingsManager.setDate_ST(value); break;
+                    case SettingsManager.THIRD_TERM : ApplicationLoader.settingsManager.setDate_TT(value);
                 }
             }
         } catch (Exception ex) {
@@ -350,22 +350,26 @@ public class CacheManager {
     }
 
     public Integer getStageOfClassroom(Integer classroom) {
-        return switch (classroom) {
-            case 1 -> 0;
-            case 2, 3 -> 1;
-            case 4 -> 2;
-            default -> null;
-        };
+        Integer result;
+        switch (classroom) {
+            case 1 : result = 0; break;
+            case 2 :  case 3 : result = 1; break;
+            case 4 : result = 2; break;
+            default : result = null;
+        }
+        return result;
     }
 
     public String getNameStageOfClassroom(Integer classroom) {
-        return switch (classroom) {
-            case 1 -> LanguageManager.INFANT_COMMUNITY[ApplicationLoader.settingsManager.language];
-            case 2, 3 -> LanguageManager.CHILDRENS_HOUSE[ApplicationLoader.settingsManager.language];
-            case 4, 5 -> LanguageManager.PRIMARY[ApplicationLoader.settingsManager.language];
-            case 6 -> "Children's House";
-            default -> null;
-        };
+        String result;
+        switch (classroom) {
+            case 1 : result =  LanguageManager.INFANT_COMMUNITY[ApplicationLoader.settingsManager.language]; break;
+            case 2 : case 3 : result =  LanguageManager.CHILDRENS_HOUSE[ApplicationLoader.settingsManager.language]; break;
+            case 4 : case 5 : result =  LanguageManager.PRIMARY[ApplicationLoader.settingsManager.language]; break;
+            case 6 : result =  "Children's House"; break;
+            default : result = null;
+        }
+        return result;
     }
 
 

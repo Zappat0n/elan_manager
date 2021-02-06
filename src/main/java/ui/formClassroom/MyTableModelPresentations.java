@@ -141,18 +141,20 @@ public class MyTableModelPresentations extends AbstractTableModel {
             else return "->" + ApplicationLoader.cacheManager.presentationsSub.get(sub)[ApplicationLoader.settingsManager.language];
         }
 
-        return switch (data[rowIndex][columnIndex - 1]) {
-            case 0 -> "";
-            case 1 -> "/";
-            case 2 -> "Λ";
-            case 3 -> "Δ";
-            case 4 -> "M";
-            case 5 -> "T";
-            case 6 -> "W";
-            case 7 -> "Th";
-            case 8 -> "F";
-            default -> null;
-        };
+        String result;
+        switch (data[rowIndex][columnIndex - 1]) {
+            case 0 : result = ""; break;
+            case 1 : result = "/"; break;
+            case 2 : result = "Λ"; break;
+            case 3 : result = "Δ"; break;
+            case 4 : result = "M"; break;
+            case 5 : result = "T"; break;
+            case 6 : result = "W"; break;
+            case 7 : result = "Th"; break;
+            case 8 : result = "F"; break;
+            default : result = null;
+        }
+        return result;
     }
 
     @Override

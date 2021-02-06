@@ -209,8 +209,8 @@ public class TableDrawer {
         for ( String line : lines) {
             final float textWidth = (table.getFont().getStringWidth(line) / 1000f) * table.getFontSize();
             switch (cell.getHorizontalAlignment()) {
-                case RIGHT -> xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
-                case CENTER -> {
+                case RIGHT : xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight())); break;
+                case CENTER : {
                     final float diff = (columnWidth - textWidth) / 2;
                     xOffset = moveX + diff;
                 }

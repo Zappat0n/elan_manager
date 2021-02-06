@@ -91,11 +91,13 @@ public class LinkManager {
     }
 
     private int getType(Boolean isOutcome) {
-        return switch (eventType) {
-            case 1 -> isOutcome ? 9 : 4;
-            case 6 -> isOutcome ? 10 : 2;
-            case 7 -> isOutcome ? 11 : 5;
-            default -> 0;
-        };
+        int result;
+        switch (eventType) {
+            case 1 : result = isOutcome ? 9 : 4; break;
+            case 6 : result = isOutcome ? 10 : 2; break;
+            case 7 : result = isOutcome ? 11 : 5; break;
+            default : result = 0;
+        }
+        return result;
     }
 }

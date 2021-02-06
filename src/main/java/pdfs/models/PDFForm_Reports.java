@@ -411,20 +411,20 @@ public class PDFForm_Reports {
         while (set.next()) {
             Integer event_type = set.getInt(TableEvents.event_type);
             switch (event_type) {
-                case 2 -> processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 4 -> processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 5 -> processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 9 -> processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 10 -> processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 11 -> processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 12 -> notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes));
-                case 15 -> {
+                case 2 : processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 4 : processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 5 : processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 9 : processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 10 : processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 11 : processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 12 : notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes)); break;
+                case 15 : {
                     java.util.Date date = set.getDate(TableEvents.date);
                     if (lastReportDate == null || date.after(lastReportDate)) lastReportDate = date;
                 }
