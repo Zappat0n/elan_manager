@@ -10,6 +10,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import java.beans.PropertyEditorSupport;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -92,15 +93,17 @@ public class MyTableModelPlanning extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        return switch (column) {
-            case 0 -> "";
-            case 1 -> "Monday";
-            case 2 -> "Tuesday";
-            case 3 -> "Wednesday";
-            case 4 -> "Thursday";
-            case 5 -> "Friday";
-            default -> null;
-        };
+        String result;
+        switch (column) {
+            case 0 : result = ""; break;
+            case 1 : result = "Monday"; break;
+            case 2 : result = "Tuesday"; break;
+            case 3 : result = "Wednesday"; break;
+            case 4 : result = "Thursday"; break;
+            case 5 : result = "Friday"; break;
+            default : result = null;
+        }
+        return result;
     }
 
     @Override
