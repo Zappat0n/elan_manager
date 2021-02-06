@@ -7,6 +7,7 @@ import ui.formClassroomTargets.ClassroomFormTargets;
 import ui.formConfig.ConfigForm;
 import ui.formCurriculum.CurriculumForm;
 import ui.formDatabase.contacts.DBContactsForm;
+import ui.formInternalReports.InternalReportsForm;
 import ui.formMedia.MediaForm;
 import ui.formReports.ReportsForm;
 import ui.formUpload.UploadForm;
@@ -36,6 +37,7 @@ public class MainForm {
     private JButton buttonCurriculum;
     private JButton buttonDatabase;
     private JButton buttonMedia;
+    private JButton buttonInternalReports;
 
     public MainForm() {
     }
@@ -100,6 +102,12 @@ public class MainForm {
             if (!ReportsForm.yetChanged) {
                 addPanelToContainer(ReportsForm.main(ApplicationLoader.settingsManager, ApplicationLoader.bdManager,
                         ApplicationLoader.cacheManager, frame));
+            } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
+        }));
+        buttonInternalReports = new JButton();
+        buttonInternalReports.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+            if (!ReportsForm.yetChanged) {
+                addPanelToContainer(InternalReportsForm.main());
             } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
         }));
         buttonCurriculum = new JButton();

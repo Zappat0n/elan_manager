@@ -4,13 +4,18 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import bd.BDManager;
 import drive.DriveGovernor;
+import ui.MainForm;
 import utils.CacheManager;
 import utils.MyLogger;
+import utils.PlanningManager;
 import utils.SettingsManager;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -26,6 +31,14 @@ public class ConfigForm {
     private JRadioButton rBSpanish;
     private JList<String> listGoogleLog;
     private JButton buttonFoldersCheck;
+    private JButton button1;
+
+    public ConfigForm() {
+        button1.addActionListener(e -> {
+            PlanningManager planner = new PlanningManager(112, new Date(2020,8,5), new Date(2020,11,23));
+            JOptionPane.showMessageDialog(MainForm.frame, planner.name + ": " + planner.age);
+        });
+    }
 
     public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
         ConfigForm.settingsManager = settingsManager;
@@ -62,7 +75,7 @@ public class ConfigForm {
     }
 
 
-    class SWcheckFolders extends SwingWorker {
+    class SWcheckFolders extends SwingWorker<Object, Object> {
         DriveGovernor governor;
         FileList folders;
         Connection co;

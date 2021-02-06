@@ -135,42 +135,6 @@ public class BDManager {
         }
     }
 
-    public LinkedHashMap<String, Integer> getAllNameAndIdForTable(Connection co, MyTable table) {
-        try {
-            MySet set = getValues(co, table, null);
-
-            if (set.getCount() == 0) return null;
-            LinkedHashMap<String, Integer> data = new LinkedHashMap<>(set.getCount());
-            while (set.next()) {
-                data.put(set.getString("name"), set.getInt("id"));
-            }
-            return data;
-        } catch (Exception e) {
-            MyLogger.e(TAG, e);
-        }
-        return null;
-    }
-
-    public Vector<String> getAllNameForTable(MyTable table) {
-        Connection co = null;
-        try {
-            co = connect();
-            MySet set = getValues(co, table, null);
-
-            if (set.getCount() == 0) return null;
-            Vector<String> data = new Vector<>(set.getCount());
-            while (set.next()) {
-                if (set.getInt("id") != -1) data.add(set.getString("name"));
-            }
-            return data;
-        } catch (Exception e) {
-            MyLogger.e(TAG, e);
-        } finally {
-            closeQuietly(co);
-        }
-        return null;
-    }
-
     private void showError(String error) {
         JOptionPane.showMessageDialog(MainForm.frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
@@ -357,7 +321,7 @@ public class BDManager {
         return c + ")";
     }
 
-    private synchronized MySet executeQuery(Connection co, String query, MyTable table, String[] keys) {
+    public synchronized MySet executeQuery(Connection co, String query, MyTable table, String[] keys) {
         try {
             if (co == null) co = connect();
             st = co.createStatement();
