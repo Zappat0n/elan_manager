@@ -174,7 +174,7 @@ public class MediaForm {
                         ArrayList<Integer> outcomes = cacheManager.outcomesPerMonthAndSubarea.get(month).get(subarea);
                         if (outcomes != null && !subareas.contains(subarea)) {
                             subareas.add(subarea);
-                            String[] data = cacheManager.subareasTarget.get(subarea);
+                            String[] data = (String[]) cacheManager.subareasTarget.get(subarea);
                             model.addElement(data[settingsManager.language]);
                         }
                     }
@@ -185,7 +185,7 @@ public class MediaForm {
                             ArrayList<Integer> targets = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                             if (targets != null && !subareas.contains(subarea)) {
                                 subareas.add(subarea);
-                                String[] data = cacheManager.subareasTarget.get(subarea);
+                                String[] data = (String[]) cacheManager.subareasTarget.get(subarea);
                                 model.addElement(data[settingsManager.language]);
                             }
                         }

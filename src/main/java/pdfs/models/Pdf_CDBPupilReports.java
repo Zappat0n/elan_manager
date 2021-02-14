@@ -96,8 +96,8 @@ public class Pdf_CDBPupilReports extends PDFForm_Reports {
                 }
                 if (addAreaTitle) {
                     if (pointsToAdd.size() > 0) {
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
-                                cacheManager.areasTarget.get(areaId)[0]);
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[settingsManager.language],
+                                pointsToAdd.toArray(new Point[0]), cacheManager.areasTarget.get(areaId)[0]);
                         addAreaTitle = false;
                     } else if (hasData) {
                         position -= 30;
@@ -107,8 +107,8 @@ public class Pdf_CDBPupilReports extends PDFForm_Reports {
                         addAreaTitle = false;
                     }
                 } else
-                    if (pointsToAdd.size() > 0) drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
-                            null);
+                    if (pointsToAdd.size() > 0) drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[settingsManager.language],
+                            pointsToAdd.toArray(new Point[0]), null);
             }
             addPercentageToTitle("Accomplished: "+ Math.round(reached * 100 / (double) getAreaSize(areamodel, year)) + "%");
         }
@@ -140,11 +140,11 @@ public class Pdf_CDBPupilReports extends PDFForm_Reports {
                         addTitle = false;
                     }
                     if (addAreaTitle) {
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 cacheManager.areasTarget.get(areaId)[0]);
                         addAreaTitle = false;
                     } else
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 null);
                 }
             }
@@ -180,12 +180,12 @@ public class Pdf_CDBPupilReports extends PDFForm_Reports {
                         addTitle = false;
                     }
                     if (addAreaTitle) {
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
-                                cacheManager.areasTarget.get(areaId)[0]);
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[settingsManager.language],
+                                pointsToAdd.toArray(new Point[0]), cacheManager.areasTarget.get(areaId)[0]);
                         addAreaTitle = false;
                     } else
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
-                                null);
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[settingsManager.language],
+                                pointsToAdd.toArray(new Point[0]), null);
                 }
             }
             addPercentageToTitle("Accomplished: "+ Math.round(reached * 100 /

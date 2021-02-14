@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableStudents;
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
@@ -520,8 +521,8 @@ public class ChildDataForm {
             List<Integer> areas;
             String firstname;
             switch (year.intValue()) {
-                case 5: pane = tPEndOfFS; areas = RawData.areasTargetPerStageData[1]; firstname = "5."; break;
-                case 6: pane = tPEndOfY1; areas = RawData.areasTargetPerStageData[2]; firstname = "6."; break;
+                case 5: pane = tPEndOfFS; areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(5); firstname = "5."; break;
+                case 6: pane = tPEndOfY1; areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(6); firstname = "6."; break;
                 default: continue;
             }
             for (Integer area : areas) {
@@ -681,7 +682,7 @@ public class ChildDataForm {
                     pane = null;
                 }
             }
-            areas = RawData.areasTargetperStage.get(year);
+            areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(year);
             for (Integer area : areas) {
                 JList list = createTargetsList(year, area);
                 if (list != null) {

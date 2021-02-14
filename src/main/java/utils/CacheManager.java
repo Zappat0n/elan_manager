@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static java.time.temporal.ChronoUnit.MONTHS;
+import static java.time.temporal.ChronoUnit.YEARS;
 
 
 /**
@@ -28,7 +29,7 @@ public class CacheManager {
     public final LinkedHashMap<Integer, String> classrooms;
     public final LinkedHashMap<Integer, String[]> areasTarget; //name, nombre
     public final LinkedHashMap<Integer, String[]> areasMontessori;  //name, nombre
-    public final LinkedHashMap<Integer, String[]> subareasTarget; //name, nombre
+    public final LinkedHashMap<Integer, Object[]> subareasTarget; //name, nombre, area
     public final LinkedHashMap<Integer, Object[]> subareasMontessori; //name, nombre, area
     public final LinkedHashMap<Integer, String> observations;
     public final HashMap<Integer, Object[]> outcomes;//name,nombre,subarea,start_month,end_month
@@ -40,6 +41,7 @@ public class CacheManager {
     public final LinkedHashMap<Integer, LinkedHashMap<Integer, ArrayList<Integer>>> outcomesPerMonthAndSubarea;
     public final SortedMap<Double, LinkedHashMap<Integer, ArrayList<Integer>>> presentationsPerYearAndSubarea;
     public final HashMap<Integer, ArrayList<Integer>> studentsPerClassroom;
+    public final HashMap<Integer, ArrayList<Integer>> areasTargetPerStage;
     public final HashMap<Integer, ArrayList<Integer>> subareasTargetPerArea;
     public final HashMap<Integer, ArrayList<Integer>> subareasMontessoriPerArea;
     public final HashMap<Integer, ArrayList<Integer>> presentationsSubPerPresentation;
@@ -72,6 +74,7 @@ public class CacheManager {
         outcomesPerMonthAndSubarea = new LinkedHashMap<>();
         presentationsPerYearAndSubarea = new TreeMap<>();
         studentsPerClassroom = new HashMap<>();
+        areasTargetPerStage  = new HashMap<>();
         subareasTargetPerArea = new HashMap<>();
         subareasMontessoriPerArea = new HashMap<>();
         presentationsSubPerPresentation = new HashMap<>();
@@ -143,8 +146,8 @@ public class CacheManager {
             while (set.next()) {
                 Integer id = set.getInt(TableNC_subareas.id);
                 Integer area = set.getInt(TableNC_subareas.area);
-                subareasTarget.put(id, new String[]{set.getString(TableNC_subareas.name),
-                        set.getString(TableNC_subareas.nombre)});
+                subareasTarget.put(id, new Object[]{set.getString(TableNC_subareas.name),
+                        set.getString(TableNC_subareas.nombre), area});
                 targetSubareaArea.put(id,area);
                 ArrayList<Integer> t = subareasTargetPerArea.computeIfAbsent(area, k -> new ArrayList<>());
                 t.add(id);
@@ -163,6 +166,16 @@ public class CacheManager {
                 ArrayList<Integer> list = tPerSubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 targets.put(id, new Object[]{name, nombre,subarea,year});
+                int stage = getNCStage(year);
+                list = areasTargetPerStage.get(stage);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    areasTargetPerStage.put(stage, list);
+                }
+                Integer area = (Integer) subareasTarget.get(subarea)[2];
+                if (list.indexOf(area) == -1) {
+                    list.add(area);
+                }
             }
             labelAction.setText("Loading Montessori areas...");
             set = new MySet(st.executeQuery(query + TablePresentations_areas.table_name), BDManager.tablePresentations_areas, null);
@@ -227,6 +240,18 @@ public class CacheManager {
                 ArrayList<Integer> list = oPerSubarea.computeIfAbsent(subarea, k -> new ArrayList<>());
                 list.add(id);
                 outcomes.put(id, new Object[]{name,nombre,subarea,start_month,end_month});
+                double months = end_month;
+                int stage = getNCStage(months / 12);
+                list = areasTargetPerStage.get(stage);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    areasTargetPerStage.put(stage, list);
+                }
+                Integer area = (Integer) subareasTarget.get(subarea)[2];
+                if (list.indexOf(area) == -1) {
+                    list.add(area);
+                }
+
             }
             labelAction.setText("Loading links...");
             set = new MySet(st.executeQuery(query + TableLinks.table_name), BDManager.tableLinks, null);
@@ -349,6 +374,15 @@ public class CacheManager {
         return i;
     }
 
+    public Integer getNCStage(double year) {
+        int i = 0;
+        for (int value : RawData.yearsNC) {
+            if (year <= value) return RawData.yearsNC[i];
+            else i++;
+        }
+        return RawData.yearsNC[i];
+    }
+
     public Integer getStageOfClassroom(Integer classroom) {
         Integer result;
         switch (classroom) {
@@ -444,4 +478,29 @@ public class CacheManager {
         return months / 12 + (ApplicationLoader.settingsManager.language == 0 ? " years and " : " años y ") + months%12 +
                 (ApplicationLoader.settingsManager.language == 0 ? " months" : " meses");
     }
+
+    public Integer getChildrenYear(int student, int classroom, Date date) {
+        Date birthday = (Date)students.get(student)[1];
+        Integer[] classroomYears = RawData.yearsPerClassroom[classroom];
+        date = date == null ? new Date(new java.util.Date().getTime()) : date;
+
+        LocalDate dateBefore = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateAfter = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        long yearsLong = YEARS.between(dateBefore, dateAfter);
+        int years = (int) yearsLong;
+
+        if (Arrays.stream(classroomYears).anyMatch(x -> x == years)) {
+            return years;
+        } else {
+            if (years < classroomYears[0]) {
+                return classroomYears[0];
+            }
+            if (years > classroomYears[2]) {
+                return classroomYears[2];
+            }
+        }
+
+        return null;
+    }
+
 }

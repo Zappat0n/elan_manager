@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableStudents;
+import main.ApplicationLoader;
 import pdfs.boxedtexts.BoxedText;
 import pdfs.tables.Cell;
 import pdfs.tables.Row;
@@ -371,7 +372,7 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsPerYearAndSubarea.get(year);
-            for (Object areaId : RawData.areasTargetperStage.get(year)) {
+            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get(year)) {
                 Integer _areaId = (Integer) areaId;
                 ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {

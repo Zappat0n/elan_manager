@@ -1,5 +1,6 @@
 package ui.models;
 
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.SettingsManager;
 import utils.data.RawData;
@@ -53,7 +54,7 @@ public class MyListAreasModel extends DefaultListModel<String> {
             }
         } else if (typeIndex == 1 || typeIndex == 2){
             double year = RawData.yearsperstage[yearIndex];
-            for (Object oid: RawData.areasTargetperStage.get(year)){
+            for (Object oid: ApplicationLoader.cacheManager.areasTargetPerStage.get(year)){
                 Integer id = (Integer) oid;
                 data.put(cacheManager.areasTarget.get(id)[0], id);
             }

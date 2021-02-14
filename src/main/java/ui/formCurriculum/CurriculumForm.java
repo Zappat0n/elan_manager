@@ -34,8 +34,16 @@ public class CurriculumForm {
     private JList<String> listSubareas;
     private JTable tableLinks;
     private JButton button1;
+    private JList listNCStages;
+    private JList listNCAreas;
+    private JList listNCSubareas;
+    private JTable tableNationalCurriculum;
+    private JButton buttonNCText;
+    private JButton buttonNCPdf;
     private ArrayList<Integer> areasList;
+    private ArrayList<Integer> areasNCList;
     private ArrayList<Integer> subareasList;
+    private ArrayList<Integer> subareasNCList;
     private Curriculum curriculum;
     private TableLinksGovernor linksGovernor;
 
@@ -48,12 +56,19 @@ public class CurriculumForm {
 
     private void createUIComponents() {
         areasList = new ArrayList<>();
+        areasNCList = new ArrayList<>();
         subareasList = new ArrayList<>();
+        subareasNCList = new ArrayList<>();
         listStages = new JList<>();
+        listNCStages = new JList<>();
         listAreas = new JList<>(new DefaultListModel<>());
+        listNCAreas = new JList<>(new DefaultListModel<>());
         listSubareas = new JList<>(new DefaultListModel<>());
+        listNCSubareas = new JList<>(new DefaultListModel<>());
         buttonPdf = new JButton();
+        buttonNCPdf = new JButton();
         buttonTxt = new JButton();
+        buttonNCText = new JButton();
         buttonLoadLinks = new JButton();
         DefaultTableModel modelLinks = new DefaultTableModel();
         tableLinks = new JTable(modelLinks) {
@@ -96,6 +111,10 @@ public class CurriculumForm {
         tableCurriculum.getColumnModel().getColumn(1).setHeaderValue("Presentation");
         tableCurriculum.getColumnModel().getColumn(2).setHeaderValue("Exercises");
 
+        ((DefaultTableModel)tableCurriculum.getModel()).setColumnCount(3);
+        tableNationalCurriculum.getColumnModel().getColumn(0).setHeaderValue("Subarea");
+        tableNationalCurriculum.getColumnModel().getColumn(1).setHeaderValue("Target");
+
         buttonLoadLinks.addActionListener(e -> {
             final JFileChooser fc = new JFileChooser();
             int returnVal = fc.showOpenDialog(mainPanel);
@@ -118,6 +137,19 @@ public class CurriculumForm {
                 areasList.add((Integer)area);
                 model.addElement(cacheManager.areasMontessori.get(area)[settingsManager.language]);
             }
+        });
+
+        listNCStages.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
+            DefaultListModel<String> model = (DefaultListModel<String>) listNCAreas.getModel();
+            model.clear();
+            areasNCList.clear();/*
+            Object[] areas = cacheManager.subareasTargetPerArea.get(listNCStages.getSelectedIndex()).keySet().toArray();
+            Arrays.sort(areas);
+            for (Object area : areas) {
+                areasNCList.add((Integer)area);
+                model.addElement(cacheManager.areasMontessori.get(area)[settingsManager.language]);
+            }*/
         });
 
         listAreas.addListSelectionListener(e -> {

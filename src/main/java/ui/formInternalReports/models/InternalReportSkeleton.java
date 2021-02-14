@@ -1,19 +1,10 @@
-package ui.formReports.models;
+package ui.formInternalReports.models;
 
 import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableStudents;
 import main.ApplicationLoader;
-import pdfs.boxedtexts.BoxedText;
-import pdfs.tables.Cell;
-import pdfs.tables.Row;
-import pdfs.tables.Table;
-import pdfs.tables.TableDrawer;
-import utils.CacheManager;
-import utils.MyLogger;
-import utils.SettingsManager;
-import utils.data.RawData;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,7 +14,17 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import pdfs.boxedtexts.BoxedText;
+import pdfs.tables.Cell;
+import pdfs.tables.Row;
+import pdfs.tables.Table;
+import pdfs.tables.TableDrawer;
+import utils.CacheManager;
+import utils.MyLogger;
+import utils.SettingsManager;
+import utils.data.RawData;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,100 +38,71 @@ import java.util.*;
 /**
  * Created by angel on 8/04/17.
  */
-public class PDFForm_Reports {
-    private static final String TAG = PDFForm_Reports.class.getSimpleName();
+public class InternalReportSkeleton {
+    private static final String TAG = InternalReportSkeleton.class.getSimpleName();
+    protected Connection co;
+    protected final Date startDate;
+    protected final Date endDate;
+    protected final Boolean portrait;
+    protected final int classroom;
     //final int[][] language = {{0,0}, {3, 4}};
+    protected PDPage page;
     final int fontTitleSize = 12;
     final int fontSize = 10;
     final ArrayList<Integer> ncTargets;
-    public final PDDocument doc;
-    public PDFont font = null;
-    public String fileName;
+    protected final PDDocument doc;
+    protected PDFont font = null;
+    protected String fileName;
     public final float margin = 30;
-    int line_space;
-    final Integer studentId;
-    public final String studentName;
-    final Integer classroom;
-    //ArrayList<Point> points;
-    java.util.Date birthDate;
-    public final java.util.Date reportDate;
-    public final java.util.Date changeDate;
+    protected int line_space;
     public java.util.Date lastReportDate;
-    final static String[] stages ={"Early Years", "Nursery", "Reception", "Year 1", "Year 2", "Year 3", "Year 4", "Year 5", "Year 6", "Year 7", "Year 8"};
+    protected final static String[] stages ={"Early Years", "Nursery", "Reception", "Year 1", "Year 2", "Year 3",
+            "Year 4", "Year 5", "Year 6", "Year 7", "Year 8"};
     final String[] stagesShort ={"EY", "Nursery", "Reception", "Y1", "Y2", "Y3", "Y4", "Y5", "Y6", "Y7", "Y8"};
-    final String reportType;
-    Integer stageId;
-    Integer month;
-    Connection co;
-    Boolean connectedHere = false;
-    final BufferedImage logo;
-    final LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, Point>>> events_targets;
-    final LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, Point>>> events_outcomes;
-    final SortedMap<Date, String> notes;
+    protected Integer stageId;
+    protected BufferedImage logo;
+    protected Integer position;
 
-
-    public PDFForm_Reports(Connection co, Integer studentId, Integer classroom, java.util.Date reportDate, String reportType,
-                    BufferedImage logo) {
-        this.logo = logo;
-        this.reportType = reportType;
-        this.studentId = studentId;
-        studentName = (String)ApplicationLoader.cacheManager.students.get(studentId)[0];
-        this.classroom = (classroom!=null) ? classroom : ApplicationLoader.cacheManager.getClassroomId(studentId);
-        this.reportDate = reportDate;
-        this.changeDate = null;
-        doc = new PDDocument();
-        notes = new TreeMap<>();
+    protected InternalReportSkeleton(Connection co, Date startDate, Date endDate, int classroom, Boolean portrait) {
+        this.co = co;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.portrait = portrait;
+        this.classroom = classroom;
+        fileName = getFileName();
         try {
-            font = //PDType1Font.HELVETICA;
-                    PDType0Font.load(doc, getClass().getResourceAsStream("Verdana.ttf"));
+            logo = ImageIO.read(getClass().getResourceAsStream("logo.png"));
+        } catch (IOException e) {
+            MyLogger.e(TAG, e);
+        }
+        doc = new PDDocument();
+        try {
+            font = PDType1Font.HELVETICA;
+                    //PDType0Font.load(doc, getClass().getResourceAsStream("Verdana.ttf"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //PDType1Font.HELVETICA_BOLD;
-
-        //points = new ArrayList<>();
-        events_targets = new LinkedHashMap<>();
-        events_outcomes = new LinkedHashMap<>();
         ncTargets = new ArrayList<>();
-        initialize(co);
     }
 
-    private void initialize(Connection co) {
-        if (co == null) {
-            connectedHere = true;
-            this.co = ApplicationLoader.bdManager.connect();
-        } else this.co = co;
-        MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableStudents, TableStudents.id + "=" + studentId);
-        if (set.next()) {
-            birthDate = set.getDate(TableStudents.birth_date);
+    private String getFileName() {
+        String name = RawData.classrooms[classroom-1].replace(" ", "-")+"_"+startDate+"_"+endDate+".pdf";
+        return ApplicationLoader.settingsManager.getValue(SettingsManager.REPORTS_DIR) + name;
+    }
+
+
+    protected void nextPage() {
+        if (portrait) {
+            page = createPage();
+            doc.addPage(page);
+            position = 800;
+        } else {
+            page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            doc.addPage(page);
+            position = 490;
         }
-        calculateStage(ApplicationLoader.cacheManager.getClassroomId(studentId));
-        fileName = getFileName();
     }
 
-    void calculateStage(int classroom) { //1 comundi, 2 cdb, 3 taller
-        Integer years = getYears();
-        if (years == null || years < 3) stageId = 0;
-        else stageId = years - 2;
-    }
-
-    private Integer getYears() {
-        if (birthDate == null) return null;
-        int startMonth = Calendar.DECEMBER;
-        int day = 31;
-        Calendar now = Calendar.getInstance();
-        now.setTime(reportDate != null ? reportDate : new java.util.Date());
-        Calendar start = Calendar.getInstance();
-        if (now.get(Calendar.MONTH)<Calendar.SEPTEMBER) start.set(now.get(Calendar.YEAR)-1, startMonth, day);
-        else start.set(now.get(Calendar.YEAR), startMonth, day);
-
-        Calendar birth = Calendar.getInstance();
-        birth.setTime(birthDate);
-        month = birth.get(Calendar.MONTH)+1;
-        return Period.between(
-                LocalDate.of(birth.get(Calendar.YEAR), month, birth.get(Calendar.DAY_OF_MONTH)),
-                LocalDate.of(start.get(Calendar.YEAR), start.get(Calendar.MONTH) + 1, start.get(Calendar.DAY_OF_MONTH))).getYears();
-    }
 
     public String createDocument(){return fileName;}
 
@@ -147,11 +119,11 @@ public class PDFForm_Reports {
         } else return position +10;
     }
 
-    void createLegend(PDPage page, int positionX, int positionY, PDFont font, int fontTitleSize, int fontSize) {
+    void createLegend(PDPage page, PDFont font) {
         Table.TableBuilder tableBuilder =new Table.TableBuilder();
         tableBuilder.addColumnOfWidth(20);
         tableBuilder.addColumnOfWidth(120);
-        tableBuilder.setFontSize(fontTitleSize, fontSize);
+        tableBuilder.setFontSize(10, 8);
         tableBuilder.setFont(font);
         Row.RowBuilder rowBuilder = new Row.RowBuilder();
         rowBuilder.add(Cell.withText("/").withAllBorders());
@@ -167,17 +139,17 @@ public class PDFForm_Reports {
         tableBuilder.addRow(rowBuilder.build());
 
         try {
-            addTable(page, positionX, positionY, tableBuilder.build());
+            addTable(page, 520, 580, tableBuilder.build());
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }
 
     }
 
-    PDPage createPage(int line_space) {
+    PDPage createPage() {
         PDPage page = new PDPage(PDRectangle.A4);
         page.setRotation(0);
-        this.line_space = line_space;
+        this.line_space = 10;
         return page;
     }
 
@@ -185,6 +157,8 @@ public class PDFForm_Reports {
 
         //BufferedImage image = ImageIO.read(new File(imagePath));
         PDImageXObject pdImage = LosslessFactory.createFromImage(doc,image);
+                //System.out.println(new File(imagePath).getAbsolutePath());
+        //PDImageXObject pdImage = PDImageXObject.createFromFile(file, doc);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page,
                 PDPageContentStream.AppendMode.APPEND, true, true);
         float scale = Float.parseFloat(_scale);
@@ -194,7 +168,7 @@ public class PDFForm_Reports {
         return y;
     }
 
-    Integer addTitle(PDPage page, String message, int x, int y, int fontSize, Boolean bold) throws IOException {
+    protected Integer addTitle(PDPage page, String message, int x, int y, int fontSize, Boolean bold) throws IOException {
         PDPageContentStream contents = new PDPageContentStream(doc, page,
                 PDPageContentStream.AppendMode.APPEND, true);
         contents.beginText();
@@ -243,7 +217,7 @@ public class PDFForm_Reports {
         return y - Math.round(height - bt.leading) - line_space;
     }
 
-    Table drawTableWithPoints(int[] columns, String[] title, Point[] pointsindex, int fontTitleSize, int fontSize) {
+    Table drawTableWithPoints(int[] columns, String[] title, Point[] pointsindex, int fontSize) {
         String[][] data = null;
         Boolean[] color = null;
         if (pointsindex != null) {
@@ -273,11 +247,11 @@ public class PDFForm_Reports {
                 color[i] = point.isRed;
             }
         }
-        return drawTable(columns, title, data, fontTitleSize, fontSize, color);
+        return drawTable(columns, title, data, 12, fontSize, color);
     }
 
-    private Table drawTable(int[] columns, String[] title, String[][] data, int fontTitleSize, int fontSize,
-                            Boolean[] color) {
+    private Table drawTable(int[] columns, String[] title, String[][] data,
+                            @SuppressWarnings("SameParameterValue") int fontTitleSize, int fontSize, Boolean[] color) {
         Table.TableBuilder tableBuilder = new Table.TableBuilder();
         for (int width : columns) tableBuilder.addColumnOfWidth(width);
         tableBuilder.setFontSize(fontTitleSize, fontSize);
@@ -312,12 +286,11 @@ public class PDFForm_Reports {
         return tableBuilder.build();
     }
 
-    void addTable(PDPage page, int x, int y, Table table) throws IOException {
+    protected Integer addTable(PDPage page, int x, int y, Table table) throws IOException {
         PDPageContentStream contents = new PDPageContentStream(doc, page,PDPageContentStream.AppendMode.APPEND, true);
-
         (new TableDrawer(contents, table, x, y)).draw();
         contents.close();
-        table.getHeight();
+        return Math.round(y - Math.round(table.getHeight()));
     }
 
     LinkedHashMap<Integer, LinkedHashMap<Integer[], LinkedHashMap<Integer, Double>>> loadOutcomes() {
@@ -346,10 +319,11 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = ApplicationLoader.cacheManager.targetsPerYearAndSubarea.get(year);
-            for (Integer areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get(year)) {
-                ArrayList<Integer> subareas = ApplicationLoader.cacheManager.subareasTargetPerArea.get(areaId);
+            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get(year)) {
+                Integer _areaId = (Integer) areaId;
+                ArrayList<Integer> subareas = ApplicationLoader.cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {
-                    subarea = area.get(areaId);
+                    subarea = area.get(_areaId);
                     if (subarea == null) subarea = new LinkedHashMap<>();
                     for (Integer subareaId : subareas) {
                         ArrayList<Integer> targets = targetsperSubarea.get(subareaId);
@@ -362,7 +336,7 @@ public class PDFForm_Reports {
                             subarea.put(subareaId, items);
                         } else if (items == null) subarea.put(subareaId, new LinkedHashMap<>());
                     }
-                    area.put(areaId, subarea);
+                    area.put(_areaId, subarea);
                 }
             }
         }
@@ -378,82 +352,6 @@ public class PDFForm_Reports {
         }
         return count;
     }
-
-    void loadEvents(Connection co, Integer studentId) {
-        MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableEvents, TableEvents.student + "=" + studentId);
-        HashMap<Point, Date> pointToDate = new HashMap<>();
-        while (set.next()) {
-            Integer event_type = set.getInt(TableEvents.event_type);
-            switch (event_type) {
-                case 2 : processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 4 : processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 5 : processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 9 : processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 10 : processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 11 : processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date)); break;
-                case 12 : notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes)); break;
-                case 15 : {
-                    java.util.Date date = set.getDate(TableEvents.date);
-                    if (lastReportDate == null || date.after(lastReportDate)) lastReportDate = date;
-                }
-            }
-        }
-        if (lastReportDate != null)
-            for (Point point : pointToDate.keySet()) {
-                if (pointToDate.get(point).after(lastReportDate)) point.setRed();
-            }
-    }
-
-    private void processTarget(Boolean isTarget, HashMap<Point, Date> pointToDate, int event_points, int targetId, Date date){
-        try {
-            Object[] target = (isTarget) ? ApplicationLoader.cacheManager.targets.get(targetId) : ApplicationLoader.cacheManager.outcomes.get(targetId);//name,subarea,year, nombre
-            LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, Point>>> events =
-                    (isTarget) ? events_targets : events_outcomes;
-
-            Integer subareaId = (int)target[2];//name, nombre, subarea, year
-            Integer areaId = ApplicationLoader.cacheManager.targetSubareaArea.get(subareaId);
-            LinkedHashMap<Integer, LinkedHashMap<Integer, Point>> subarea;
-            if (!events.containsKey(areaId)) {
-                subarea = new LinkedHashMap<>();
-                events.put(areaId, subarea);
-            } else subarea = events.get(areaId);
-
-            LinkedHashMap<Integer, Point> items;
-            if (!subarea.containsKey(subareaId)) {
-                items = new LinkedHashMap<>();
-                subarea.put(subareaId, items);
-            } else items = subarea.get(subareaId);
-
-            if (!items.containsKey(targetId)) {
-                Point point = new Point((String) target[ApplicationLoader.settingsManager.language], 1);
-                point.setPoints(event_points, date);
-                pointToDate.put(point, date);
-                items.put(targetId, point);
-            } else {
-                Point point = items.get(targetId);
-                if (event_points > point.points) point.setPoints(event_points, date);
-                if (pointToDate.get(point).before(date)) pointToDate.put(point, date);
-            }
-        } catch (Exception ex) {
-            MyLogger.d(TAG, "Error with target:" + targetId);
-            MyLogger.e(TAG, ex);
-        }
-    }
-
-    private String getFileName() {
-        String stage = stagesShort[stageId];
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-
-        return ApplicationLoader.settingsManager.getValue(SettingsManager.REPORTS_DIR) +
-                formatter.format(reportDate) + "-" + reportType + "-" + stage + " " + studentName + ".pdf";
-    }
-
 
     public static class Point {
         final String name;

@@ -46,6 +46,7 @@ Pending features:
 - GitFlow
 - Rubocop
 - VS Code
+- Icons created by [Martin Berube](https://iconarchive.com/show/people-icons-by-martin-berube.html)
 
 ## Contribute to this Project
 

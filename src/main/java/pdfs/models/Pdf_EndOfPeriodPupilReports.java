@@ -75,7 +75,7 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             for (final Integer subareaId : areamodel.keySet()) {
                 final LinkedHashMap<Integer, Double> subareamodel = areamodel.get(subareaId);
                 final LinkedHashMap<Integer, Point> subareevents = (areaevents !=null) ? areaevents.get(subareaId) : null;
-                Point point = new Point(cacheManager.subareasTarget.get(subareaId)[0], subareamodel.size());
+                Point point = new Point((String)cacheManager.subareasTarget.get(subareaId)[0], subareamodel.size());
                 for (final Integer target : subareamodel.keySet()) {
                     Point p= (subareevents!= null) ? subareevents.get(target) : null;
                     if (p != null) point.addPoints(p.points);

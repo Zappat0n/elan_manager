@@ -175,13 +175,13 @@
               <hideActionText value="true"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <icon value="ui/construction-worker-icon.png"/>
+              <icon value="ui/doctor-icon.png"/>
               <iconTextGap value="-2"/>
               <maximumSize width="70" height="68"/>
               <minimumSize width="62" height="54"/>
               <preferredSize width="62" height="54"/>
-              <text value="CONFIG"/>
-              <toolTipText value="Config"/>
+              <text value="INT. REPORTS"/>
+              <toolTipText value="Internal Reports"/>
               <verticalAlignment value="0"/>
               <verticalTextPosition value="3"/>
             </properties>
