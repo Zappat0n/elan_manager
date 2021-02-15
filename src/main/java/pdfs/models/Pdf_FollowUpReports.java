@@ -249,7 +249,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                         }
                     }
                 if (pointsToAdd.size() > 0) {
-                    data.put(cacheManager.subareasTarget.get(subareaId)[lang], pointsToAdd.toArray(new Point[0]));
+                    data.put((String)cacheManager.subareasTarget.get(subareaId)[lang], pointsToAdd.toArray(new Point[0]));
                 }
             }
 

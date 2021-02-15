@@ -23,31 +23,25 @@ import java.util.*;
 public class ClassroomForm {
     private static final String TAG = ClassroomForm.class.getSimpleName();
     public ClassroomFormData formData;
-    public static BDManager bdManager;
-    private static SettingsManager settingsManager;
-    private static CacheManager cacheManager;
     private static Connection co;
 
     public JPanel mainPanel;
     private JList<String> listClassrooms;
-    private JTable tablePresentations;
+    public JTable tablePresentations;
     private JList<String> listStage;
     private JList<String> listArea;
     private JButton buttonCopy;
     private JTextField tFSearch;
     private UtilDateModel dateModel;
     public JDatePickerImpl datePicker;
-    private JTable tablePlanning;
+    public JTable tablePlanning;
     private JButton buttonPrint;
     private JSplitPane mainSP;
     private JList<String> listSearch;
     ArrayList<Integer> areas;
     private LinkedHashMap<String, Integer[]> presentationsSearched;
 
-    public static JPanel main(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager) {
-        ClassroomForm.bdManager = bdManager;
-        ClassroomForm.settingsManager = settingsManager;
-        ClassroomForm.cacheManager = cacheManager;
+    public static JPanel main() {
         ClassroomForm form = new ClassroomForm();
         form.mainSP.setDividerLocation(180);
         return form.mainPanel;
@@ -66,21 +60,21 @@ public class ClassroomForm {
         dateModel.setValue(new Date());
 
         try {
-            co = bdManager.connect();
-            formData = new ClassroomFormData(mainPanel, cacheManager);
-            tablePresentations = new JTable(new MyTableModelPresentations(co, settingsManager, cacheManager, bdManager, mainPanel, dateModel, formData)) {
+            co = ApplicationLoader.bdManager.connect();
+            formData = new ClassroomFormData(mainPanel);
+            tablePresentations = new JTable(new MyTableModelPresentations(co, mainPanel, dateModel, formData)) {
                 @Override
                 public TableCellRenderer getCellRenderer(int row, int column) {
-                    return new MyTablePresentationsRenderer(cacheManager, formData);
+                    return new MyTablePresentationsRenderer(formData);
                 }
             };
             tablePresentations.setRowSelectionAllowed ( false );
             tablePresentations.setCellSelectionEnabled ( true );
             tablePresentations.getTableHeader().setDefaultRenderer(new MyHeaderRenderer(formData));
-            tablePresentations.addKeyListener(new ClipboardKeyAdapter(tablePresentations, tFSearch, cacheManager, formData));
+            tablePresentations.addKeyListener(new ClipboardKeyAdapter(tablePresentations, tFSearch, formData));
             tablePresentations.setShowGrid(true);
 
-            tablePlanning = new JTable(new MyTableModelPlanning(bdManager, settingsManager, co, cacheManager, dateModel, mainPanel, formData)) {
+            tablePlanning = new JTable(new MyTableModelPlanning(co, dateModel, mainPanel, formData)) {
                 @Override
                 public TableCellRenderer getCellRenderer(int row, int column) {
                     return new MyTablePlanningRenderer();
@@ -106,10 +100,8 @@ public class ClassroomForm {
                 public void columnSelectionChanged(ListSelectionEvent listSelectionEvent) { }
             });
 
-            tablePresentations.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
-                    new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
-            tablePlanning.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager, co,
-                    new java.sql.Date(dateModel.getValue().getTime()), tablePresentations, tablePlanning, formData));
+            tablePresentations.addMouseListener(new MyMouseAdapter(this, co, new java.sql.Date(dateModel.getValue().getTime())));
+            tablePlanning.addMouseListener(new MyMouseAdapter(this, co, new java.sql.Date(dateModel.getValue().getTime())));
             formData.setTables(tablePresentations);
 
             listClassrooms = new JList<>();
@@ -128,12 +120,12 @@ public class ClassroomForm {
                 int index = listStage.getSelectedIndex();
                 if (index == -1) return;
 
-                Set<Integer> _areas = cacheManager.stageAreaSubareaMontessori.get(index).keySet();
+                Set<Integer> _areas = ApplicationLoader.cacheManager.stageAreaSubareaMontessori.get(index).keySet();
                 areas.clear();
                 Vector<String> areas_names = new Vector<>();
                 for (int area: _areas) {
                     areas.add(area);
-                    areas_names.add(cacheManager.areasMontessori.get(area)[settingsManager.language]);
+                    areas_names.add(ApplicationLoader.cacheManager.areasMontessori.get(area)[ApplicationLoader.settingsManager.language]);
                 }
                 listArea.setListData(areas_names);
                 formData.area = null;
@@ -150,8 +142,8 @@ public class ClassroomForm {
 
             buttonPrint = new JButton();
             buttonPrint.addActionListener(e -> {
-                Pdf_Planning planning = new Pdf_Planning(bdManager, cacheManager, settingsManager, tablePlanning,
-                        listClassrooms.getSelectedIndex()+1, dateModel.getValue());
+                Pdf_Planning planning = new Pdf_Planning(tablePlanning, listClassrooms.getSelectedIndex()+1,
+                        dateModel.getValue());
                 planning.createDocument();
             });
 
@@ -171,7 +163,8 @@ public class ClassroomForm {
             listSearch.addListSelectionListener(e -> {
                 if (listSearch.getSelectedIndex() == -1) return;
                 Integer[] datos = presentationsSearched.get(listSearch.getSelectedValue()); //id, subarea
-                Integer area = (Integer) cacheManager.subareasMontessori.get(datos[1])[ApplicationLoader.settingsManager.language]; //name, nombre, area
+                Integer area = (Integer) ApplicationLoader.cacheManager.subareasMontessori.get(datos[1])[
+                        ApplicationLoader.settingsManager.language]; //name, nombre, area
                 SwingUtilities.invokeLater(() -> {
                     listArea.setSelectedIndex(areas.indexOf(area));
                     int position = (formData.presentations.indexOf(datos[0]+".0"));
@@ -210,7 +203,7 @@ public class ClassroomForm {
 
         if (area != -1 && classroom != -1 && stage != -1) {
             SwingUtilities.invokeLater(() -> {
-                if (cacheManager.stageAreaSubareaMontessori.get(stage).containsKey(area)) {
+                if (ApplicationLoader.cacheManager.stageAreaSubareaMontessori.get(stage).containsKey(area)) {
                     formData.getData(classroom, stage, area);
                     resizeColumns(tablePresentations);
                 }
@@ -264,7 +257,7 @@ public class ClassroomForm {
         Integer classroom = formData.classroom;
         if (classroom == null) return;
         for (int i=0; i<numCols-1; i++) {
-            excelStr.append(escape((cacheManager.students.get(formData.students.get(i))[0])));
+            excelStr.append(escape((ApplicationLoader.cacheManager.students.get(formData.students.get(i))[0])));
             excelStr.append(ClipboardKeyAdapter.CELL_BREAK);
 
         }
@@ -295,10 +288,24 @@ public class ClassroomForm {
             model.clear();
             if (text.length() < 3 || listStage.getSelectedIndex() == 0) return;
             // Name -> Id, subarea
-            presentationsSearched = cacheManager.searchPresentationWithText(text, listStage.getSelectedIndex());
+            presentationsSearched = ApplicationLoader.cacheManager.searchPresentationWithText(text, listStage.getSelectedIndex());
             for (String name: presentationsSearched.keySet()) {
                 model.addElement(name);
             }
         });
     }
+
+    public void paintValue(Integer event_id, Integer event_sub, Integer student, int newValue) {
+        String id = event_id + "." + (event_sub != null ? event_sub : "0");
+        int row = formData.presentations.indexOf(id);
+        int col = formData.students.indexOf(student)+1;
+        if (row != -1) tablePresentations.setValueAt(newValue, row, col);
+        else MyLogger.d(TAG, "Data point lost");
+        if (newValue > 3) {
+            MyTableModelPlanning model = (MyTableModelPlanning) tablePlanning.getModel();
+            model.setValue(event_id, event_sub, col-1, newValue - 3);
+        }
+    }
+
+
 }

@@ -11,23 +11,12 @@ import java.sql.*;
 
 public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListener {
     private final static String TAG = MyPopUpMenuPresentations.class.getSimpleName();
-    private final BDManager bdManager;
     public static final String[] planning_values = {"M", "T", "W", "Th", "F"};
-    final ClassroomFormData formData;
-    final JTable tablePresentations;
-    final JTable tablePlanning;
+    final ClassroomForm form;
     final Date date;
-    final SettingsManager settingsManager;
-    final CacheManager cacheManager;
 
-    public MyPopUpMenuPresentations(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager,
-                                    JTable tablePresentations, JTable tablePlanning, Date date, ClassroomFormData formData) {
-        this.formData = formData;
-        this.bdManager = bdManager;
-        this.settingsManager = settingsManager;
-        this.cacheManager = cacheManager;
-        this.tablePresentations = tablePresentations;
-        this.tablePlanning = tablePlanning;
+    public MyPopUpMenuPresentations(ClassroomForm form, Date date) {
+        this.form = form;
         this.date = date;
         String[] presentations_values = {" ", "/", "Λ", "Δ"};
         for (String presentations_value : presentations_values) {
@@ -50,28 +39,27 @@ public class MyPopUpMenuPresentations extends JPopupMenu implements ActionListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Integer newvalue = null;
+        Integer newValue = null;
         JMenuItem item = (JMenuItem)e.getSource();
-        int[] rows = tablePresentations.getSelectedRows();
-        int[] columns = tablePresentations.getSelectedColumns();
+        int[] rows = form.tablePresentations.getSelectedRows();
+        int[] columns = form.tablePresentations.getSelectedColumns();
 
         switch (item.getText()) {
-            case " " -> newvalue = 0;
-            case "/" -> newvalue = 1;
-            case "Λ" -> newvalue = 2;
-            case "Δ" -> newvalue = 3;
-            case "M" -> newvalue = 4;
-            case "T" -> newvalue = 5;
-            case "W" -> newvalue = 6;
-            case "Th" -> newvalue = 7;
-            case "F" -> newvalue = 8;
-            case "Clear" -> {
+            case " " : newValue = 0; break;
+            case "/" : newValue = 1; break;
+            case "Λ" : newValue = 2; break;
+            case "Δ" : newValue = 3; break;
+            case "M" : newValue = 4; break;
+            case "T" : newValue = 5; break;
+            case "W" : newValue = 6; break;
+            case "Th" : newValue = 7; break;
+            case "F" : newValue = 8; break;
+            case "Clear" : {
             }
         }
 
         try {
-            SWDBUpdater updater = new SWDBUpdater(bdManager, settingsManager, cacheManager, tablePresentations,
-                    tablePlanning, rows, columns, newvalue, date, formData);
+            SWDBUpdater updater = new SWDBUpdater(form, rows, columns, newValue, date);
             updater.doInBackground();
         } catch (Exception ex) {
             MyLogger.e(TAG, ex);

@@ -56,17 +56,19 @@ public class MySet {
 
     private Object getValue(String key, String type) throws SQLException {
         if (type.contains("VARCHAR")) type = "STRING";
-        return switch (type) {
-            case "STRING", "LONGTEXT" -> rs.getString(key);
-            case "INT", "SMALLINT" -> rs.getInt(key);
-            case "BOOLEAN" -> rs.getBoolean(key);
-            case "BIGINT" -> rs.getLong(key);
-            case "TIMESTAMP" -> rs.getTimestamp(key);
-            case "BLOB" -> rs.getBlob(key);
-            case "DATE" -> rs.getDate(key);
-            case "DOUBLE" -> rs.getDouble(key);
-            default -> null;
-        };
+        Object result;
+        switch (type) {
+            case "STRING" : case "LONGTEXT" : result = rs.getString(key); break;
+            case "INT" : case "SMALLINT" : result = rs.getInt(key); break;
+            case "BOOLEAN" : result = rs.getBoolean(key); break;
+            case "BIGINT" : result = rs.getLong(key); break;
+            case "TIMESTAMP" : result = rs.getTimestamp(key); break;
+            case "BLOB" : result = rs.getBlob(key); break;
+            case "DATE" : result = rs.getDate(key); break;
+            case "DOUBLE" : result = rs.getDouble(key); break;
+            default : result = null;
+        }
+        return result;
     }
 
     public Boolean next() {

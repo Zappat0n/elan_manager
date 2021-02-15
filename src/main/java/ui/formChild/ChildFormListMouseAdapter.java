@@ -47,12 +47,13 @@ public class ChildFormListMouseAdapter extends MouseAdapter {
     }
 
     private void checkIndex(int index, ChildDataFormListItem item) {
-        Boolean add = switch (index) {
-            case 0 -> !item.getBox1();
-            case 1 -> !item.getBox2();
-            case 2 -> !item.getBox3();
-            default -> false;
-        };
+        Boolean add;
+        switch (index) {
+            case 0 : add = !item.getBox1(); break;
+            case 1 : add = !item.getBox2(); break;
+            case 2 : add = !item.getBox3(); break;
+            default : add = false;
+        }
 
         for (int i = subs.size() - 1; i > -1; i--) {
             item = subs.get(i);

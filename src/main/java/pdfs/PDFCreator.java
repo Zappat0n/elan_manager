@@ -159,7 +159,7 @@ public class PDFCreator {
         Integer teacher = null;
         try {
             co = bdManager.connect();
-            for (Integer studentId : cacheManager.studentsperclassroom.get(classroom)) {
+            for (Integer studentId : cacheManager.studentsPerClassroom.get(classroom)) {
                 if (classroom != 1 && doYetReport) {
                     Pdf_Yet_Reports pdf1 = new Pdf_Yet_Reports(bdManager, co, cacheManager, settingsManager, studentId, classroom,
                             reportDate, logo);
@@ -278,7 +278,7 @@ public class PDFCreator {
         Connection co = null;
         try {
             co = bdManager.connect();
-            for (Integer studentId : cacheManager.studentsperclassroom.get(classroomId)) {
+            for (Integer studentId : cacheManager.studentsPerClassroom.get(classroomId)) {
                 form =  new Pdf_FollowUpReports(bdManager, cacheManager, settingsManager,
                         co, studentId, classroomId, date, null, logo, true, null);
                 File file = new File(form.createDocument());

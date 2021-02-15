@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class SwingUpdater extends SwingWorker {
+public class SwingUpdater extends SwingWorker<Object, Object> {
     private static final String TAG = SwingUpdater.class.getSimpleName();
     public static final Integer UPDATER_LOAD = 0;
     public static final Integer UPDATER_SAVE = 1;
@@ -48,13 +48,14 @@ public class SwingUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0 -> {
+            case 0 : {
                 clear();
                 load();
                 ReportsForm.yetChanged = false;
+                break;
             }
-            case 1 -> save();
-            case 2 -> clear();
+            case 1 : save(); break;
+            case 2 : clear();
         }
         return null;
     }

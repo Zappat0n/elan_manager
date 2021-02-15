@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableStudents;
+import main.ApplicationLoader;
 import pdfs.boxedtexts.BoxedText;
 import pdfs.tables.Cell;
 import pdfs.tables.Row;
@@ -370,10 +371,10 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> subarea;
         LinkedHashMap<Integer, Double> items;
         for (Double year : years) {
-            LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsperyearandsubarea.get(year);
-            for (Object areaId : RawData.areasTargetperStage.get(year)) {
+            LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsPerYearAndSubarea.get(year);
+            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get(year)) {
                 Integer _areaId = (Integer) areaId;
-                ArrayList<Integer> subareas = cacheManager.subareasTargetperarea.get(_areaId);
+                ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {
                     subarea = area.get(_areaId);
                     if (subarea == null) subarea = new LinkedHashMap<>();
@@ -411,20 +412,20 @@ public class PDFForm_Reports {
         while (set.next()) {
             Integer event_type = set.getInt(TableEvents.event_type);
             switch (event_type) {
-                case 2 -> processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 4 -> processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 5 -> processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 9 -> processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 10 -> processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 11 -> processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
-                        set.getDate(TableEvents.date));
-                case 12 -> notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes));
-                case 15 -> {
+                case 2 : processTarget(true, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 4 : processTarget(true, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 5 : processTarget(true, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 9 : processTarget(false, pointToDate, 1, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 10 : processTarget(false, pointToDate, 2, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 11 : processTarget(false, pointToDate, 3, set.getInt(TableEvents.event_id),
+                        set.getDate(TableEvents.date)); break;
+                case 12 : notes.put(set.getDate(TableEvents.date), set.getString(TableEvents.notes)); break;
+                case 15 : {
                     java.util.Date date = set.getDate(TableEvents.date);
                     if (lastReportDate == null || date.after(lastReportDate)) lastReportDate = date;
                 }
@@ -444,7 +445,7 @@ public class PDFForm_Reports {
                     (isTarget) ? events_targets : events_outcomes;
 
             Integer subareaId = (int)target[2];//name, nombre, subarea, year
-            Integer areaId = cacheManager.targetsubareaarea.get(subareaId);
+            Integer areaId = cacheManager.targetSubareaArea.get(subareaId);
             LinkedHashMap<Integer, LinkedHashMap<Integer, Point>> subarea;
             if (!events.containsKey(areaId)) {
                 subarea = new LinkedHashMap<>();

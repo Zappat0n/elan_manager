@@ -1,5 +1,6 @@
 package ui.formClassroom;
 
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.data.RawData;
 
@@ -13,7 +14,6 @@ import java.util.LinkedHashMap;
 
 public class ClassroomFormData {
     private final JPanel frame;
-    private final CacheManager cacheManager;
     private JTable tablePresentations;
     public final ArrayList<String> presentations;
     public final ArrayList<Integer> students;
@@ -22,9 +22,8 @@ public class ClassroomFormData {
     Integer stage = null;
     Integer area = null;
 
-    public ClassroomFormData(JPanel frame, CacheManager cacheManager) {
+    public ClassroomFormData(JPanel frame) {
         this.frame = frame;
-        this.cacheManager = cacheManager;
         presentations = new ArrayList<>();
         students = new ArrayList<>();
         dates = new ArrayList<>();
@@ -62,16 +61,16 @@ public class ClassroomFormData {
             double min = RawData.yearsmontessori[stage][0];
             double max = RawData.yearsmontessori[stage][1];
 
-            for (double year : cacheManager.presentationsperyearandsubarea.keySet()) {
+            for (double year : ApplicationLoader.cacheManager.presentationsPerYearAndSubarea.keySet()) {
                 if (year >= min && year < max) {
                     LinkedHashMap<Integer, ArrayList<Integer>> presentationspersubarea =
-                            cacheManager.presentationsperyearandsubarea.get(year);
+                            ApplicationLoader.cacheManager.presentationsPerYearAndSubarea.get(year);
                     for (int subarea : presentationspersubarea.keySet()) {
-                        ArrayList<Integer> list = cacheManager.subareasMontessoriperarea.get(area);
+                        ArrayList<Integer> list = ApplicationLoader.cacheManager.subareasMontessoriPerArea.get(area);
                         if (list != null && list.contains(subarea))
                             for (int presentation : presentationspersubarea.get(subarea)) {
                                 presentations.add(presentation + ".0");
-                                ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(presentation);
+                                ArrayList<Integer> subs = ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(presentation);
                                 if (subs != null) for (Integer sub : subs)
                                     presentations.add(presentation + "." + sub);
                             }
@@ -91,7 +90,7 @@ public class ClassroomFormData {
         classroom = _classroom;
         students.clear();
         dates.clear();
-        ArrayList<Integer> _students = cacheManager.studentsperclassroom.get(classroom);
+        ArrayList<Integer> _students = ApplicationLoader.cacheManager.studentsPerClassroom.get(classroom);
         if (_students == null) {
             JOptionPane.showMessageDialog(frame, "There are not students for this classroom", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -101,7 +100,7 @@ public class ClassroomFormData {
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault()).minusMonths(1);
         for (Integer student: _students) {
-            ZonedDateTime birthday = ((Date)cacheManager.students.get(student)[1]).toLocalDate().atStartOfDay(ZoneId.systemDefault());
+            ZonedDateTime birthday = ((Date)ApplicationLoader.cacheManager.students.get(student)[1]).toLocalDate().atStartOfDay(ZoneId.systemDefault());
 
             Double age = ChronoUnit.MONTHS.between(birthday, now)/12d;
             boolean added = false;
@@ -118,5 +117,15 @@ public class ClassroomFormData {
                 dates.add(age);
             }
         }
+    }
+
+    public Integer[] getEvent(int row) {
+        String event = presentations.get(row);
+        String[] ev = event.split("[.]");
+        return new Integer[] {Integer.valueOf(ev[0]), (ev[1].equals("0")) ? null : Integer.valueOf(ev[1])};
+    }
+
+    public int getStudent(int column) {
+        return students.get(column);
     }
 }

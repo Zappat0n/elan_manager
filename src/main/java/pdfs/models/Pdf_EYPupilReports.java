@@ -77,11 +77,11 @@ public class Pdf_EYPupilReports extends PDFForm_Reports {
                         addTitle = false;
                     }
                     if (addAreaTitle) {
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 cacheManager.areasTarget.get(areaId)[0]);
                         addAreaTitle = false;
                     } else
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 null);
                 }
             }
@@ -116,11 +116,11 @@ public class Pdf_EYPupilReports extends PDFForm_Reports {
                         addTitle = false;
                     }
                     if (addAreaTitle) {
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 cacheManager.areasTarget.get(areaId)[0]);
                         addAreaTitle = false;
                     } else
-                        drawNextTable(cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
+                        drawNextTable((String)cacheManager.subareasTarget.get(subareaId)[0], pointsToAdd.toArray(new Point[0]),
                                 null);
                 }
             }

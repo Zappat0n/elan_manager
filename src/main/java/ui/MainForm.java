@@ -7,6 +7,7 @@ import ui.formClassroomTargets.ClassroomFormTargets;
 import ui.formConfig.ConfigForm;
 import ui.formCurriculum.CurriculumForm;
 import ui.formDatabase.contacts.DBContactsForm;
+import ui.formInternalReports.InternalReportsForm;
 import ui.formMedia.MediaForm;
 import ui.formReports.ReportsForm;
 import ui.formUpload.UploadForm;
@@ -21,7 +22,7 @@ import java.awt.event.WindowEvent;
 /**
  * Created by angel on 5/02/17.
  */
-class MainForm {
+public class MainForm {
     private static final String TAG = MainForm.class.getSimpleName();
     public static JFrame frame;
     private JPanel mainPanel;
@@ -36,6 +37,7 @@ class MainForm {
     private JButton buttonCurriculum;
     private JButton buttonDatabase;
     private JButton buttonMedia;
+    private JButton buttonInternalReports;
 
     public MainForm() {
     }
@@ -79,7 +81,7 @@ class MainForm {
         buttonClassroom = new JButton();
         buttonClassroom.addActionListener(e -> SwingUtilities.invokeLater(() -> {
             if (!ReportsForm.yetChanged) {
-                addPanelToContainer(ClassroomForm.main(ApplicationLoader.bdManager, ApplicationLoader.settingsManager, ApplicationLoader.cacheManager));
+                addPanelToContainer(ClassroomForm.main());
             } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
         }));
         buttonConfig = new JButton();
@@ -100,6 +102,12 @@ class MainForm {
             if (!ReportsForm.yetChanged) {
                 addPanelToContainer(ReportsForm.main(ApplicationLoader.settingsManager, ApplicationLoader.bdManager,
                         ApplicationLoader.cacheManager, frame));
+            } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
+        }));
+        buttonInternalReports = new JButton();
+        buttonInternalReports.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+            if (!ReportsForm.yetChanged) {
+                addPanelToContainer(InternalReportsForm.main());
             } else JOptionPane.showMessageDialog(mainPanel, "Please save before leaving");
         }));
         buttonCurriculum = new JButton();

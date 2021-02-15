@@ -1,16 +1,13 @@
 package ui.formReports;
 
-import bd.BDManager;
 import ui.formReports.managers.EoYManager;
 import ui.formReports.managers.ReportManager;
-import utils.CacheManager;
-import utils.SettingsManager;
 
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class SwingDBEOYUpdater extends SwingWorker {
+public class SwingDBEOYUpdater extends SwingWorker<Object, Object> {
     private static final String TAG = SwingDBEOYUpdater.class.getSimpleName();
     private final ArrayList<JTextArea> textAreas;
 
@@ -20,14 +17,13 @@ public class SwingDBEOYUpdater extends SwingWorker {
     Integer action = null; // 0 load, 1 save;
     final EoYManager eoyManager;
 
-    public SwingDBEOYUpdater(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
-                             ArrayList<JTextArea> textAreas, Date date, Integer classroom,
+    public SwingDBEOYUpdater(ArrayList<JTextArea> textAreas, Date date, Integer classroom,
                              Integer student) {
         this.textAreas = textAreas;
         this.classroom = classroom;
         this.student = student;
-        ReportManager reportManager = new ReportManager(cacheManager, date, student);
-        eoyManager = new EoYManager(bdManager, settingsManager, reportManager, textAreas, date, classroom, student);
+        ReportManager reportManager = new ReportManager(date, student);
+        eoyManager = new EoYManager(reportManager, textAreas, date, classroom, student);
     }
 
     public void setLoad(){
@@ -42,12 +38,13 @@ public class SwingDBEOYUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0 -> {
+            case 0 : {
                 clear();
                 eoyManager.load();
                 ReportsForm.yetChanged = false;
+                break;
             }
-            case 1 -> eoyManager.save();
+            case 1 : eoyManager.save();
         }
         return null;
     }

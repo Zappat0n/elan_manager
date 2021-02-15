@@ -2,6 +2,7 @@ package ui.formClassroom;
 
 import bd.BDManager;
 import bd.model.TableEvents;
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
@@ -9,6 +10,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import java.beans.PropertyEditorSupport;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +21,6 @@ import java.util.Calendar;
 public class MyTableModelPlanning extends AbstractTableModel {
     private static final String TAG = MyTableModelPlanning.class.getSimpleName();
     final ClassroomFormData formData;
-    private final BDManager bdManager;
-    private final CacheManager cacheManager;
-    final SettingsManager settingsManager;
     private final UtilDateModel dateModel;
 
     private Connection co;
@@ -29,13 +28,9 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public String[][] events;
     private final JPanel frame;
 
-    public MyTableModelPlanning(BDManager bdManager, SettingsManager settingsManager, Connection co,
-                                CacheManager cacheManager, UtilDateModel dateModel, JPanel frame, ClassroomFormData formData) {
-        this.settingsManager = settingsManager;
+    public MyTableModelPlanning(Connection co, UtilDateModel dateModel, JPanel frame, ClassroomFormData formData) {
         this.formData = formData;
-        this.bdManager = bdManager;
         this.co = co;
-        this.cacheManager = cacheManager;
         this.dateModel = dateModel;
         this.frame = frame;
     }
@@ -72,7 +67,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
 
         try {
             if (co == null || co.isClosed()) {
-                co = bdManager.connect();
+                co = ApplicationLoader.bdManager.connect();
             }
             st = co.createStatement();
             rs = st.executeQuery(query);
@@ -98,15 +93,17 @@ public class MyTableModelPlanning extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        return switch (column) {
-            case 0 -> "";
-            case 1 -> "Monday";
-            case 2 -> "Tuesday";
-            case 3 -> "Wednesday";
-            case 4 -> "Thursday";
-            case 5 -> "Friday";
-            default -> null;
-        };
+        String result;
+        switch (column) {
+            case 0 : result = ""; break;
+            case 1 : result = "Monday"; break;
+            case 2 : result = "Tuesday"; break;
+            case 3 : result = "Wednesday"; break;
+            case 4 : result = "Thursday"; break;
+            case 5 : result = "Friday"; break;
+            default : result = null;
+        }
+        return result;
     }
 
     @Override
@@ -137,7 +134,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public ArrayList getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             ArrayList<String> list = new ArrayList<>();
-            list.add((String)cacheManager.students.get(formData.students.get(rowIndex))[0]);
+            list.add((String)ApplicationLoader.cacheManager.students.get(formData.students.get(rowIndex))[0]);
             return list;
         }
         return data[rowIndex][columnIndex-1];
@@ -149,9 +146,10 @@ public class MyTableModelPlanning extends AbstractTableModel {
     }
 
     public String getValue(Integer event_id, Integer event_sub) {
-        return cacheManager.presentations.get(event_id)[settingsManager.language] +
+        return ApplicationLoader.cacheManager.presentations.get(event_id)[ApplicationLoader.settingsManager.language] +
                 ((event_sub != null && event_sub != 0) ? " (" +
-                        cacheManager.presentationsSub.get(event_sub)[settingsManager.language] + ")" : "");
+                        ApplicationLoader.cacheManager.presentationsSub.get(event_sub)[
+                                ApplicationLoader.settingsManager.language] + ")" : "");
     }
 
 }

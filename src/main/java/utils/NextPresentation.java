@@ -40,7 +40,7 @@ public class NextPresentation {
         Integer subarea = (Integer) data[2];
         Integer currentPriority = (Integer) data[4];
         Double year = (Double) data[3];
-        ArrayList<Integer> presentations = cacheManager.presentationsperyearandsubarea.get(year).get(subarea);
+        ArrayList<Integer> presentations = cacheManager.presentationsPerYearAndSubarea.get(year).get(subarea);
 
         //Check same subarea
         int index;
@@ -58,7 +58,7 @@ public class NextPresentation {
 
         //Search for following subarea
         if (nextPresentation == null) {
-            LinkedHashMap<Integer, ArrayList<Integer>> subareas = cacheManager.presentationsperyearandsubarea.get(year);
+            LinkedHashMap<Integer, ArrayList<Integer>> subareas = cacheManager.presentationsPerYearAndSubarea.get(year);
             List list = Arrays.asList(subareas.keySet().toArray());
             index = list.indexOf(subarea);
             if (index < list.size() - 1) {
@@ -69,7 +69,7 @@ public class NextPresentation {
     }
 
     private void calculateNextPresentationSub() {
-        ArrayList<Integer> subs = cacheManager.presentationssubperpresentation.get(nextPresentation);
+        ArrayList<Integer> subs = cacheManager.presentationsSubPerPresentation.get(nextPresentation);
         nextPresentationSub = (subs != null) ? subs.get(0) :  0;
     }
 

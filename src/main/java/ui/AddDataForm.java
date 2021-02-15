@@ -69,7 +69,7 @@ public class AddDataForm {
         JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         dateModel.setValue(new Date());
-        listClassrooms = new JList<>(cacheManager.getClasroomsName());
+        listClassrooms = new JList<>(cacheManager.getClassroomsNames());
         listClassrooms.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
             ListModel m = listClassrooms.getModel();

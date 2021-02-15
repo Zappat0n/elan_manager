@@ -1,6 +1,7 @@
 package ui.formChild;
 
 import bd.BDManager;
+import main.ApplicationLoader;
 import ui.formChildData.ChildDataFormListItem;
 import ui.formChildData.ChildDataFormListModel;
 import ui.formChildData.ChildDataFormRenderer;
@@ -72,16 +73,16 @@ public class ChildForm {
         List<Integer> areas;
 
         for (int i = 0; i < 6; i++) {
-            year = switch (i) {
-                case 0 -> 2.5;
-                case 1 -> 5;
-                case 2 -> 6;
-                case 3 -> 7;
-                case 4 -> 8;
-                case 5 -> 9;
-                default -> 0;
-            };
-            areas = RawData.areasTargetperStage.get(year);
+            switch (i) {
+                case 0 : year = 2; break;
+                case 1 : year = 4; break;
+                case 2 : year = 5; break;
+                case 3 : year = 6; break;
+                case 4 : year = 7; break;
+                case 5 : year = 8; break;
+                default : year = 0;
+            }
+            areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(year);
             for (Integer area : areas) {
                 createTargetsList(year, area);
             }

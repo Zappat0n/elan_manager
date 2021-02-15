@@ -1,5 +1,6 @@
 package ui.formCurriculum;
 
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.SettingsManager;
 import utils.data.RawData;
@@ -11,22 +12,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Curriculum {
-    protected final CacheManager cacheManager;
-    protected final SettingsManager settingsManager;
     protected final int stage;
     protected final HashSet<Integer> subareas;
     protected final ArrayList<Line> lines;
+    protected final Boolean nc;
 
-    public Curriculum(CacheManager cacheManager, SettingsManager settingsManager, int stage, int area) {
-        this.cacheManager = cacheManager;
-        this.settingsManager = settingsManager;
+    public Curriculum(int stage, int area, boolean nc) {
+        this.nc = nc;
         this.stage = stage;
         lines = new ArrayList<>();
-        subareas = cacheManager.stageAreaSubareaMontessori.get(stage).get(area);
+        subareas = nc ? new HashSet<>(ApplicationLoader.cacheManager.subareasTargetPerArea.get(area)) :
+                ApplicationLoader.cacheManager.stageAreaSubareaMontessori.get(stage).get(area);
     }
 
     protected Boolean includePresentation(Double year, int subarea) {
-        if (year < RawData.yearsmontessori[stage][0] || year > RawData.yearsmontessori[stage][1]) return false;
+        if (nc) {
+            int ini = stage == 0 ? 0 : RawData.yearsNC[stage - 1];
+            if (year <= ini || year > RawData.yearsNC[stage]) return false;
+        } else {
+            if (year < RawData.yearsmontessori[stage][0] || year > RawData.yearsmontessori[stage][1]) return false;
+        }
         return subareas.contains(subarea);
     }
 

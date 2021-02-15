@@ -167,6 +167,25 @@
               <verticalTextPosition value="3"/>
             </properties>
           </component>
+          <component id="62ee6" class="javax.swing.JButton" binding="buttonInternalReports" custom-create="true">
+            <constraints/>
+            <properties>
+              <focusPainted value="false"/>
+              <font size="8" style="0"/>
+              <hideActionText value="true"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <icon value="ui/doctor-icon.png"/>
+              <iconTextGap value="-2"/>
+              <maximumSize width="70" height="68"/>
+              <minimumSize width="62" height="54"/>
+              <preferredSize width="62" height="54"/>
+              <text value="INT. REPORTS"/>
+              <toolTipText value="Internal Reports"/>
+              <verticalAlignment value="0"/>
+              <verticalTextPosition value="3"/>
+            </properties>
+          </component>
           <component id="1878a" class="javax.swing.JButton" binding="buttonCurriculum" custom-create="true">
             <constraints/>
             <properties>

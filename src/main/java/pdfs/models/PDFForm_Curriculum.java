@@ -57,9 +57,9 @@ public class PDFForm_Curriculum {
     }
 
     private void initialize() {
-        for (double year : cacheManager.presentationsperyearandsubarea.keySet()) {
+        for (double year : cacheManager.presentationsPerYearAndSubarea.keySet()) {
             if (year >= firstYear && year < lastYear) {
-                LinkedHashMap<Integer, ArrayList<Integer>> map = cacheManager.presentationsperyearandsubarea.get(year);
+                LinkedHashMap<Integer, ArrayList<Integer>> map = cacheManager.presentationsPerYearAndSubarea.get(year);
                 for (Integer subarea : map.keySet()) {
                     int area = getAreaForSubarea(subarea);
                     if (area == -1) MyLogger.d(TAG, "DATA ERROR!!!!!");
@@ -73,8 +73,8 @@ public class PDFForm_Curriculum {
     }
 
     private int getAreaForSubarea (int subarea) {
-        for (int area : cacheManager.subareasMontessoriperarea.keySet()) {
-            for (int sub : cacheManager.subareasMontessoriperarea.get(area)) {
+        for (int area : cacheManager.subareasMontessoriPerArea.keySet()) {
+            for (int sub : cacheManager.subareasMontessoriPerArea.get(area)) {
                 if (sub==subarea) return area;
             }
         }

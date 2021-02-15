@@ -138,7 +138,7 @@ CacheManager cacheManager , SettingsManager settingsManager, PDDocument doc, flo
 
         private String getTargetText(String text, Integer lastSubarea, Object[] data) {
             Integer subarea = (Integer) data[2];
-            Integer area = cacheManager.targetsubareaarea.get(subarea);
+            Integer area = cacheManager.targetSubareaArea.get(subarea);
             if (!subarea.equals(lastSubarea)) {
                 text += cacheManager.areasTarget.get(area)[settingsManager.language] + " - ";
                 text += cacheManager.subareasTarget.get(subarea)[settingsManager.language] + "\n";

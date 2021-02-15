@@ -1,11 +1,11 @@
 package ui;
 
+import links.LinkManager;
 import main.*;
 import bd.BDManager;
 import utils.*;
 
 import javax.swing.*;
-import java.sql.SQLException;
 
 /**
  * Created by angel on 7/05/17.
@@ -41,8 +41,7 @@ public class LoaderForm {
                     return null;
                 }
                 try {
-                    ApplicationLoader.cacheManager = new CacheManager(ApplicationLoader.bdManager,
-                            ApplicationLoader.settingsManager, lAction);
+                    ApplicationLoader.cacheManager = new CacheManager(lAction);
                     MainForm.main(null);
                 } finally {
                     frame.dispose();
@@ -65,8 +64,8 @@ public class LoaderForm {
 
     private static void initApplication() {
         ApplicationLoader.fileManager = new FileManager(frame);
-        ApplicationLoader.settingsManager = new SettingsManager(frame, ApplicationLoader.fileManager);
-        ApplicationLoader.bdManager = new BDManager(ApplicationLoader.settingsManager);
+        ApplicationLoader.settingsManager = new SettingsManager(frame);
+        ApplicationLoader.bdManager = new BDManager();
     }
 
     private static void checkVersion() {

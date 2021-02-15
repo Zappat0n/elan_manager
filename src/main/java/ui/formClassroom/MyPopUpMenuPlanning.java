@@ -2,6 +2,7 @@ package ui.formClassroom;
 
 import bd.BDManager;
 import bd.model.TableEvents;
+import main.ApplicationLoader;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,27 +12,21 @@ import java.util.Calendar;
 
 public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
     private final static String TAG = MyPopUpMenuPlanning.class.getSimpleName();
-    private static BDManager bdManager;
     final int student;
     final String event;
     final Integer event_id;
     final Integer event_sub;
-    int oldvalue;
-    final JTable tablePresentations;
-    final JTable tablePlanning;
+    int oldValue;
     final int row;
     final int column;
     final Date date;
-    private final ClassroomFormData formData;
+    private final ClassroomForm form;
 
-    public MyPopUpMenuPlanning(BDManager bdManager, int student, String event, JTable tablePresentations,
-                               JTable tablePlanning, int row, int column, Date date, ClassroomFormData formData) {
-        this.formData = formData;
-        MyPopUpMenuPlanning.bdManager = bdManager;
+    public MyPopUpMenuPlanning(ClassroomForm form, int student, String event, int row,
+                               int column, Date date) {
+        this.form = form;
         this.student = student;
         this.event = event;
-        this.tablePresentations = tablePresentations;
-        this.tablePlanning = tablePlanning;
         this.row = row;
         this.column = column;
         this.date = date;
@@ -43,19 +38,19 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
             JMenuItem item = new JMenuItem(values[i]);
             item.addActionListener(this);
             add(item);
-            if (oldvalue == i) item.setSelected(true);
+            if (oldValue == i) item.setSelected(true);
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         removeValue(student, event_id, event_sub, date, MyPopUpMenuPresentations.planning_values[column-1]);
-        tablePlanning.getModel().setValueAt(null, row, column);
+        form.tablePlanning.getModel().setValueAt(null, row, column);
         String id = event_id + "." + ((event_sub != null) ? event_sub : 0);
-        int row = formData.presentations.indexOf(id);
+        int row = form.formData.presentations.indexOf(id);
         if (row != -1) {
-            int col = formData.students.indexOf(student)+1;
-            tablePresentations.setValueAt(0, row, col);
+            int col = form.formData.students.indexOf(student)+1;
+            form.tablePresentations.setValueAt(0, row, col);
         }
     }
 
@@ -66,8 +61,8 @@ public class MyPopUpMenuPlanning extends JPopupMenu implements ActionListener {
         java.sql.Date monday = new java.sql.Date(cal.getTime().getTime());
         Connection connection = null;
         try {
-            connection = bdManager.connect();
-            bdManager.removeValue(connection, BDManager.tableEvents,
+            connection = ApplicationLoader.bdManager.connect();
+            ApplicationLoader.bdManager.removeValue(connection, BDManager.tableEvents,
                     TableEvents.student + "=" + student + " AND " +
                             TableEvents.event_id + "=" + event_id + " AND " +
                             (event_sub!=null?TableEvents.event_sub + "=" + event_sub:TableEvents.event_sub + "IS NULL") + " AND " +

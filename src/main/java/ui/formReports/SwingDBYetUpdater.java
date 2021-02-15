@@ -1,15 +1,12 @@
 package ui.formReports;
 
-import bd.BDManager;
 import ui.formReports.managers.ReportManager;
 import ui.formReports.managers.YetManager;
-import utils.CacheManager;
-import utils.SettingsManager;
 
 import javax.swing.*;
 import java.sql.Date;
 
-public class SwingDBYetUpdater extends SwingWorker {
+public class SwingDBYetUpdater extends SwingWorker<Object, Object> {
     private static final String TAG = SwingDBYetUpdater.class.getSimpleName();
     private final JTextArea tALegend;
     private final JTextArea tADoneWell;
@@ -21,17 +18,17 @@ public class SwingDBYetUpdater extends SwingWorker {
     Integer action = null; // 0 load, 1 save;
     final YetManager yetManager;
 
-    public SwingDBYetUpdater(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager, JTextArea tALegend, JTextArea tADoneWell,
-                             JTextArea tAEvenBetter, JTextArea tATask, Date date, Integer classroom, Integer student) {
+    public SwingDBYetUpdater(JTextArea tALegend, JTextArea tADoneWell, JTextArea tAEvenBetter, JTextArea tATask,
+                             Date date, Integer classroom, Integer student) {
         this.tALegend = tALegend;
         this.tADoneWell = tADoneWell;
         this.tAEvenBetter = tAEvenBetter;
         this.tATask = tATask;
         this.classroom = classroom;
         this.student = student;
-        ReportManager reportManager = new ReportManager(cacheManager, date, student);
-        yetManager = new YetManager(bdManager, settingsManager, reportManager, tALegend.getText(), tADoneWell.getText(),
-                tAEvenBetter.getText(), tATask.getText(), date, classroom, student);
+        ReportManager reportManager = new ReportManager(date, student);
+        yetManager = new YetManager(reportManager, tALegend.getText(), tADoneWell.getText(), tAEvenBetter.getText(),
+                tATask.getText(), date, classroom, student);
     }
 
     public void setLoad(){
@@ -46,13 +43,14 @@ public class SwingDBYetUpdater extends SwingWorker {
     protected Object doInBackground() {
         if (action == null) return null;
         switch (action) {
-            case 0 -> {
+            case 0 : {
                 clear();
                 String[] result = yetManager.load();
                 fillTextArea(result);
                 ReportsForm.yetChanged = false;
+                break;
             }
-            case 1 -> yetManager.save();
+            case 1 : yetManager.save();
         }
         return null;
     }

@@ -75,7 +75,7 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             for (final Integer subareaId : areamodel.keySet()) {
                 final LinkedHashMap<Integer, Double> subareamodel = areamodel.get(subareaId);
                 final LinkedHashMap<Integer, Point> subareevents = (areaevents !=null) ? areaevents.get(subareaId) : null;
-                Point point = new Point(cacheManager.subareasTarget.get(subareaId)[0], subareamodel.size());
+                Point point = new Point((String)cacheManager.subareasTarget.get(subareaId)[0], subareamodel.size());
                 for (final Integer target : subareamodel.keySet()) {
                     Point p= (subareevents!= null) ? subareevents.get(target) : null;
                     if (p != null) point.addPoints(p.points);
@@ -139,15 +139,15 @@ public class Pdf_EndOfPeriodPupilReports extends PDFForm_Reports {
             int type = rs.getInt(TableEvents.event_type);
             int targetId = rs.getInt(TableEvents.event_id);
             switch (type) {
-                case 2 -> event_points = 2;
-                case 4 -> event_points = 1;
-                case 5 -> event_points = 3;
-                case 99 -> notes.put(targetId, rs.getString(TableEvents.notes));
+                case 2 : event_points = 2; break;
+                case 4 : event_points = 1; break;
+                case 5 : event_points = 3; break;
+                case 99 : notes.put(targetId, rs.getString(TableEvents.notes));
             }
             if (event_points == null) continue;
 
             Integer subareaId = cacheManager.getTargetSubarea(targetId);
-            Integer areaId = cacheManager.targetsubareaarea.get(subareaId);
+            Integer areaId = cacheManager.targetSubareaArea.get(subareaId);
             LinkedHashMap<Integer, LinkedHashMap<Integer, Point>> subarea;
             if (!events_targets.containsKey(areaId)) {
                 subarea = new LinkedHashMap<>();

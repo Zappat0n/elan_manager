@@ -2,6 +2,7 @@ package ui.formClassroom;
 
 import bd.BDManager;
 import bd.model.TableEvents;
+import main.ApplicationLoader;
 import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
@@ -17,19 +18,12 @@ public class MyTableModelPresentations extends AbstractTableModel {
     private final UtilDateModel dateModel;
     final ClassroomFormData formData;
     Connection co;
-    final SettingsManager settingsManager;
-    final BDManager bdManager;
-    final CacheManager cacheManager;
     public int[][] data;
     private final JPanel frame;
 
 
-    public MyTableModelPresentations(Connection co, SettingsManager settingsManager, CacheManager cacheManager,
-                                     BDManager bdManager, JPanel frame, UtilDateModel dateModel, ClassroomFormData formData) {
+    public MyTableModelPresentations(Connection co, JPanel frame, UtilDateModel dateModel, ClassroomFormData formData) {
         this.formData = formData;
-        this.settingsManager = settingsManager;
-        this.cacheManager = cacheManager;
-        this.bdManager = bdManager;
         this.frame = frame;
         this.co = co;
         this.dateModel = dateModel;
@@ -55,7 +49,7 @@ public class MyTableModelPresentations extends AbstractTableModel {
         ResultSet rs = null;
         try {
             if (co == null || co.isClosed()) {
-                this.co = bdManager.connect();
+                this.co = ApplicationLoader.bdManager.connect();
             }
             st = co.createStatement();
             rs = st.executeQuery(query);
@@ -124,12 +118,12 @@ public class MyTableModelPresentations extends AbstractTableModel {
     public int getColumnCount() {
         if (formData == null) return 0;
         if (formData.classroom == null) return 0;
-        else return cacheManager.studentsperclassroom.get(formData.classroom).size()+1;
+        else return ApplicationLoader.cacheManager.studentsPerClassroom.get(formData.classroom).size()+1;
     }
 
     public String getColumnName(int col) {
         if (col == 0) return "";
-        else return (String)cacheManager.students.get(formData.students.get(col-1))[0];
+        else return (String)ApplicationLoader.cacheManager.students.get(formData.students.get(col-1))[0];
     }
 
     public boolean isCellEditable(int row, int col) { return false; }
@@ -142,23 +136,25 @@ public class MyTableModelPresentations extends AbstractTableModel {
         if (columnIndex == 0) {
             String[] presentation = formData.presentations.get(rowIndex).split("[.]");
             int sub = Integer.parseInt(presentation[1]);
-            if (sub == 0) return (String)cacheManager.presentations.get(
-                    Integer.valueOf(presentation[0]))[settingsManager.language];
-            else return "->" + cacheManager.presentationsSub.get(sub)[settingsManager.language];
+            if (sub == 0) return (String)ApplicationLoader.cacheManager.presentations.get(
+                    Integer.valueOf(presentation[0]))[ApplicationLoader.settingsManager.language];
+            else return "->" + ApplicationLoader.cacheManager.presentationsSub.get(sub)[ApplicationLoader.settingsManager.language];
         }
 
-        return switch (data[rowIndex][columnIndex - 1]) {
-            case 0 -> "";
-            case 1 -> "/";
-            case 2 -> "Λ";
-            case 3 -> "Δ";
-            case 4 -> "M";
-            case 5 -> "T";
-            case 6 -> "W";
-            case 7 -> "Th";
-            case 8 -> "F";
-            default -> null;
-        };
+        String result;
+        switch (data[rowIndex][columnIndex - 1]) {
+            case 0 : result = ""; break;
+            case 1 : result = "/"; break;
+            case 2 : result = "Λ"; break;
+            case 3 : result = "Δ"; break;
+            case 4 : result = "M"; break;
+            case 5 : result = "T"; break;
+            case 6 : result = "W"; break;
+            case 7 : result = "Th"; break;
+            case 8 : result = "F"; break;
+            default : result = null;
+        }
+        return result;
     }
 
     @Override

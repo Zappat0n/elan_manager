@@ -11,23 +11,12 @@ import java.sql.Connection;
 import java.sql.Date;
 
 public class MyMouseAdapter extends MouseAdapter {
-    private final JTable tablePlanning;
-    private final JTable tablePresentations;
-    final ClassroomFormData formData;
-    final BDManager bdManager;
-    final SettingsManager settingsManager;
-    final CacheManager cacheManager;
+    final ClassroomForm form;
     final Connection co;
     final Date date;
 
-    public MyMouseAdapter(BDManager bdManager, SettingsManager settingsManager, CacheManager cacheManager,
-                          Connection co, Date date, JTable tablePresentations, JTable tablePlanning, ClassroomFormData formData) {
-        this.formData = formData;
-        this.settingsManager = settingsManager;
-        this.bdManager = bdManager;
-        this.cacheManager = cacheManager;
-        this.tablePlanning = tablePlanning;
-        this.tablePresentations = tablePresentations;
+    public MyMouseAdapter(ClassroomForm form, Connection co, Date date) {
+        this.form = form;
         this.co = co;
         this.date = date;
     }
@@ -46,13 +35,12 @@ public class MyMouseAdapter extends MouseAdapter {
                     table.setColumnSelectionInterval(column, column);
                 }
 
-                JPopupMenu menu = new MyPopUpMenuPresentations(bdManager, settingsManager, cacheManager, table,
-                        tablePlanning, date, formData);
+                JPopupMenu menu = new MyPopUpMenuPresentations(form, date);
                 menu.show(e.getComponent(), e.getX(), e.getY());
             } else {
                 String event = ((MyTableModelPlanning)table.getModel()).events[row][column-1];
-                JPopupMenu menu = new MyPopUpMenuPlanning(bdManager, formData.students.get(row),
-                        event, tablePresentations, tablePlanning, row, column, date, formData);
+                JPopupMenu menu = new MyPopUpMenuPlanning(form, form.formData.students.get(row),
+                        event, row, column, date);
                 menu.show(e.getComponent(), e.getX(), e.getY());
             }
         }

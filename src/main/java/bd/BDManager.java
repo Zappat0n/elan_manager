@@ -1,6 +1,8 @@
 package bd;
 
 import bd.model.*;
+import main.ApplicationLoader;
+import ui.MainForm;
 import utils.MyLogger;
 import utils.SettingsManager;
 
@@ -46,16 +48,13 @@ public class BDManager {
 
     private Connection co = null;
     private Statement st = null;
-    private final SettingsManager settingsManager;
-    private JFrame frame;
     private final String user;
     private final String password;
     public Boolean noData = false;
 
-    public BDManager(SettingsManager settingsManager) {
-        this.settingsManager = settingsManager;
-        user = settingsManager.user;
-        password = settingsManager.getValue(SettingsManager.PWD);
+    public BDManager() {
+        user = ApplicationLoader.settingsManager.user;
+        password = ApplicationLoader.settingsManager.getValue(SettingsManager.PWD);
         if (user == null || password == null) {
             noData = true;
             showError("Unable to connect to database.\nUser data is missing.");
@@ -67,7 +66,7 @@ public class BDManager {
         Properties connectionProps = new Properties();
         connectionProps.put("user", user);
         connectionProps.put("password", password);
-        String link = settingsManager.getValue(SettingsManager.LINK)+TimeZone.getDefault().getID() ;
+        String link = ApplicationLoader.settingsManager.getValue(SettingsManager.LINK)+TimeZone.getDefault().getID() ;
         try {
             co = DriverManager.getConnection(link, connectionProps);
         } catch (SQLException e) {
@@ -113,44 +112,31 @@ public class BDManager {
         return null;
     }
 
-    public LinkedHashMap<String, Integer> getAllNameAndIdForTable(Connection co, MyTable table) {
+    public Statement prepareBatch() {
+        Statement st = null;
         try {
-            MySet set = getValues(co, table, null);
-
-            if (set.getCount() == 0) return null;
-            LinkedHashMap<String, Integer> data = new LinkedHashMap<>(set.getCount());
-            while (set.next()) {
-                data.put(set.getString("name"), set.getInt("id"));
-            }
-            return data;
+            if (co == null || co.isClosed()) co = connect();
+            co.setAutoCommit(false);
+            st = co.createStatement();
         } catch (Exception e) {
             MyLogger.e(TAG, e);
         }
-        return null;
+        return st;
     }
 
-    public Vector<String> getAllNameForTable(MyTable table) {
-        Connection co = null;
+    public ResultSet executeBatch(Statement st) {
         try {
-            co = connect();
-            MySet set = getValues(co, table, null);
-
-            if (set.getCount() == 0) return null;
-            Vector<String> data = new Vector<>(set.getCount());
-            while (set.next()) {
-                if (set.getInt("id") != -1) data.add(set.getString("name"));
-            }
-            return data;
-        } catch (Exception e) {
+            st.executeBatch();
+            co.commit();
+            return st.getGeneratedKeys();
+        } catch (SQLException e) {
             MyLogger.e(TAG, e);
-        } finally {
-            closeQuietly(co);
+            return null;
         }
-        return null;
     }
 
     private void showError(String error) {
-        JOptionPane.showMessageDialog(frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(MainForm.frame, error, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
     public void addValue(MyTable table, String[] key, String[] value) {
@@ -203,7 +189,8 @@ public class BDManager {
             else ps.setNull(5, Types.INTEGER);
             if (notes != null) ps.setString(6, notes);
             else ps.setNull(6, Types.LONGVARCHAR);
-            if (settingsManager.teacher != null) ps.setInt(7,  settingsManager.teacher);
+            if (ApplicationLoader.settingsManager.teacher != null)
+                ps.setInt(7,  ApplicationLoader.settingsManager.teacher);
             else ps.setNull(7, Types.INTEGER);
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
@@ -305,13 +292,18 @@ public class BDManager {
         return executeQuery(connection, table.getValues(condition), table, null);
     }
 
+    public MySet getValues(MyTable table, String condition) {
+        if (table == null) return null;
+        return executeQuery(table.getValues(condition), table, null);
+    }
+
     public MySet getValues(Connection connection, MyTable table, String[] keys, String condition) {
         if (table == null) return null;
         return executeQuery(connection, table.getValues(keysToString(keys), condition), table, keys);
     }
 
     public void removeValue(Connection co, MyTable table, String condition, Boolean confirm) {
-        if (confirm && JOptionPane.showConfirmDialog(frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
+        if (confirm && JOptionPane.showConfirmDialog(MainForm.frame, "¿Borrar datos?") != JOptionPane.YES_OPTION) return;
         if (table == null) return;
         executeQueryUpdate(co, table.removeValue(condition));
     }
@@ -329,7 +321,20 @@ public class BDManager {
         return c + ")";
     }
 
-    private synchronized MySet executeQuery(Connection co, String query, MyTable table, String[] keys) {
+    public synchronized MySet executeQuery(Connection co, String query, MyTable table, String[] keys) {
+        try {
+            if (co == null) co = connect();
+            st = co.createStatement();
+            return new MySet(st.executeQuery(query), table, keys);
+        } catch (SQLException e) {
+            MyLogger.e(TAG, e);
+        } finally {
+            closeQuietlyStatement();
+        }
+        return null;
+    }
+
+    private synchronized MySet executeQuery(String query, MyTable table, String[] keys) {
         try {
             if (co == null) co = connect();
             st = co.createStatement();
@@ -368,6 +373,10 @@ public class BDManager {
         try { rs.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
         try { st.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
         try { connection.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
+    }
+
+    public void closeQuietlyConnection(){
+        try { co.close(); } catch (Exception e) { MyLogger.e(TAG, e); }
     }
 
     private void closeQuietlyStatement(){

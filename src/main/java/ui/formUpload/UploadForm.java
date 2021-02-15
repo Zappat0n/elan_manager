@@ -150,13 +150,13 @@ public class UploadForm {
                 students.clear();
                 int classroom = cBClassroom.getSelectedIndex();
                 if (classroom == 0) return;
-                for (int id : cacheManager.studentsperclassroom.get(classroom)) {
+                for (int id : cacheManager.studentsPerClassroom.get(classroom)) {
                     model.addElement((String)cacheManager.students.get(id)[0]);
                     students.add(id);
                 }
                 cBArea.removeAllItems();
                 areas.clear();
-                stage = cacheManager.getStageofClassroom(cBClassroom.getSelectedIndex());
+                stage = cacheManager.getStageOfClassroom(cBClassroom.getSelectedIndex());
                 if (stage == null) return;
                 cBArea.insertItemAt("", 0);
                 LinkedHashMap<Integer, HashSet<Integer>> newareas = cacheManager.stageAreaSubareaMontessori.get(stage);
@@ -367,7 +367,7 @@ public class UploadForm {
             DefaultListModel<String> modelPresentationsSub = (DefaultListModel<String>) listPresentationsSub.getModel();
             modelPresentationsSub.clear();
             presentationssub.clear();
-            ArrayList<Integer> list = cacheManager.presentationssubperpresentation.get(presentation);
+            ArrayList<Integer> list = cacheManager.presentationsSubPerPresentation.get(presentation);
             if (list != null && list.size() > 0)
                 for (Integer id : list) {
                     modelPresentationsSub.addElement((String)cacheManager.presentationsSub.get(id)[settingsManager.language]);

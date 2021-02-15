@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.MySet;
 import bd.model.TableEvents;
 import bd.model.TableEventsYet;
+import main.ApplicationLoader;
 import utils.MyLogger;
 import utils.SettingsManager;
 
@@ -17,8 +18,6 @@ import static bd.BDManager.encodeString;
 
 public class YetManager implements IManager{
     private static final String TAG = YetManager.class.getSimpleName();
-    private final BDManager bdManager;
-    private final SettingsManager settingsManager;
     private final ReportManager reportManager;
     private final Date date;
     final Integer classroom;
@@ -30,10 +29,8 @@ public class YetManager implements IManager{
     final int month;
     final int year;
 
-    public YetManager(BDManager bdManager, SettingsManager settingsManager, ReportManager reportManager, String legend,
-                      String doneWell, String evenBetter, String task, Date date, Integer classroom, Integer student) {
-        this.bdManager = bdManager;
-        this.settingsManager = settingsManager;
+    public YetManager(ReportManager reportManager, String legend, String doneWell, String evenBetter, String task,
+                      Date date, Integer classroom, Integer student) {
         this.reportManager = reportManager;
         this.legend = legend;
         this.doneWell = doneWell;
@@ -52,8 +49,8 @@ public class YetManager implements IManager{
         Connection co = null;
         String[] result = new String[4];
         try {
-            co = bdManager.connect();
-            MySet set = bdManager.getValues(co, BDManager.tableEventsYet, getCondition());
+            co = ApplicationLoader.bdManager.connect();
+            MySet set = ApplicationLoader.bdManager.getValues(co, BDManager.tableEventsYet, getCondition());
             while (set.next()) {
                 Integer event_id = set.getInt(TableEvents.event_id);
                 Integer student = set.getInt(TableEvents.student);
@@ -70,7 +67,7 @@ public class YetManager implements IManager{
         Connection co = null;
         Statement st = null;
         try {
-            co = bdManager.connect();
+            co = ApplicationLoader.bdManager.connect();
             st = co.createStatement();
             st.executeUpdate("DELETE FROM " + BDManager.tableEventsYet.getName() + " WHERE " + getCondition());
             st.addBatch(getInsertString(-1, classroom, encodeString(legend)));
@@ -105,6 +102,6 @@ public class YetManager implements IManager{
         String tableName = TableEventsYet.table_name;
         return "INSERT INTO `" + tableName + "` (`date`, `student`, `event_id`, `notes`, `teacher`) VALUES('" +
                 date + "'," + student + "," + event_id + "," + (text != null ? "'" +
-                text + "'" : "NULL")+ "," + settingsManager.teacher + ");";
+                text + "'" : "NULL")+ "," + ApplicationLoader.settingsManager.teacher + ");";
     }
 }

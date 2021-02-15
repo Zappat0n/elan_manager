@@ -142,7 +142,7 @@ public class ReportsForm {
                 currentClassroom = listClassrooms.getSelectedIndex() + 1;
 
                 students.clear();
-                ArrayList<Integer> listStudents = cacheManager.studentsperclassroom.get(currentClassroom);
+                ArrayList<Integer> listStudents = cacheManager.studentsPerClassroom.get(currentClassroom);
                 if (listStudents != null)
                     for (Integer id : listStudents) {
                         students.add(id);
@@ -224,9 +224,8 @@ public class ReportsForm {
                 JOptionPane.showMessageDialog(mainPanel, "Please select classroom and student");
                 return;
             }
-            SwingDBYetUpdater updater = new SwingDBYetUpdater(bdManager, cacheManager, settingsManager, tALegend,
-                    tADoneWell, tAEvenBetter, tATask, new java.sql.Date(dateModelYet.getValue().getTime()),
-                    currentClassroom+1, students.get(currentStudent));
+            SwingDBYetUpdater updater = new SwingDBYetUpdater(tALegend, tADoneWell, tAEvenBetter, tATask,
+                    new java.sql.Date(dateModelYet.getValue().getTime()), currentClassroom+1, students.get(currentStudent));
             updater.setLoad();
             updater.execute();
         });
@@ -239,9 +238,8 @@ public class ReportsForm {
                 JOptionPane.showMessageDialog(mainPanel, "Please select classroom and student");
                 return;
             }
-            SwingDBYetUpdater updater = new SwingDBYetUpdater(bdManager, cacheManager, settingsManager, tALegend,
-                    tADoneWell, tAEvenBetter, tATask, new java.sql.Date(dateModelYet.getValue().getTime()),
-                    currentClassroom + 1, students.get(currentStudent));
+            SwingDBYetUpdater updater = new SwingDBYetUpdater(tALegend, tADoneWell, tAEvenBetter, tATask,
+                    new java.sql.Date(dateModelYet.getValue().getTime()), currentClassroom + 1, students.get(currentStudent));
             updater.setSave();
             updater.execute();
             yetChanged = false;
@@ -321,9 +319,8 @@ public class ReportsForm {
                 return;
             }
 
-            SwingDBEOYUpdater updater = new SwingDBEOYUpdater(bdManager, cacheManager, settingsManager, textAreasEoY,
-                    new java.sql.Date(dateModelEoY.getValue().getTime()), currentClassroom+1,
-                    students.get(currentStudent));
+            SwingDBEOYUpdater updater = new SwingDBEOYUpdater(textAreasEoY, new java.sql.Date(dateModelEoY.getValue().getTime()),
+                    currentClassroom+1, students.get(currentStudent));
             updater.setLoad();
             updater.execute();
         });
@@ -336,9 +333,8 @@ public class ReportsForm {
                 JOptionPane.showMessageDialog(mainPanel, "Please select classroom and student");
                 return;
             }
-            SwingDBEOYUpdater updater = new SwingDBEOYUpdater(bdManager, cacheManager, settingsManager, textAreasEoY,
-                    new java.sql.Date(dateModelEoY.getValue().getTime()), currentClassroom + 1,
-                    students.get(currentStudent));
+            SwingDBEOYUpdater updater = new SwingDBEOYUpdater(textAreasEoY, new java.sql.Date(dateModelEoY.getValue().getTime()),
+                    currentClassroom + 1, students.get(currentStudent));
             updater.setSave();
             updater.execute();
             eoyChanged = false;
@@ -360,9 +356,9 @@ public class ReportsForm {
         buttonGenerateEOY.addActionListener(e -> {
             java.sql.Date date = new java.sql.Date(dateModelEoY.getValue().getTime());
             Integer currentStudent = students.get(listStudents.getSelectedIndex());
-            ReportManager reportManager = new ReportManager(cacheManager, date, currentStudent);
-            Pdf_EoY_Reports report = new Pdf_EoY_Reports(bdManager, null, cacheManager, settingsManager,
-                    currentStudent, listClassrooms.getSelectedIndex() + 1, date, logo, reportManager,
+            ReportManager reportManager = new ReportManager(date, currentStudent);
+            Pdf_EoY_Reports report = new Pdf_EoY_Reports(null, currentStudent,
+                    listClassrooms.getSelectedIndex() + 1, date, logo, reportManager,
                     checkBoxEoYComments.isSelected(), checkBoxEoYPhotos.isSelected(),
                     (DefaultListModel<String>) listLog.getModel());
         });

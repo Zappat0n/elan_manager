@@ -1,6 +1,6 @@
 package ui.formReports.managers;
 
-import utils.CacheManager;
+import main.ApplicationLoader;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -14,14 +14,12 @@ public class ReportManager {
             "Muchas gracias y un saludo,\n\n" +
             "ELAN Montessori British School\n" +
             "Carril Rincona, Rincón de Beniscornia, 30108, Murcia";
-    final CacheManager cacheManager;
     final Date date;
     final Integer student;
     final int month;
     final int year;
 
-    public ReportManager(CacheManager cacheManager, Date date, Integer student) {
-        this.cacheManager = cacheManager;
+    public ReportManager(Date date, Integer student) {
         this.date = date;
         this.student = student;
         Calendar cal = Calendar.getInstance();
@@ -91,7 +89,7 @@ public class ReportManager {
 
     public String getTextForEmail(String text, Integer student) {
         text = text.replace("[TERM]", getStringTerm());
-        text = text.replace("[STUDENT]", (String)cacheManager.students.get(student)[0]);
+        text = text.replace("[STUDENT]", (String) ApplicationLoader.cacheManager.students.get(student)[0]);
         return text;
     }
 }

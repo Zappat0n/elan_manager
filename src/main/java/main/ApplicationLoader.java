@@ -21,10 +21,6 @@ public class ApplicationLoader {
     public static CacheManager cacheManager;
 
     public static void main(String[] args) {
-        launchUI();
-    }
-
-    private static void launchUI(){
         SwingUtilities.invokeLater(() -> {
             try {
                 LoaderForm.main(null);
@@ -34,5 +30,4 @@ public class ApplicationLoader {
             }
         });
     }
-
 }

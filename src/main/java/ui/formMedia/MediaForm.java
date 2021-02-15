@@ -38,7 +38,7 @@ public class MediaForm {
     private JTextArea textAreaComments;
     private JLabel labelPresentation;
     private JLabel labelPresentationSub;
-    private UtilDateModel dateModel;
+    private UtilDateModel dateModelImplPictureDate;
     private JDatePickerImpl datePickerImplPictureDate;
     private JButton buttonUpdate;
     private JButton buttonDelete;
@@ -51,6 +51,10 @@ public class MediaForm {
     private JButton buttonTurnRight;
     private JButton buttonUpload;
     private JButton buttonTurnLeft;
+    private UtilDateModel dateModelIni;
+    private JDatePickerImpl datePickerIni;
+    private UtilDateModel dateModelEnd;
+    private JDatePickerImpl datePickerEnd;
     public DriveGovernor driveGovernor;
     private HashMap<JRadioButton, MediaPicture> mediaFiles;
     private ArrayList<Integer> subareas;
@@ -82,14 +86,22 @@ public class MediaForm {
         BoxLayout layout = new BoxLayout(panelImgs, BoxLayout.PAGE_AXIS);
         panelImgs.setLayout(layout);
 
-        dateModel = new UtilDateModel();
+        dateModelImplPictureDate = new UtilDateModel();
+        dateModelIni = new UtilDateModel();
+        dateModelEnd = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
-        datePickerImplPictureDate = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        dateModel.setValue(new Date());
+        datePickerIni = new JDatePickerImpl(new JDatePanelImpl(dateModelIni, p), new DateLabelFormatter());
+        datePickerEnd = new JDatePickerImpl(new JDatePanelImpl(dateModelEnd, p), new DateLabelFormatter());
+        Calendar cal = Calendar.getInstance();
+        dateModelEnd.setValue(cal.getTime());
+        cal.add(Calendar.MONTH, -3);
+        dateModelIni.setValue(cal.getTime());
+
+        datePickerImplPictureDate = new JDatePickerImpl(new JDatePanelImpl(dateModelImplPictureDate, p), new DateLabelFormatter());
+        dateModelImplPictureDate.setValue(new Date());
 
         listClassrooms = new JList<>(cacheManager.getClassroomsListModel());
         listStudents = new JList<>();
@@ -101,7 +113,7 @@ public class MediaForm {
         listStudents.addListSelectionListener(e -> {
             if (listStudents.getValueIsAdjusting() || listStudents.getSelectedIndex() == -1 ||
                     listClassrooms.getSelectedIndex() == -1) return;
-            Integer student = cacheManager.studentsperclassroom.get(listClassrooms.getSelectedIndex()+1).get(listStudents.getSelectedIndex());
+            Integer student = cacheManager.studentsPerClassroom.get(listClassrooms.getSelectedIndex()+1).get(listStudents.getSelectedIndex());
             mediaFiles.clear();
             panelImgs.removeAll();
             SWLoadImages load = new SWLoadImages(student);
@@ -134,7 +146,7 @@ public class MediaForm {
                 co = bdManager.connect();
                 //id, date, student, presentation, presentation_sub, comment, fileId;
                 String[] keys = {TableMedia.date, TableMedia.comment};
-                java.sql.Date newDate = new java.sql.Date(dateModel.getValue().getTime());
+                java.sql.Date newDate = new java.sql.Date(dateModelImplPictureDate.getValue().getTime());
                 String newComment = textAreaComments.getText();
                 String[] values = {newDate.toString(), newComment};
                 bdManager.updateValues(co, BDManager.tableMedia, keys, values, TableMedia.id + "=" + currentPicture.id);
@@ -155,14 +167,14 @@ public class MediaForm {
             Integer area = RawData.cdbAreasTarget.get(listNCAreas.getSelectedIndex());
             DefaultListModel<String> model = (DefaultListModel<String>)listNCSubareas.getModel();
             model.clear();
-            cacheManager.subareasTargetperarea.get(area).forEach(subarea -> {
+            cacheManager.subareasTargetPerArea.get(area).forEach(subarea -> {
                 if (!cBTargetOrOutcome.isSelected()) {
                     Integer[] months = getMonths();
                     for (Integer month : months) {
-                        ArrayList<Integer> outcomes = cacheManager.outcomespermonthandsubarea.get(month).get(subarea);
+                        ArrayList<Integer> outcomes = cacheManager.outcomesPerMonthAndSubarea.get(month).get(subarea);
                         if (outcomes != null && !subareas.contains(subarea)) {
                             subareas.add(subarea);
-                            String[] data = cacheManager.subareasTarget.get(subarea);
+                            String[] data = (String[]) cacheManager.subareasTarget.get(subarea);
                             model.addElement(data[settingsManager.language]);
                         }
                     }
@@ -170,10 +182,10 @@ public class MediaForm {
                     Double[] years = getYears();
                     if (years != null)
                         for (Double year : years) {
-                            ArrayList<Integer> targets = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                            ArrayList<Integer> targets = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                             if (targets != null && !subareas.contains(subarea)) {
                                 subareas.add(subarea);
-                                String[] data = cacheManager.subareasTarget.get(subarea);
+                                String[] data = (String[]) cacheManager.subareasTarget.get(subarea);
                                 model.addElement(data[settingsManager.language]);
                             }
                         }
@@ -188,12 +200,12 @@ public class MediaForm {
             DefaultListModel<String> model = (DefaultListModel<String>)listNCTargets.getModel();
             model.clear();
             Integer area = RawData.cdbAreasTarget.get(selArea);
-            Integer subarea = cacheManager.subareasTargetperarea.get(area).get(selSubArea);
+            Integer subarea = cacheManager.subareasTargetPerArea.get(area).get(selSubArea);
             if (!cBTargetOrOutcome.isSelected()) {
                 Integer[] months = getMonths();
                 if (months != null)
                     for (Integer month : months) {
-                        ArrayList<Integer> outcomes = cacheManager.outcomespermonthandsubarea.get(month).get(subarea);
+                        ArrayList<Integer> outcomes = cacheManager.outcomesPerMonthAndSubarea.get(month).get(subarea);
                         if (outcomes != null) {
                             outcomes.forEach(o -> model.addElement((String)cacheManager.outcomes.get(o)[settingsManager.language]));
                         }
@@ -202,7 +214,7 @@ public class MediaForm {
                 Double[] years = getYears();
                 if (years != null)
                     for (Double year : years) {
-                        ArrayList<Integer> targets = cacheManager.targetsperyearandsubarea.get(year).get(subarea);
+                        ArrayList<Integer> targets = cacheManager.targetsPerYearAndSubarea.get(year).get(subarea);
                         if (targets != null) {
                             targets.forEach(t -> model.addElement((String)cacheManager.targets.get(t)[settingsManager.language]));
                         }
@@ -232,28 +244,32 @@ public class MediaForm {
         buttonUpload.addActionListener(actionEvent -> {
             MediaPicture picture = mediaFiles.get(currentItem);
             picture.image = currentPicture.image;
-            driveGovernor.manager.updateFile(picture.fileId, dateModel.getValue(), picture);
+            driveGovernor.manager.updateFile(picture.fileId, dateModelImplPictureDate.getValue(), picture);
         });
     }
 
     private Integer[] getMonths(){
-        return switch (listClassrooms.getSelectedIndex()) {
-            case 0 -> RawData.monthsOutcomesForEY;
-            case 1, 2 -> RawData.monthsOutcomesForFS;
-            default -> null;
-        };
+        Integer[] result;
+        switch (listClassrooms.getSelectedIndex()) {
+            case 0 : result = RawData.monthsOutcomesForEY; break;
+            case 1 : case 2 : result = RawData.monthsOutcomesForFS; break;
+            default : result = null;
+        }
+        return result;
     }
 
     private Double[] getYears(){
-        return switch (listClassrooms.getSelectedIndex()) {
-            case 0 -> new Double[]{2.5};
-            case 1 -> new Double[]{5d, 6d};
-            default -> null;
-        };
+        Double[] result;
+        switch (listClassrooms.getSelectedIndex()) {
+            case 0 : result = new Double[]{2.5}; break;
+            case 1 : result = new Double[]{5d, 6d}; break;
+            default : result = null;
+        }
+        return result;
     }
 
 
-    private class SWLoadImages extends SwingWorker {
+    private class SWLoadImages extends SwingWorker<Object, Object> {
         ImageIcon blankImage;
         final Integer student;
 
@@ -283,7 +299,7 @@ public class MediaForm {
 
                     currentPicture = mediaFiles.get(currentItem);
                     if (currentPicture.image != null) labelMainImg.setIcon(new ImageIcon(currentPicture.image));
-                    dateModel.setValue(new Date(currentPicture.date.getTime()));
+                    dateModelImplPictureDate.setValue(new Date(currentPicture.date.getTime()));
                     labelPresentation.setText(
                             (String)cacheManager.presentations.get(currentPicture.presentation)[settingsManager.language]);
                     if (currentPicture.presentationSub != null && currentPicture.presentationSub != -1)
@@ -323,7 +339,10 @@ public class MediaForm {
             Connection co = null;
             try {
                 co = bdManager.connect();
-                MySet set = bdManager.getValues(co, BDManager.tableMedia, TableMedia.student + "=" + student);
+                MySet set = bdManager.getValues(co, BDManager.tableMedia,
+                        TableMedia.student + "=" + student + " AND date >= '" +
+                                new java.sql.Date(dateModelIni.getValue().getTime()) + " AND date <= " +
+                                new java.sql.Date(dateModelEnd.getValue().getTime()) + "'");
                 int counter = 1;
                 if (set.size() > 0)
                     while (set.next()) {

@@ -1,6 +1,7 @@
 package ui.formClassroomTargets;
 
 import bd.BDManager;
+import main.ApplicationLoader;
 import ui.components.DateLabelFormatter;
 import utils.CacheManager;
 import utils.SettingsManager;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
@@ -70,9 +72,8 @@ public class ClassroomFormTargets {
                 if (index != -1) {
                     DefaultListModel<String> model = (DefaultListModel<String>) listAreas.getModel();
                     model.clear();
-                    for (Object item : RawData.areasTargetPerStageData[index]) {
-                        Integer _item = (Integer) item;
-                        model.addElement(cacheManager.areasTarget.get(_item)[settingsManager.language]);
+                    for (Integer area : ApplicationLoader.cacheManager.areasTargetPerStage.get(RawData.yearsNC[index])) {
+                        model.addElement(cacheManager.areasTarget.get(area)[settingsManager.language]);
                     }
                 }
             }
@@ -100,8 +101,10 @@ public class ClassroomFormTargets {
         int classroom = listClassrooms.getSelectedIndex() + 1;
         int stage = listStages.getSelectedIndex();
 
+
         if (classroom != -1 && stage != -1) {
-            Integer area = (Integer) RawData.areasTargetPerStageData[stage].get(listAreas.getSelectedIndex());
+            ArrayList<Integer> areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(RawData.yearsNC[stage]);
+            Integer area = areas.get(listAreas.getSelectedIndex());
             if (area != -1) {
                 SwingUtilities.invokeLater(() -> {
                     ((MyTableModelTargets) tableTargets.getModel()).loadData(classroom, stage, area);
