@@ -301,16 +301,9 @@
                             <properties/>
                             <border type="none"/>
                             <children>
-                              <component id="c7eb7" class="javax.swing.JList" binding="listNCStages" custom-create="true">
+                              <component id="bcaa" class="javax.swing.JList" binding="listStagesNC" custom-create="true">
                                 <constraints/>
-                                <properties>
-                                  <maximumSize width="60" height="59"/>
-                                  <model>
-                                    <item value="EYs"/>
-                                    <item value="FS"/>
-                                    <item value="Primary"/>
-                                  </model>
-                                </properties>
+                                <properties/>
                               </component>
                             </children>
                           </scrollpane>

@@ -27,7 +27,7 @@ public class CacheManager {
     public final LinkedHashMap<Integer, Object[]> students; //name, birthday, drive_main, drive_documents, drive_photos, drive_reports
     public final LinkedHashMap<Integer, Object[]> teachers; //name, classroom
     public final LinkedHashMap<Integer, String> classrooms;
-    public final LinkedHashMap<Integer, String[]> areasTarget; //name, nombre
+    public final LinkedHashMap<Integer, String[]> areasTarget; //name, nombre, subarea
     public final LinkedHashMap<Integer, String[]> areasMontessori;  //name, nombre
     public final LinkedHashMap<Integer, Object[]> subareasTarget; //name, nombre, area
     public final LinkedHashMap<Integer, Object[]> subareasMontessori; //name, nombre, area
@@ -167,13 +167,9 @@ public class CacheManager {
                 list.add(id);
                 targets.put(id, new Object[]{name, nombre,subarea,year});
                 int stage = getNCStage(year);
-                list = areasTargetPerStage.get(stage);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    areasTargetPerStage.put(stage, list);
-                }
+                list = areasTargetPerStage.computeIfAbsent(stage, k -> new ArrayList<>());
                 Integer area = (Integer) subareasTarget.get(subarea)[2];
-                if (list.indexOf(area) == -1) {
+                if (!list.contains(area)) {
                     list.add(area);
                 }
             }
@@ -242,13 +238,9 @@ public class CacheManager {
                 outcomes.put(id, new Object[]{name,nombre,subarea,start_month,end_month});
                 double months = end_month;
                 int stage = getNCStage(months / 12);
-                list = areasTargetPerStage.get(stage);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    areasTargetPerStage.put(stage, list);
-                }
+                list = areasTargetPerStage.computeIfAbsent(stage, k -> new ArrayList<>());
                 Integer area = (Integer) subareasTarget.get(subarea)[2];
-                if (list.indexOf(area) == -1) {
+                if (!list.contains(area)) {
                     list.add(area);
                 }
 

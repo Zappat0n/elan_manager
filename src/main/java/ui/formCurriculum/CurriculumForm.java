@@ -15,16 +15,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 public class CurriculumForm {
     private static final String TAG = CurriculumForm.class.getSimpleName();
     private static SettingsManager settingsManager;
     private static CacheManager cacheManager;
     private JPanel mainPanel;
-    private JList listStages;
+    private JList<String> listStages;
     private JTable tableCurriculum;
     private JList<String> listAreas;
     private JButton buttonPdf;
@@ -34,12 +32,12 @@ public class CurriculumForm {
     private JList<String> listSubareas;
     private JTable tableLinks;
     private JButton button1;
-    private JList listNCStages;
-    private JList listNCAreas;
-    private JList listNCSubareas;
+    private JList<String> listNCAreas;
+    private JList<String> listNCSubareas;
     private JTable tableNationalCurriculum;
     private JButton buttonNCText;
     private JButton buttonNCPdf;
+    private JList<String> listStagesNC;
     private ArrayList<Integer> areasList;
     private ArrayList<Integer> areasNCList;
     private ArrayList<Integer> subareasList;
@@ -60,7 +58,7 @@ public class CurriculumForm {
         subareasList = new ArrayList<>();
         subareasNCList = new ArrayList<>();
         listStages = new JList<>();
-        listNCStages = new JList<>();
+        listStagesNC = new JList<>(RawData.stagesNC);
         listAreas = new JList<>(new DefaultListModel<>());
         listNCAreas = new JList<>(new DefaultListModel<>());
         listSubareas = new JList<>(new DefaultListModel<>());
@@ -111,7 +109,9 @@ public class CurriculumForm {
         tableCurriculum.getColumnModel().getColumn(1).setHeaderValue("Presentation");
         tableCurriculum.getColumnModel().getColumn(2).setHeaderValue("Exercises");
 
-        ((DefaultTableModel)tableCurriculum.getModel()).setColumnCount(3);
+        tableNationalCurriculum = new JTable(new DefaultTableModel());
+
+        ((DefaultTableModel)tableNationalCurriculum.getModel()).setColumnCount(2);
         tableNationalCurriculum.getColumnModel().getColumn(0).setHeaderValue("Subarea");
         tableNationalCurriculum.getColumnModel().getColumn(1).setHeaderValue("Target");
 
@@ -139,17 +139,17 @@ public class CurriculumForm {
             }
         });
 
-        listNCStages.addListSelectionListener(e -> {
+        listStagesNC.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
             DefaultListModel<String> model = (DefaultListModel<String>) listNCAreas.getModel();
             model.clear();
-            areasNCList.clear();/*
-            Object[] areas = cacheManager.subareasTargetPerArea.get(listNCStages.getSelectedIndex()).keySet().toArray();
-            Arrays.sort(areas);
-            for (Object area : areas) {
-                areasNCList.add((Integer)area);
-                model.addElement(cacheManager.areasMontessori.get(area)[settingsManager.language]);
-            }*/
+            areasNCList.clear();
+            int stage = RawData.yearsNC[listStagesNC.getSelectedIndex()];
+            ArrayList<Integer> areas = cacheManager.areasTargetPerStage.get(stage);
+            for (Integer area : areas) {
+                areasNCList.add(area);
+                model.addElement(cacheManager.areasTarget.get(area)[settingsManager.language]);
+            }
         });
 
         listAreas.addListSelectionListener(e -> {
@@ -162,7 +162,7 @@ public class CurriculumForm {
 
             HashSet<Integer> subs = cacheManager.stageAreaSubareaMontessori.get(stage).get(area);
             if (subs != null) {
-                curriculum = new CurriculumSubareaYear(cacheManager, settingsManager, stage, area);
+                curriculum = new CurriculumSubareaYear(stage, area, false);
                 for (Integer sub : subs) {
                     model.addElement((String)cacheManager.subareasMontessori.get(sub)[settingsManager.language]);
                     subareasList.add(sub);
@@ -171,10 +171,48 @@ public class CurriculumForm {
             }
         });
 
+        listNCAreas.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting() || listNCAreas.getSelectedIndex() == -1)  return;
+            DefaultListModel<String> model = (DefaultListModel<String>) listNCSubareas.getModel();
+            model.clear();
+            subareasNCList.clear();
+            int stage = listStagesNC.getSelectedIndex();
+            int area = areasNCList.get(listNCAreas.getSelectedIndex());
+
+            ArrayList<Integer> subs = cacheManager.subareasTargetPerArea.get(area);
+            if (subs != null) {
+                curriculum = new CurriculumSubareaYear(stage, area, true);
+                for (Integer sub : subs) {
+                    model.addElement((String)cacheManager.subareasTarget.get(sub)[settingsManager.language]);
+                    subareasNCList.add(sub);
+                }
+                tableNationalCurriculum.setModel(curriculum.getTableModel());
+            }
+        });
+
         listSubareas.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting() || listSubareas.getSelectedIndex() == -1)  return;
             linksGovernor.clear();
             linksGovernor.loadSubarea(listStages.getSelectedIndex(), subareasList.get(listSubareas.getSelectedIndex()));
+        });
+
+        buttonNCText.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Documents", "txt"));
+            fileChooser.setDialogTitle("Specify a file to save");
+            fileChooser.setAcceptAllFileFilterUsed(true);
+            int userSelection = fileChooser.showSaveDialog(mainPanel);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String fileName = fileToSave.getAbsolutePath();
+                try {
+                    if (!Files.getFileExtension(fileName).equals("txt")) fileName += ".txt";
+                    curriculum.writeToFile(fileName);
+                } catch (IOException ex) {
+                    MyLogger.e(TAG, ex);
+                }
+            }
         });
 
         buttonTxt.addActionListener(e -> {
@@ -204,6 +242,7 @@ public class CurriculumForm {
             this.model = model;
         }
 
+        @SuppressWarnings("SuspiciousMethodCalls")
         public void loadSubarea(int stage, int subarea) {
             for (String code : cacheManager.links.keySet()) {
                 String[] values = code.split("\\.");
@@ -243,6 +282,7 @@ public class CurriculumForm {
             this.model = model;
         }
 
+        @SuppressWarnings("SuspiciousMethodCalls")
         public void loadSubarea(int stage, int subarea) {
             for (String code : cacheManager.links.keySet()) {
                 String[] values = code.split("\\.");
