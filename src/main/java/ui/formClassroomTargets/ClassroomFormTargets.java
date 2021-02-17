@@ -2,6 +2,7 @@ package ui.formClassroomTargets;
 
 import bd.BDManager;
 import main.ApplicationLoader;
+import ui.MainForm;
 import ui.components.DateLabelFormatter;
 import utils.CacheManager;
 import utils.SettingsManager;
@@ -102,7 +103,7 @@ public class ClassroomFormTargets {
         int stage = listStages.getSelectedIndex();
 
 
-        if (classroom != -1 && stage != -1) {
+        if (classroom != 0 && stage != -1) {
             ArrayList<Integer> areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(RawData.yearsNC[stage]);
             Integer area = areas.get(listAreas.getSelectedIndex());
             if (area != -1) {
@@ -112,6 +113,8 @@ public class ClassroomFormTargets {
                     updateRowHeights(tableTargets);
                 });
             }
+        } else {
+            JOptionPane.showMessageDialog(MainForm.frame, "Please select a classroom", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

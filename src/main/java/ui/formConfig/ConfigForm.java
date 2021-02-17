@@ -4,18 +4,13 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import bd.BDManager;
 import drive.DriveGovernor;
-import ui.MainForm;
 import utils.CacheManager;
 import utils.MyLogger;
-import utils.PlanningManager;
 import utils.SettingsManager;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -31,14 +26,6 @@ public class ConfigForm {
     private JRadioButton rBSpanish;
     private JList<String> listGoogleLog;
     private JButton buttonFoldersCheck;
-    private JButton button1;
-
-    public ConfigForm() {
-        button1.addActionListener(e -> {
-            PlanningManager planner = new PlanningManager(112, new Date(2020,8,5), new Date(2020,11,23));
-            JOptionPane.showMessageDialog(MainForm.frame, planner.name + ": " + planner.age);
-        });
-    }
 
     public static JPanel main(SettingsManager settingsManager, BDManager bdManager, CacheManager cacheManager) {
         ConfigForm.settingsManager = settingsManager;
@@ -64,7 +51,7 @@ public class ConfigForm {
 
         buttonFoldersCheck = new JButton();
         buttonFoldersCheck.addActionListener(actionEvent -> {
-            SWcheckFolders worker = new SWcheckFolders();
+            SWCheckFolders worker = new SWCheckFolders();
             worker.execute();
         });
         listGoogleLog = new JList<>(new DefaultListModel<>());
@@ -75,7 +62,7 @@ public class ConfigForm {
     }
 
 
-    class SWcheckFolders extends SwingWorker<Object, Object> {
+    class SWCheckFolders extends SwingWorker<Object, Object> {
         DriveGovernor governor;
         FileList folders;
         Connection co;
@@ -133,7 +120,6 @@ public class ConfigForm {
                     String query = "UPDATE Students SET drive_main = ?, drive_documents = ?, drive_photos = ?, " +
                             "drive_reports = ? WHERE id = ?";
 
-                    // create the mysql insert preparedstatement
                     PreparedStatement preparedStmt = co.prepareStatement(query);
                     preparedStmt.setString(1, main);
                     preparedStmt.setString(2, documents);
