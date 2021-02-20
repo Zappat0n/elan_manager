@@ -13,6 +13,8 @@ import java.sql.Date;
 
 public class PdfTermEvaluations extends InternalReportSkeleton {
     private static final String TAG = PdfTermEvaluations.class.getSimpleName();
+    private static final Integer[] periods = { 7, 9, 11 };
+    private static final String[] periodsNames = { "KS1", "LKS2", "UKS2" };
     TermEvaluationsManager manager;
 
     public PdfTermEvaluations(Integer classroom, Date startDate, Date endDate) {
@@ -45,7 +47,7 @@ public class PdfTermEvaluations extends InternalReportSkeleton {
 
             for (int student : ApplicationLoader.cacheManager.studentsPerClassroom.get(classroom)) {
                 Integer year = ApplicationLoader.cacheManager.getChildrenYear(student, classroom, startDate);
-                Integer target = manager.targets.get(area).get(year);
+                Integer target = getTargetsForPeriod(year, area);
                 if (target != null) {
                     addRow(tableBuilder, area, student, target);
                 }
@@ -77,6 +79,15 @@ public class PdfTermEvaluations extends InternalReportSkeleton {
                 .withAllBorders();
         rowBuilder.add(c);
         tableBuilder.addRow(rowBuilder.build());
+    }
+
+    private Integer getTargetsForPeriod(int year, int area) {
+        switch (year) {
+            case 6: case 7: return manager.targets.get(area).get(6) + manager.targets.get(area).get(7);
+            case 8: case 9: return manager.targets.get(area).get(8) + manager.targets.get(area).get(9);
+            case 10: case 11: return manager.targets.get(area).get(10) + manager.targets.get(area).get(11);
+        }
+        return null;
     }
 
     private void addRow(Table.TableBuilder tableBuilder, int area, int student, int target) {

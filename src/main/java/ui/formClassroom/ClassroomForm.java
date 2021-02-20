@@ -187,7 +187,7 @@ public class ClassroomForm {
         for (int row = 0; row < last; row++) {
             int rows = 0;
             for (int column = 0; column < tablePlanning.getColumnCount(); column++) {
-                ArrayList value = ((MyTableModelPlanning)tablePlanning.getModel()).getValueAt(row, column);
+                ArrayList<String> value = ((MyTableModelPlanning)tablePlanning.getModel()).getValueAt(row, column);
                 int x = (value != null) ? value.size() : 0;
                 rows = Math.max(rows, x);
             }
@@ -284,7 +284,7 @@ public class ClassroomForm {
     private void updateSearch(){
         SwingUtilities.invokeLater(() -> {
             DefaultListModel<String> model = (DefaultListModel<String>) listSearch.getModel();
-            String text = tFSearch.getText();
+            String text = tFSearch.getText().toLowerCase();
             model.clear();
             if (text.length() < 3 || listStage.getSelectedIndex() == 0) return;
             // Name -> Id, subarea
