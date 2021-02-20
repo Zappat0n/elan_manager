@@ -478,9 +478,8 @@ public class CacheManager {
 
         LocalDate dateBefore = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateAfter = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-        long yearsLong = YEARS.between(dateBefore, dateAfter);
-        int years = (int) yearsLong;
-
+        long yearsLong = YEARS.between(dateBefore.withMonth(1).withDayOfYear(1), dateAfter);
+        /*
         if (Arrays.stream(classroomYears).anyMatch(x -> x == years)) {
             return years;
         } else {
@@ -491,8 +490,8 @@ public class CacheManager {
                 return classroomYears[2];
             }
         }
-
-        return null;
+*/
+        return (dateAfter.getMonth().getValue() <= 8) ? (int) yearsLong - 1 : (int) yearsLong; //null
     }
 
 }

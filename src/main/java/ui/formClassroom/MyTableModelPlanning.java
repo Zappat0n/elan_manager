@@ -3,14 +3,11 @@ package ui.formClassroom;
 import bd.BDManager;
 import bd.model.TableEvents;
 import main.ApplicationLoader;
-import utils.CacheManager;
 import utils.MyLogger;
-import utils.SettingsManager;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.beans.PropertyEditorSupport;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +21,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
     private final UtilDateModel dateModel;
 
     private Connection co;
-    private ArrayList[][] data;
+    private ArrayList<String>[][] data;
     public String[][] events;
     private final JPanel frame;
 
@@ -40,6 +37,7 @@ public class MyTableModelPlanning extends AbstractTableModel {
         events = null;
     }
 
+    @SuppressWarnings("unchecked")
     public void resetTable() {
         data = new ArrayList[formData.students.size()][];
         events = new String[formData.students.size()][];
@@ -120,18 +118,18 @@ public class MyTableModelPlanning extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 0) return;
 
-        ArrayList list = data[rowIndex][columnIndex-1];
+        ArrayList<String> list;
+        list = data[rowIndex][columnIndex-1];
         if (list == null) {
-            list = new ArrayList();
+            list = new ArrayList<>();
             data[rowIndex][columnIndex-1] = list;
         }
-        //noinspection unchecked
-        list.add(aValue);
+        list.add((String)aValue);
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
     @Override
-    public ArrayList getValueAt(int rowIndex, int columnIndex) {
+    public ArrayList<String> getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             ArrayList<String> list = new ArrayList<>();
             list.add((String)ApplicationLoader.cacheManager.students.get(formData.students.get(rowIndex))[0]);
