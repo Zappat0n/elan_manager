@@ -8,7 +8,7 @@ import java.util.List;
  * Created by angel on 7/05/17.
  */
 public class RawData {
-    public static final Double[] yearsperstage = new Double[]{2.5, 5d, 6d, 7d, 8d, 9d, 10d, 11d};
+    public static final Double[] yearsperstage = new Double[]{2.5, 5d, 6d, 7d, 8d, 9d, 10d, 11d, 12d};
     public static final Double[] yearMontessoriStage = new Double[]{3d, 6d, 9d};
     public static final Double[][] yearsmontessori = new Double[][]{
             new Double[]{0d, 3d},
@@ -27,8 +27,8 @@ public class RawData {
     public static final Integer[] monthsOutcomesForEY = new Integer[]{20, 26, 36};
     public static final Integer[] monthsOutcomesForFS = new Integer[]{36, 50, 60};
 
-    public static final String[] stagesNC = new String[]{"EYs", "FS", "Year 1", "Year 2", "Year 3", "Year 4", "Year 5", "Year 6"};
-    public static final String[] classrooms = new String[]{"Snails", "Roots", "Seeds", "Primary I", "Primary II", "Test"};
+    public static final String[] stagesNC = new String[]{"EYs", "FS", "Year 1", "Year 2", "Year 3", "Year 4", "Year 5", "Year 6", "KS3"};
+    public static final String[] classrooms = new String[]{"Snails", "Roots", "Seeds", "Primary I", "Primary II"};
     public static final Integer[][] yearsPerClassroom = new Integer[][]{
             new Integer[]{},
             new Integer[]{0, 1, 2},
@@ -37,7 +37,7 @@ public class RawData {
             new Integer[]{6, 7, 8},
             new Integer[]{9, 10, 11}};
 
-    public static final int[] yearsNC = new int[] { 3, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+    public static final int[] yearsNC = new int[] { 3, 5, 6, 7, 8, 9, 10, 11, 12 };
 
     public static final List<Integer> cdbAreasTarget = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18);
 

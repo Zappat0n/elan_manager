@@ -64,7 +64,7 @@ public class ClassroomFormTargets {
         tableTargets.addMouseListener(new MyMouseAdapter(bdManager, settingsManager, cacheManager,
                 new java.sql.Date(dateModel.getValue().getTime())));
 
-        listClassrooms = new JList<>();
+        listClassrooms = new JList<>(RawData.classrooms);
         listStages = new JList<>(RawData.stagesNC);
         listAreas = new JList<>(new DefaultListModel<>());
         listStages.addListSelectionListener(e -> {
