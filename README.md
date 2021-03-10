@@ -42,10 +42,11 @@ Pending features:
 
 ## Designed With
 - Java
+- MySql
+- Gradle
 - Git
 - GitFlow
-- Rubocop
-- VS Code
+- IntelliJ IDEA
 - Icons created by [Martin Berube](https://iconarchive.com/show/people-icons-by-martin-berube.html)
 
 ## Contribute to this Project
