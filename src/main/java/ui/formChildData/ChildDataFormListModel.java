@@ -183,9 +183,9 @@ public class ChildDataFormListModel extends DefaultListModel<ChildDataFormListIt
     private static Integer getIndexofType(Byte type, Integer event_type) {
         for ( int i = 0; i < 3; i++) {
             switch (type) {
-                case 0: if (event_type == event_typeOutcome[i]) return i;
-                case 1: if (event_type == event_typeNC[i]) return i;
-                case 2: if (event_type == event_typeMontessori[i]) return i;
+                case 0: if (event_type == event_typeOutcome[i]) return i; break;
+                case 1: if (event_type == event_typeNC[i]) return i; break;
+                case 2: if (event_type == event_typeMontessori[i]) return i; break;
             }
         }
         return null;
