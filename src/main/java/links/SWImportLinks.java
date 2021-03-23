@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class SWImportLinks extends SwingWorker<Boolean, Integer> {
     private static final String TAG = SWImportLinks.class.getSimpleName();
@@ -33,7 +34,9 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
             String line = reader.readLine();
             while (line != null) {
                 String[] items = line.split("\t");
-                if (items.length > 0) processLine(items);
+                if (items.length > 0) {
+                    if (!processLine(items)) return false;
+                }
                 line = reader.readLine();
                 dialog.pb.setValue(++position);
             }
@@ -50,7 +53,7 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
         return true;
     }
 
-    private void processLine(String[] items) throws SQLException {
+    private Boolean processLine(String[] items) throws SQLException {
         for (int i = 1; i < items.length; i++) {
             if (!items[i].contains(".")) addBatch(items[i], "0", items[0]);
             else {
@@ -59,11 +62,12 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
                 else {
                     if (values[1].contains("-")) {
                         String[] subs = values[1].split("-");
-                        addMultiple(values[0], subs[0], subs[1], items[0]);
+                        return addMultiple(values[0], subs[0], subs[1], items[0]);
                     } else addBatch(values[0], values[1], items[0]);
                 }
             }
         }
+        return true;
     }
 
     private void initialize() throws IOException {
@@ -85,11 +89,18 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
         }
     }
 
-    private void addMultiple(String presentation, String _start, String _end, String nc) throws SQLException {
+    private Boolean addMultiple(String presentation, String _start, String _end, String nc) throws SQLException {
         final int start = Integer.parseInt(_start);
         final int end = Integer.parseInt(_end);
-        for (Integer sub : ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(Integer.parseInt(presentation))) {
-            if (sub >= start && sub <= end) addBatch(presentation, sub.toString(), nc);
+        ArrayList<Integer> subs = ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(Integer.parseInt(presentation));
+        if (subs != null) {
+            for (Integer sub : subs) {
+                if (sub >= start && sub <= end) addBatch(presentation, sub.toString(), nc);
+            }
+            return true;
+        }   else {
+            MyLogger.d("Error with peresentation " + presentation, "It does not have subs");
+            return false;
         }
     }
 }
