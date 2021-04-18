@@ -31,13 +31,14 @@ public class CurriculumForm {
     private JTable tableImportLinks;
     private JList<String> listSubareas;
     private JTable tableLinks;
-    private JButton button1;
     private JList<String> listNCAreas;
     private JList<String> listNCSubareas;
     private JTable tableNationalCurriculum;
     private JButton buttonNCText;
     private JButton buttonNCPdf;
     private JList<String> listStagesNC;
+    private JRadioButton rBOutcomes;
+    private JRadioButton rBTargets;
     private ArrayList<Integer> areasList;
     private ArrayList<Integer> areasNCList;
     private ArrayList<Integer> subareasList;
@@ -121,7 +122,7 @@ public class CurriculumForm {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
 
-                SWImportLinks sw = new SWImportLinks(file, true);
+                SWImportLinks sw = new SWImportLinks(file, rBOutcomes.isSelected());
                 sw.execute();
             }
         });

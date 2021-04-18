@@ -52,7 +52,7 @@ public class InternalReportSkeleton {
     final ArrayList<Integer> ncTargets;
     protected final PDDocument doc;
     protected PDFont font = null;
-    protected String fileName;
+    public String fileName;
     public final float margin = 30;
     protected int line_space;
     public java.util.Date lastReportDate;
