@@ -4,6 +4,7 @@ import bd.BDManager;
 import bd.model.TableEvents;
 import drive.DriveGovernor;
 import pdfs.models.Pdf_FollowUpReports;
+import ui.MainForm;
 import ui.formReports.managers.ReportManager;
 import ui.formReports.models.Pdf_EoY_Reports;
 import ui.formReports.models.Pdf_Yet_Reports;
@@ -42,7 +43,6 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
     final Boolean doEoYPhotos;
     final Boolean checkContacts;
     final Boolean uploadToDrive;
-    final JFrame frame;
     final JProgressBar progressBar;
     Integer max;
     final Integer student;
@@ -52,7 +52,7 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
     final DefaultListModel<String> log;
 
     public SwingReportGenerator(BDManager bdManager, CacheManager cacheManager, SettingsManager settingsManager,
-                                JFrame frame, Integer student, Integer classroom, Date reportDate, Date changeDate,
+                                Integer student, Integer classroom, Date reportDate, Date changeDate,
                                 Boolean recordDate, Boolean sendEmail, Boolean doYetReport, Boolean doTargetsReport,
                                 Boolean doEoYReport, Boolean doEoYComments, Boolean doEoYPhotos, Boolean checkContacts,
                                 Boolean uploadToDrive, String header, String body, JProgressBar progressBar,
@@ -71,7 +71,6 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
         this.doEoYComments = doEoYComments;
         this.doEoYPhotos = doEoYPhotos;
         this.checkContacts = checkContacts;
-        this.frame = frame;
         this.progressBar = progressBar;
         this.student = student;
         this.header = header;
@@ -100,6 +99,7 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
         try {
             co = bdManager.connect();
             if (checkContacts && checkContacts(co)) {
+                MyLogger.d(TAG, "All contacts ready");
                 BDManager.closeQuietly(co);
                 return null;
             }
@@ -179,7 +179,7 @@ public class SwingReportGenerator extends SwingWorker<Object, Object> implements
             for (Integer id : pending) {
                 names.append(cacheManager.students.get(id)[0]).append("\n");
             }
-            JOptionPane.showInternalMessageDialog(frame, "There are children without contact data", names.toString(),
+            JOptionPane.showMessageDialog(MainForm.frame,  names.toString(), "There are children without contact data",
                     JOptionPane.ERROR_MESSAGE);
             return false;
         } else return true;

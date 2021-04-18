@@ -182,7 +182,7 @@ public class ReportsForm {
             if (index != -1) {
                 Integer student = (checkBoxClassroom.isSelected()) ? null : students.get(studentIndex);
                 SwingReportGenerator generator = new SwingReportGenerator(bdManager, cacheManager,
-                        settingsManager, frame, student, index+1, dateModelMultiple.getValue(), null,
+                        settingsManager, student, index+1, dateModelMultiple.getValue(), null,
                         checkBoxRecord.isSelected(), checkBoxEmail.isSelected(), checkBoxYet.isSelected(),
                         checkBoxTargets.isSelected(), checkBoxEoY.isSelected(), checkBoxEoYComments.isSelected(),
                         checkBoxEoYPhotos.isSelected(), checkContacts.isSelected(), checkBoxDrive.isSelected(),
@@ -252,7 +252,7 @@ public class ReportsForm {
             if (index != -1) {
                 Integer student = (checkBoxClassroom.isSelected()) ? null : students.get(studentIndex);
                 SwingReportGenerator generator = new SwingReportGenerator(bdManager, cacheManager,
-                        settingsManager, frame, student, index+1, dateModelYet.getValue(), null,
+                        settingsManager, student, index+1, dateModelYet.getValue(), null,
                         false, false, false, true, false,
                         false, false, false, false,null,
                         null, progressBar, (DefaultListModel<String>) listLog.getModel());

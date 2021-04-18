@@ -75,8 +75,6 @@ public class PresentationsTree {
         return processQueue(queue, result, ++count, amount);
     }
 
-
-
     // Class Node of the tree
 
     static class Node {

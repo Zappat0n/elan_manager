@@ -82,8 +82,8 @@ public class ReportManager {
     }
 
     public String getStringTerm(){
-        if (month >= 2 && month <= 4) return "Segundo Trimestre";
-        else if (month >= 5 && month <= 9) return "Tercer Trimestre";
+        if (month >= 2 && month <= 5) return "Segundo Trimestre";
+        else if (month >= 6 && month <= 9) return "Tercer Trimestre";
         else return "Primer Trimestre";
     }
 

@@ -370,9 +370,9 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, Double>>> area = new LinkedHashMap<>();
         LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> subarea;
         LinkedHashMap<Integer, Double> items;
-        for (Double year : years) {
+        for (double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsPerYearAndSubarea.get(year);
-            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get(year)) {
+            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get((int)year)) {
                 Integer _areaId = (Integer) areaId;
                 ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {

@@ -16,15 +16,10 @@ public class TablePresentations extends MyTable {
     public static final String priority = "priority";
     public static final String nombre = "nombre";
     public static final String description = "description";
-    public static final String nc1 = "nc1";
-    public static final String nc2 = "nc2";
-    public static final String nc3 = "nc3";
-    public static final String nc4 = "nc4";
-    public static final String nc5 = "nc5";
-    private static final String[] fields = {id, name, subarea, year, year_end, priority, nombre, description, nc1,
-            nc2, nc3, nc4, nc5};
+    public static final String planning = "planning";
+    private static final String[] fields = {id, name, subarea, year, year_end, priority, nombre, description, planning};
     private static final String[] field_def = {"INT", "VARCHAR(120)", "INT", "DOUBLE", "DOUBLE", "INT", "VARCHAR(120)",
-            "TINYTEXT", "INT", "INT", "INT", "INT", "INT"};
+            "TINYTEXT", "BOOLEAN",};
     private static final String key = id;
 
     public TablePresentations() {

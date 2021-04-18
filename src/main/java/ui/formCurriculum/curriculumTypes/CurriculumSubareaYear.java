@@ -2,9 +2,6 @@ package ui.formCurriculum.curriculumTypes;
 
 import main.ApplicationLoader;
 import ui.formCurriculum.Curriculum;
-import utils.CacheManager;
-import utils.SettingsManager;
-
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
