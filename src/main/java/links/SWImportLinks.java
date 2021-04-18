@@ -42,6 +42,7 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
             }
             reader.close();
             ApplicationLoader.bdManager.executeBatch(st);
+            MyLogger.d(TAG, "--- IMPORT COMPLETED ---");
         } catch (IOException ex) {
             MyLogger.e(TAG, ex);
             return false;
@@ -55,14 +56,24 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
 
     private Boolean processLine(String[] items) throws SQLException {
         for (int i = 1; i < items.length; i++) {
-            if (!items[i].contains(".")) addBatch(items[i], "0", items[0]);
-            else {
+            if (items[i].trim().equals("")) {continue;}
+            if (!items[i].contains(".")) {
+                if (!items[i].contains("-")) {
+                    addBatch(items[i], "0", items[0]);
+                } else {
+                    addMultiplePresentations(items[i], items[0]);
+                }
+            } else {
                 String[] values = items[i].split("\\.");
+                if (values.length < 2) {
+                    logError(values[0], null);
+                    return false;
+                }
                 if (values[1].equals("*")) addAsterisk(values[0], items[0]);
                 else {
                     if (values[1].contains("-")) {
                         String[] subs = values[1].split("-");
-                        return addMultiple(values[0], subs[0], subs[1], items[0]);
+                        return addMultipleSubs(values[0], subs[0], subs[1], items[0]);
                     } else addBatch(values[0], values[1], items[0]);
                 }
             }
@@ -74,6 +85,13 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
         reader = new BufferedReader(new FileReader(file));
         dialog.pb.setMaximum((int) Files.lines(file.toPath()).count());
         st = ApplicationLoader.bdManager.prepareBatch();
+    }
+
+    private void addMultiplePresentations(String presentations, String nc) throws SQLException {
+        String[] range = presentations.split("-");
+        for(int presentation = Integer.parseInt(range[0]); presentation <= Integer.parseInt(range[1]); presentation++) {
+            addBatch(String.valueOf(presentation), "0", nc);
+        }
     }
 
     private void addBatch(String presentation, String presentation_sub, String nc) throws SQLException {
@@ -89,9 +107,16 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
         }
     }
 
-    private Boolean addMultiple(String presentation, String _start, String _end, String nc) throws SQLException {
-        final int start = Integer.parseInt(_start);
-        final int end = Integer.parseInt(_end);
+    private Boolean addMultipleSubs(String presentation, String _start, String _end, String nc) throws SQLException {
+        int start, end;
+        try {
+            start = Integer.parseInt(_start);
+            end = Integer.parseInt(_end);
+        } catch (Exception ex) {
+            logError(nc, null);
+            return false;
+        }
+
         ArrayList<Integer> subs = ApplicationLoader.cacheManager.presentationsSubPerPresentation.get(Integer.parseInt(presentation));
         if (subs != null) {
             for (Integer sub : subs) {
@@ -99,8 +124,16 @@ public class SWImportLinks extends SwingWorker<Boolean, Integer> {
             }
             return true;
         }   else {
-            MyLogger.d("Error with peresentation " + presentation, "It does not have subs");
+            logError(nc, presentation);
             return false;
         }
+    }
+
+    private void logError(String nc, String presentation) {
+        String ncText = (outcomes ? "Outcome: " : "Target: ") + nc;
+        String description = presentation != null ? "Presentation " + presentation + " does not have subs" : "Syntax error";
+        MyLogger.d("Error with " + ncText, description);
+        MyLogger.d(TAG, "--- IMPORT ABORTED ---");
+
     }
 }

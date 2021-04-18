@@ -43,7 +43,7 @@ public class SWDBUpdater extends SwingWorker<Boolean, Integer> {
     @Override
     protected Boolean doInBackground() throws Exception {
         Statement st = ApplicationLoader.bdManager.prepareBatch();
-        st.addBatch("DELETE FROM tempIds WHERE teacher = "+ApplicationLoader.settingsManager.teacher+";");
+        st.addBatch("DELETE FROM tempIds WHERE teacher = "+ ApplicationLoader.settingsManager.teacher+";");
         addElementsToBatch(st);
         sendToBatch(st);
         return null;
@@ -69,7 +69,7 @@ public class SWDBUpdater extends SwingWorker<Boolean, Integer> {
             if (rs.next()) multipleLinkManager.checkForLinksInInsertedIds(st, rs);
             if (checkTempEvents(st)) sendToBatch(st);
             if (checkIfRemovedLinks.size() > 0) {
-                multipleLinkManager.checkIfRemovedLinks(st, checkIfRemovedLinks);
+                multipleLinkManager.checkIfRemovedLinks(st);
                 //co.commit();
             }
             if (checkDeletedPlanning.size() > 0) checkDeletedPlanning(st);
@@ -157,12 +157,12 @@ public class SWDBUpdater extends SwingWorker<Boolean, Integer> {
                 String sql = ApplicationLoader.bdManager.getTable(TableEvents.table_name).removeValue(
                         EventCondition.getCondition(student, RawData.montessoriEvent_Types[i-1], event_id, event_sub));
                 st.addBatch(sql);
-                if (newValue < 3 && oldValue > 0) checkIfRemovedLinks.add(new EventCondition(event_id, event_sub, student));
             } catch (SQLException e) {
                 MyLogger.e(TAG, e);
                 return;
             }
         }
+        if (newValue < 3 && oldValue > 0) checkIfRemovedLinks.add(new EventCondition(event_id, event_sub, student));
     }
 
     private void addBatchEvent(Statement st, Integer student, Integer event_id, Integer event_sub, Integer event_type, String notes) throws SQLException {

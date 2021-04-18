@@ -34,8 +34,8 @@ class LinksRecorder extends Thread {
         try {
             String condition = TableEvents.date + " >= '" + startDate.toString() + "' AND " + TableEvents.date + " <= '"
                     + endDate.toString() + "' AND (event_type = 6 OR event_type = 7)";
-            st = ApplicationLoader.bdManager.prepareBatch();
             MySet set = bdManager.getValues(BDManager.tableEvents, condition);
+            st = ApplicationLoader.bdManager.prepareBatch();
             pBar.setMinimum(1);
             pBar.setMaximum(set.size());
             int i = 0;

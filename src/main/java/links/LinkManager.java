@@ -63,19 +63,6 @@ public class LinkManager {
         }
     }
 
-    public void deleteBrokenLink(EventCondition condition, Statement st, Integer event_type, int nc) throws SQLException {
-        String sql = EventCondition.getCondition(condition.student, event_type, nc, null) +
-                " AND notes IS NOT NULL";
-        MySet set = new MySet(st.executeQuery(BDManager.tableEvents.getValues(sql)), BDManager.tableEvents, null);
-        while (set.next()) {
-            Integer id = set.getInt(TableEvents.id);
-            String notes = set.getString(TableEvents.notes);
-            MySet set2 = new MySet(st.executeQuery(BDManager.tableEvents.getValues("id = " + notes)),
-                    BDManager.tableEvents, null);
-            if (!set2.next()) st.executeUpdate("DELETE FROM Events WHERE id = " + id);
-        }
-    }
-
     private void addBatch(Date date, int eventId, int newType, int id) throws SQLException {
         String sql = "INSERT INTO `Events` (`date`,`student`,`event_type`,`event_id`, `notes`, `teacher`) VALUES('"
                 + date + "'," + student + "," + newType + "," + eventId + ",'" + id + "'," +

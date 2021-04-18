@@ -1,21 +1,20 @@
 package links;
 
 import bd.BDManager;
-import bd.EventCondition;
 import bd.MySet;
 import bd.model.TableEvents;
 import main.ApplicationLoader;
 import ui.formClassroom.ClassroomForm;
-import utils.CacheManager;
+import utils.MyLogger;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MultipleLinkManager {
+    private static final String TAG = MultipleLinkManager.class.getSimpleName();
     private final ClassroomForm form;
     private final LinkManager linkManager;
     Date date;
@@ -57,22 +56,21 @@ public class MultipleLinkManager {
         ApplicationLoader.bdManager.executeBatch(st);
     }
 
-    public void checkIfRemovedLinks(Statement st, ArrayList<EventCondition> events) throws SQLException {
-        for (EventCondition condition : events) {
-            for (Map.Entry<String, CacheManager.PresentationLinks> entry : ApplicationLoader.cacheManager.links.entrySet()) {
-                int sub = (condition.event_sub != null) ? condition.event_sub : 0;
-                String[] data = entry.getKey().split("\\.");
-                if (Integer.parseInt(data[0]) == condition.event_id && Integer.parseInt(data[1]) == sub) {
-                    for (Integer outcome : entry.getValue().outcomes) {
-                        linkManager.deleteBrokenLink(condition, st, 10, outcome);
-                    }
-
-                    for (Integer target : entry.getValue().targets) {
-                        linkManager.deleteBrokenLink(condition, st, 2, target);
-                    }
-                }
-            }
+    public void checkIfRemovedLinks(Statement st) throws SQLException {
+        String sql = "SELECT b.id FROM Events a RIGHT JOIN Events b ON a.id = concat('',b.notes * 1) WHERE (concat('',b.notes * 1) = b.notes AND a.id IS NULL)";
+        ResultSet rs = st.executeQuery(sql);
+        ArrayList<Integer> ids = new ArrayList<>();
+        while (rs.next()) {
+            ids.add(rs.getInt("id"));
         }
+        rs.close();
+        ids.forEach((id) -> {
+            try {
+                st.addBatch("DELETE FROM Events WHERE id = " + id.toString());
+            } catch (SQLException e) {
+                MyLogger.e(TAG, e);
+            }
+        });
+        ApplicationLoader.bdManager.executeBatch(st);
     }
-
 }
