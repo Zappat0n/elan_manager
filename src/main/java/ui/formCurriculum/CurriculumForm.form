@@ -203,17 +203,17 @@
                               </scrollpane>
                             </children>
                           </grid>
-                          <grid id="4f763" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="4f763" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
-                              <tabbedpane title="Import"/>
+                              <tabbedpane title="Import and Generate"/>
                             </constraints>
                             <properties/>
                             <border type="none"/>
                             <children>
                               <scrollpane id="7235d">
                                 <constraints>
-                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties/>
                                 <border type="none"/>
@@ -231,7 +231,7 @@
                                 <properties/>
                                 <border type="none"/>
                                 <children>
-                                  <grid id="159fa" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                  <grid id="159fa" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                                     <margin top="0" left="0" bottom="0" right="0"/>
                                     <constraints/>
                                     <properties/>
@@ -247,7 +247,7 @@
                                       </component>
                                       <hspacer id="52bd7">
                                         <constraints>
-                                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                                         </constraints>
                                       </hspacer>
                                       <scrollpane id="c3b10">
@@ -284,10 +284,64 @@
                                           </grid>
                                         </children>
                                       </scrollpane>
+                                      <grid id="cb6d1" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                        <margin top="0" left="0" bottom="0" right="0"/>
+                                        <constraints>
+                                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties/>
+                                        <border type="none"/>
+                                        <children>
+                                          <grid id="b4ea0" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                            <margin top="0" left="0" bottom="0" right="0"/>
+                                            <constraints>
+                                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                            </constraints>
+                                            <properties/>
+                                            <border type="none"/>
+                                            <children>
+                                              <component id="cecf4" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerIni" custom-create="true">
+                                                <constraints>
+                                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                                </constraints>
+                                                <properties>
+                                                  <buttonFocusable value="false"/>
+                                                  <maximumSize width="1000" height="32767"/>
+                                                  <preferredSize width="120" height="10"/>
+                                                </properties>
+                                              </component>
+                                              <component id="fdb15" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerEnd" custom-create="true">
+                                                <constraints>
+                                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                                </constraints>
+                                                <properties>
+                                                  <buttonFocusable value="false"/>
+                                                  <maximumSize width="1000" height="32767"/>
+                                                  <preferredSize width="120" height="10"/>
+                                                </properties>
+                                              </component>
+                                            </children>
+                                          </grid>
+                                          <component id="6942" class="javax.swing.JButton" binding="buttonGenerateLinks" custom-create="true">
+                                            <constraints>
+                                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                            </constraints>
+                                            <properties>
+                                              <text value="Generate Links"/>
+                                            </properties>
+                                          </component>
+                                        </children>
+                                      </grid>
                                     </children>
                                   </grid>
                                 </children>
                               </scrollpane>
+                              <component id="d5d0f" class="javax.swing.JProgressBar" binding="progressBarLinks">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
                             </children>
                           </grid>
                         </children>

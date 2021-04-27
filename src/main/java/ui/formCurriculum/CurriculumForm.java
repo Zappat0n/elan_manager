@@ -2,6 +2,11 @@ package ui.formCurriculum;
 
 import com.google.common.io.Files;
 import links.SWImportLinks;
+import links.SWRecordLinks;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+import ui.components.DateLabelFormatter;
 import ui.formCurriculum.curriculumTypes.CurriculumSubareaYear;
 import utils.CacheManager;
 import utils.MyLogger;
@@ -39,6 +44,12 @@ public class CurriculumForm {
     private JList<String> listStagesNC;
     private JRadioButton rBOutcomes;
     private JRadioButton rBTargets;
+    private JDatePickerImpl datePickerIni;
+    private JDatePickerImpl datePickerEnd;
+    private UtilDateModel dateModelIni;
+    private UtilDateModel dateModelEnd;
+    private JButton buttonGenerateLinks;
+    private JProgressBar progressBarLinks;
     private ArrayList<Integer> areasList;
     private ArrayList<Integer> areasNCList;
     private ArrayList<Integer> subareasList;
@@ -69,6 +80,21 @@ public class CurriculumForm {
         buttonTxt = new JButton();
         buttonNCText = new JButton();
         buttonLoadLinks = new JButton();
+        buttonGenerateLinks = new JButton();
+
+        dateModelIni = new UtilDateModel();
+        dateModelEnd = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        datePickerIni = new JDatePickerImpl(new JDatePanelImpl(dateModelIni, p), new DateLabelFormatter());
+        datePickerEnd = new JDatePickerImpl(new JDatePanelImpl(dateModelEnd, p), new DateLabelFormatter());
+        Calendar cal = Calendar.getInstance();
+        dateModelEnd.setValue(cal.getTime());
+        cal.add(Calendar.MONTH, -3);
+        dateModelIni.setValue(cal.getTime());
+
         DefaultTableModel modelLinks = new DefaultTableModel();
         tableLinks = new JTable(modelLinks) {
             public String getToolTipText(@Nonnull MouseEvent e) {
@@ -126,6 +152,13 @@ public class CurriculumForm {
                 sw.execute();
             }
         });
+
+        buttonGenerateLinks.addActionListener(e -> {
+            SWRecordLinks swRecordLinks = new SWRecordLinks(new java.sql.Date(dateModelIni.getValue().getTime()),
+                    new java.sql.Date(dateModelEnd.getValue().getTime()), progressBarLinks);
+            swRecordLinks.execute();
+        });
+
 
         listStages.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
