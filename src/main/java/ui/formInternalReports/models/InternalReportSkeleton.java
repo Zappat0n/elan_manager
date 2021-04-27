@@ -40,11 +40,14 @@ import java.util.*;
  */
 public class InternalReportSkeleton {
     private static final String TAG = InternalReportSkeleton.class.getSimpleName();
+    public static final String[] STAGES = { "EYFS", "KS1", "LKS2", "UKS2", "KS3" };
+    public static final Integer[] STAGE_YEARS = { 5, 7, 9, 11, 14 };
+    public static final String[] STAGE_NAMES = { "EYFS", "KS1", "Lower KS2", "Upper KS", "KS3" };
     protected Connection co;
     protected final Date startDate;
     protected final Date endDate;
+    protected final Date reportDate;
     protected final Boolean portrait;
-    protected final int classroom;
     //final int[][] language = {{0,0}, {3, 4}};
     protected PDPage page;
     final int fontTitleSize = 12;
@@ -56,19 +59,17 @@ public class InternalReportSkeleton {
     public final float margin = 30;
     protected int line_space;
     public java.util.Date lastReportDate;
-    protected final static String[] stages ={"Early Years", "Nursery", "Reception", "Year 1", "Year 2", "Year 3",
-            "Year 4", "Year 5", "Year 6", "Year 7", "Year 8"};
-    final String[] stagesShort ={"EY", "Nursery", "Reception", "Y1", "Y2", "Y3", "Y4", "Y5", "Y6", "Y7", "Y8"};
     protected Integer stageId;
     protected BufferedImage logo;
     protected Integer position;
 
-    protected InternalReportSkeleton(Connection co, Date startDate, Date endDate, int classroom, Boolean portrait) {
+    protected InternalReportSkeleton(Connection co, Date startDate, Date endDate, Date reportDate, int stageId, Boolean portrait) {
         this.co = co;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.reportDate = reportDate;
         this.portrait = portrait;
-        this.classroom = classroom;
+        this.stageId = stageId;
         fileName = getFileName();
         try {
             logo = ImageIO.read(getClass().getResourceAsStream("logo.png"));
@@ -86,10 +87,9 @@ public class InternalReportSkeleton {
     }
 
     private String getFileName() {
-        String name = RawData.classrooms[classroom-1].replace(" ", "-")+"_"+startDate+"_"+endDate+".pdf";
+        String name = STAGES[stageId].replace(" ", "-")+"_"+startDate+"_"+endDate+".pdf";
         return ApplicationLoader.settingsManager.getValue(SettingsManager.REPORTS_DIR) + name;
     }
-
 
     protected void nextPage() {
         if (portrait) {
@@ -154,7 +154,6 @@ public class InternalReportSkeleton {
     }
 
     public Integer addImage(PDPage page, BufferedImage image, int x, int y, String _scale) throws IOException {
-
         //BufferedImage image = ImageIO.read(new File(imagePath));
         PDImageXObject pdImage = LosslessFactory.createFromImage(doc,image);
                 //System.out.println(new File(imagePath).getAbsolutePath());
