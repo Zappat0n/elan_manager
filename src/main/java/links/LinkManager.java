@@ -17,15 +17,6 @@ public class LinkManager {
     private Statement statement;
     private int student;
     private int eventType;
-    private Boolean statementCreated = false;
-
-    public void recordLinksForPresentation(int presentation, int presentation_sub, int eventType,
-                                           Date date, int student, int eventId) {
-        initialize(student, eventType);
-        statement = ApplicationLoader.bdManager.prepareBatch();
-        statementCreated = true;
-        recordLinks(presentation, presentation_sub, date, eventId);
-    }
 
     public void recordLinksForPresentation(Statement st, int presentation, int presentation_sub, int eventType,
                                            Date date, int student, int eventId) {
@@ -58,8 +49,6 @@ public class LinkManager {
             }
         } catch (SQLException e) {
             MyLogger.e(TAG, e);
-        } finally {
-            if (statementCreated) BDManager.closeQuietly(statement);
         }
     }
 
