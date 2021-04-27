@@ -10,6 +10,7 @@ import pdfs.tables.Cell;
 import pdfs.tables.Row;
 import pdfs.tables.Table;
 import pdfs.tables.TableDrawer;
+import ui.formChildData.ChildDataFormListItem;
 import utils.CacheManager;
 import utils.MyLogger;
 import utils.SettingsManager;
@@ -117,26 +118,23 @@ public class PDFForm_Reports {
     }
 
     void calculateStage(int classroom) { //1 comundi, 2 cdb, 3 taller
-        Integer years = getYears();
-        if (years == null || years < 3) stageId = 0;
-        else stageId = years - 2;
-        /*
+        Integer years; // = getYears();
         switch (classroom) {
             case 1 :    stageId = 0;
                         break;
             case 2 : case 3:
-                        int years = getYears(false);
+                        years = getYears();
                         if (years < 4) stageId = 1;
                         else if (years < 5) stageId = 2;
                         else stageId = 3;
                         break;
-            case 4 :    years = getYears(false);
+            case 4 :    years = getYears();
                         if (years < 7) stageId = 4;
                         else if (years < 8) stageId = 5;
                         else if (years < 9) stageId = 6;
                         else stageId = 7;
                         break;
-        }*/
+        }
     }
 
     private Integer getYears() {
@@ -175,7 +173,7 @@ public class PDFForm_Reports {
     void createLegend(PDPage page, PDFont font) {
         Table.TableBuilder tableBuilder =new Table.TableBuilder();
         tableBuilder.addColumnOfWidth(20);
-        tableBuilder.addColumnOfWidth(120);
+        tableBuilder.addColumnOfWidth(100);
         tableBuilder.setFontSize(10, 8);
         tableBuilder.setFont(font);
         Row.RowBuilder rowBuilder = new Row.RowBuilder();
@@ -192,11 +190,47 @@ public class PDFForm_Reports {
         tableBuilder.addRow(rowBuilder.build());
 
         try {
-            addTable(page, 520, 580, tableBuilder.build());
+            addTable(page, 440, 580, tableBuilder.build());
         } catch (IOException e) {
             MyLogger.e(TAG, e);
         }
 
+        tableBuilder =new Table.TableBuilder();
+        tableBuilder.addColumnOfWidth(20);
+        tableBuilder.addColumnOfWidth(100);
+        tableBuilder.setFontSize(10, 8);
+        tableBuilder.setFont(font);
+        rowBuilder = new Row.RowBuilder();
+        rowBuilder.add(Cell.withText(" ").withAllBorders().setBackgroundColor(ChildDataFormListItem.color1));
+        rowBuilder.add(Cell.withText((settingsManager.language==1)?"1º trimestre":"1st term").withAllBorders());
+        tableBuilder.addRow(rowBuilder.build());
+        rowBuilder = new Row.RowBuilder();
+        rowBuilder.add(Cell.withText(" ").withAllBorders().setBackgroundColor(ChildDataFormListItem.color2));
+        rowBuilder.add(Cell.withText((settingsManager.language==1)?"2º trimestre":"2nd term").withAllBorders());
+        tableBuilder.addRow(rowBuilder.build());
+        rowBuilder = new Row.RowBuilder();
+        rowBuilder.add(Cell.withText(" ").withAllBorders().setBackgroundColor(ChildDataFormListItem.color3));
+        rowBuilder.add(Cell.withText((settingsManager.language==1)?"3º trimestre":"3rd term").withAllBorders());
+        tableBuilder.addRow(rowBuilder.build());
+
+        try {
+            addTable(page, 570, 580, tableBuilder.build());
+            PDPageContentStream contents = new PDPageContentStream(doc, page,
+                    PDPageContentStream.AppendMode.APPEND, true);
+            contents.beginText();
+            contents.setFont(font, 8);
+            contents.setLeading(14.5f);
+            contents.setStrokingColor(Color.gray);
+            contents.setNonStrokingColor(Color.gray);
+            contents.newLineAtOffset(700, 560);
+            contents.showText("Gray for targets pending");
+            contents.newLine();
+            contents.showText("from previous year");
+            contents.endText();
+            contents.close();
+        } catch (IOException e) {
+            MyLogger.e(TAG, e);
+        }
     }
 
     PDPage createPage() {
@@ -372,7 +406,9 @@ public class PDFForm_Reports {
         LinkedHashMap<Integer, Double> items;
         for (double year : years) {
             LinkedHashMap<Integer, ArrayList<Integer>> targetsperSubarea = cacheManager.targetsPerYearAndSubarea.get(year);
-            for (Object areaId : ApplicationLoader.cacheManager.areasTargetPerStage.get((int)year)) {
+            int yearInt = year != 2.5 ? (int) year : 3;
+            ArrayList<Integer> areas = ApplicationLoader.cacheManager.areasTargetPerStage.get(yearInt);
+            for (Object areaId : areas) {
                 Integer _areaId = (Integer) areaId;
                 ArrayList<Integer> subareas = cacheManager.subareasTargetPerArea.get(_areaId);
                 if (subareas != null) {

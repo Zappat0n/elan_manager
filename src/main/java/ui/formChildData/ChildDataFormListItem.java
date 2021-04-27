@@ -12,12 +12,11 @@ import java.sql.Date;
  * Created by angel on 28/03/17.
  */
 public class ChildDataFormListItem extends JPanel {
-    private static final Color color0 = Color.white;
-    private static final Color color1 = Color.getHSBColor(60,25,100);
-    private static final Color color2 = Color.pink;
-    private static final Color color3 = Color.getHSBColor(33,40,100);
-    private static final Color color4 = Color.blue;
-
+    public static final Color color0 = Color.white;
+    public static final Color color1 = Color.getHSBColor(60,25,100);
+    public static final Color color2 = Color.pink;
+    public static final Color color3 = Color.cyan;
+    public static final Color color4 = Color.blue;
     // int type = { 0 Outcome NC, 1 Target NC, 2 Montessori
     public final static Integer[] event_type = {9,10,11,4,2,5,1,6,7};
     public JTextArea label;

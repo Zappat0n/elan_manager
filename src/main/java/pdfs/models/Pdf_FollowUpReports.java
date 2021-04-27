@@ -104,7 +104,7 @@ public class Pdf_FollowUpReports extends PDFForm_Reports {
                 break;
             case 1: case 2:
                 outcomes = loadOutcomes();
-                model = loadModel(new Double[]{2.5, 5d});
+                model = loadModel(new Double[]{5d});
                 loadEvents(co, studentId);
                 checkCurrentStage(5);
                 //checkNextStage(5);

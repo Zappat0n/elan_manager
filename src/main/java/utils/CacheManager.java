@@ -120,7 +120,7 @@ public class CacheManager {
                 String folder_photos = set.getString(TableStudents.drive_photos);
                 String folder_reports = set.getString(TableStudents.drive_reports);
                 students.put(id, new Object[]{set.getString(TableStudents.name), set.getDate(TableStudents.birth_date),
-                        folder_main, folder_documents, folder_photos, folder_reports});
+                        folder_main, folder_documents, folder_photos, folder_reports, classroom});
                 if (studentsPerClassroom.containsKey(classroom)) studentsPerClassroom.get(classroom).add(id);
                 else {
                     ArrayList<Integer> list = new ArrayList<>();
@@ -438,7 +438,7 @@ public class CacheManager {
             Double year = (Double) data[3];
             if (year < min || year >= max) continue;
             String name = (String) data[ApplicationLoader.settingsManager.language];
-            if (name.toLowerCase().contains(text)) {
+            if (name != null && name.toLowerCase().contains(text)) {
                 result.put(name, new Integer[]{id, (Integer) data[2]});
             }
         }
@@ -473,25 +473,16 @@ public class CacheManager {
 
     public Integer getChildrenYear(int student, int classroom, Date date) {
         Date birthday = (Date)students.get(student)[1];
-        Integer[] classroomYears = RawData.yearsPerClassroom[classroom];
+        // Integer[] classroomYears = RawData.yearsPerClassroom[classroom];
         date = date == null ? new Date(new java.util.Date().getTime()) : date;
 
         LocalDate dateBefore = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateAfter = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         long yearsLong = YEARS.between(dateBefore.withMonth(1).withDayOfYear(1), dateAfter);
-        /*
-        if (Arrays.stream(classroomYears).anyMatch(x -> x == years)) {
-            return years;
-        } else {
-            if (years < classroomYears[0]) {
-                return classroomYears[0];
-            }
-            if (years > classroomYears[2]) {
-                return classroomYears[2];
-            }
-        }
-*/
-        return (dateAfter.getMonth().getValue() <= 8) ? (int) yearsLong - 1 : (int) yearsLong; //null
+        int year = (dateAfter.getMonth().getValue() <= 8) ? (int) yearsLong - 1 : (int) yearsLong;
+        // year = year < classroomYears[0] ? classroomYears[0] : year;
+        // year = year > classroomYears[classroomYears.length-1] ? classroomYears[classroomYears.length-1] : year;
+        return year;
     }
 
 }
