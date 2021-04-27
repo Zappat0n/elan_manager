@@ -161,8 +161,7 @@ public class ClassroomForm {
             listSearch.addListSelectionListener(e -> {
                 if (listSearch.getSelectedIndex() == -1) return;
                 Integer[] datos = presentationsSearched.get(listSearch.getSelectedValue()); //id, subarea
-                Integer area = (Integer) ApplicationLoader.cacheManager.subareasMontessori.get(datos[1])[
-                        ApplicationLoader.settingsManager.language]; //name, nombre, area
+                Integer area = (Integer) ApplicationLoader.cacheManager.subareasMontessori.get(datos[1])[2];// [ ApplicationLoader.settingsManager.language]; //name, nombre, area
                 SwingUtilities.invokeLater(() -> {
                     listArea.setSelectedIndex(areas.indexOf(area));
                     int position = (formData.presentations.indexOf(datos[0]+".0"));
